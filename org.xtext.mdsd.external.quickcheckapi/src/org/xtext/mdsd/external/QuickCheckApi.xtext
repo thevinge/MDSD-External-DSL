@@ -3,15 +3,15 @@ grammar org.xtext.mdsd.external.QuickCheckApi with org.eclipse.xtext.common.Term
 generate quickCheckApi "http://www.xtext.org/mdsd/external/QuickCheckApi"
 
 Builder: 
-	"TestBuilder" "{" tests+=Test+ "}";
+	"TestBuilder" tests+=Test+;
 
 Test:
-	"Test" name=ID "{"requests+=(Request)"}"
+	"Test" name=ID requests+=(Request)+
 ;
 
 Request:
-	"request" name=ID "{" method=Method url=URL ("PRE:" preconditions=PreLogicExp)? 
-	(params+=Param)? body=Body? ("POST:"postconditions=PostLogicExp) "}"
+	"request" name=ID method=Method url=URL ("PRE:" preconditions=PreLogicExp)? 
+	(params=Param)? body=Body? ("POST:"postconditions=PostLogicExp)
 ;
 
 
@@ -36,7 +36,7 @@ PathPart:
 ;
 
 Host:
-	hostParts+=ID ("." hostvalues+=ID)*
+	hostParts+=ID ("." hostParts+=ID)*
 ;
 
 Port:
@@ -47,13 +47,6 @@ Protocol:
 	"http" | "https"	
 ;
 
-StateOp :
-	{StateOp}notOp=NotOp? "contains"
-;
-
-NotOp:
-	"not"	
-;
 
 Param:
 	"parameters" pairs+=KVPair (";" pairs+=KVPair)*	
@@ -102,4 +95,12 @@ Postcondition returns PostProposition:
 
 RequestOp:
 	{RequestOp} notOp=NotOp? "returns"	
+;
+
+StateOp :
+	{StateOp}notOp=NotOp? "contains"
+;
+
+NotOp:
+	"not"	
 ;
