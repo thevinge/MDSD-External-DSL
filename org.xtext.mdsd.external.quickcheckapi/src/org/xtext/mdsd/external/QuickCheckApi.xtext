@@ -2,8 +2,104 @@ grammar org.xtext.mdsd.external.QuickCheckApi with org.eclipse.xtext.common.Term
 
 generate quickCheckApi "http://www.xtext.org/mdsd/external/QuickCheckApi"
 
-Model:
-	greetings+=Greeting*;
-	
-Greeting:
-	'Hello' name=ID '!';
+Builder: 
+	"TestBuilder" "{" tests+=Test+ "}";
+
+Test:
+	"Test" name=ID "{"requests+=(Request)"}"
+;
+
+Request:
+	"request" name=ID "{" method=Method url=URL ("PRE:" preconditions=PreLogicExp)? 
+	(params+=Param)? body=Body? ("POST:"postconditions=PostLogicExp) "}"
+;
+
+
+Method:
+	{GET} "GET" | {POST} "POST" | {PUT} "PUT" | {PATCH} "PATCH" | {DELETE} "DELETE"	
+;
+
+URL:
+	protocol=Protocol "://" domain=Domain
+;
+
+Domain:
+	host=Host (":" port=Port)? "/" (uri=URI)?
+;
+
+URI:
+	name=ID("/" path+=PathPart)*	
+;
+
+PathPart:
+	part=ID	
+;
+
+Host:
+	hostParts+=ID ("." hostvalues+=ID)*
+;
+
+Port:
+	INT
+;
+
+Protocol:
+	"http" | "https"	
+;
+
+StateOp :
+	{StateOp}notOp=NotOp? "contains"
+;
+
+NotOp:
+	"not"	
+;
+
+Param:
+	"parameters" pairs+=KVPair (";" pairs+=KVPair)*	
+;
+
+KVPair:
+	key=Key "=" value=Value 
+;
+
+Value:
+	ID | INT
+;
+
+Key:
+	name=ID	
+;
+
+Body:
+	"body" value=STRING
+;
+
+PreLogicExp returns PreProposition:
+	PreConjunction("OR" {PreDisjunction.left=current} right=PreConjunction)*
+;
+
+PreConjunction returns PreProposition:
+	Precondition ("AND" {PreConjunction.left=current} right=Precondition)*	
+;
+
+Precondition returns PreProposition:
+	stateOp=StateOp value=STRING	
+;
+
+PostLogicExp returns PostProposition:
+	PostConjunction("OR" {PostDisjunction.left=current} right=PostConjunction)*
+;
+
+PostConjunction returns PostProposition:
+	Postcondition ("AND" {PostConjunction.left=current} right=Postcondition)*	
+;
+
+
+Postcondition returns PostProposition:
+	(stateOp=StateOp stateValue=STRING) | (requestOp=RequestOp requestValue=STRING)
+;
+
+RequestOp:
+	{RequestOp} notOp=NotOp? "returns"	
+;
