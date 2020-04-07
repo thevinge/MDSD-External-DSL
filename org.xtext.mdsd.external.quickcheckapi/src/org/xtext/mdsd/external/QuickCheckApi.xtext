@@ -11,7 +11,7 @@ Test:
 
 Request:
 	"request" name=ID method=Method url=URL ("PRE:" preconditions=PreLogicExp)? 
-	(params=Param)? body=Body? ("POST:"postconditions=PostLogicExp)
+	(params=Param)? body=Body? ("POST:"postconditions=PostLogicExp)?
 ;
 
 
@@ -36,11 +36,11 @@ PathPart:
 ;
 
 Host:
-	hostParts+=ID ("." hostParts+=ID)*
+	hostParts+=ID ("." hostParts+=ID)* | ips+=INT ("." ips+=INT)*
 ;
 
 Port:
-	INT
+	{Port} value=INT
 ;
 
 Protocol:
@@ -77,7 +77,7 @@ PreConjunction returns PreProposition:
 ;
 
 Precondition returns PreProposition:
-	stateOp=StateOp value=STRING	
+	stateOp=StateOp value=STRING | stateOp=StateOp	
 ;
 
 PostLogicExp returns PostProposition:
@@ -90,7 +90,7 @@ PostConjunction returns PostProposition:
 
 
 Postcondition returns PostProposition:
-	(stateOp=StateOp stateValue=STRING) | (requestOp=RequestOp requestValue=STRING)
+	(stateOp=StateOp stateValue=STRING) | (requestOp=RequestOp requestValue=STRING) | stateOp=StateOp
 ;
 
 RequestOp:
@@ -98,7 +98,7 @@ RequestOp:
 ;
 
 StateOp :
-	{StateOp}notOp=NotOp? "contains"
+	{StateOp}notOp=NotOp? "contains" | {StateOp}NotOperator=NotOp? "empty"
 ;
 
 NotOp:

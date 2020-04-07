@@ -7,6 +7,11 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
+import org.xtext.mdsd.external.quickCheckApi.Builder
+import org.xtext.mdsd.external.quickCheckApi.Test
+import org.xtext.mdsd.external.quickCheckApi.Host
+import org.xtext.mdsd.external.quickCheckApi.Port
+import org.xtext.mdsd.external.quickCheckApi.URI
 
 /**
  * Generates code from your model files on save.
@@ -16,10 +21,104 @@ import org.eclipse.xtext.generator.IGeneratorContext
 class QuickCheckApiGenerator extends AbstractGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
-//		fsa.generateFile('greetings.txt', 'People to greet: ' + 
-//			resource.allContents
-//				.filter(Greeting)
-//				.map[name]
-//				.join(', '))
+		val variable = resource.allContents.filter(Builder).next;
+		createFile(fsa, variable);
+		
 	}
+	
+	def createFile(IFileSystemAccess2 fsa, Builder builder) {
+		for (test : builder.tests) {
+			fsa.generateFile(test.name + ".ml", test.compile());
+		}
+		
+		
+	}
+	
+	def CharSequence compile(Test test ) {
+		'''
+		open QCheck
+		open Yojson.Basic.Util
+		open Curl
+		open Format
+		
+		module InternalHttp =
+		struct
+		  let get ?(header = "") url =
+		    let r = Buffer.create 16384 in
+		    let c = Curl.init () in
+		    set_url c url;
+		    set_httpheader c [header];
+		    set_writefunction c (fun s -> Buffer.add_string r s; String.length s);
+		    perform c;
+		    let code = get_responsecode c in
+		    cleanup c;
+		    (code, Buffer.contents r)
+		
+		  let post ?(header = "") (* ?(content_type = "text/html") *) url data =
+		    let r = Buffer.create 16384 in
+		    let c = Curl.init () in
+		    set_url c url;
+		    set_post c true;
+		    set_httpheader c [header];
+		    set_writefunction c (fun s -> Buffer.add_string r s; String.length s);
+		    set_postfields c data;
+		    set_postfieldsize c (String.length data);
+		    perform c;
+		    let code = get_responsecode c in
+		    cleanup c;
+		    (code, Buffer.contents r)
+		end
+		
+		module Http =
+		struct
+		  (* Http Headers *)
+		  let get_header = "Content-Type:application/json"
+		  let post_header = "Content-Type:application/json"
+		  
+		  let get ?(header = get_header) url =
+		    let c,r = InternalHttp.get ~header:header url in
+		    (c, Yojson.Basic.from_string r)
+		  let rawpost ?(header = post_header) url data =
+		    let c,r = InternalHttp.post ~header:header url data in
+		    (c,r)
+		  let post ?(header = post_header) url data =
+		    let c,r = InternalHttp.post ~header:header url data in
+		    (c, Yojson.Basic.from_string r)
+		end
+		
+		module APIConf =
+		struct
+		type cmd =
+		 «FOR request : test.requests »
+		     | «request.name»
+		 «ENDFOR»
+		 «FOR request : test.requests »
+		     let «request.name»URL=«request.url.protocol»://«request.url.domain.host.compile()»«request.url.domain.port.compile()»/«request.url.domain.uri.compile()»
+		 «ENDFOR»'''
+	
+	}
+	
+	def CharSequence compile(Host host) {
+		if(host.hostParts.empty) {
+			'''«FOR ip : host.ips SEPARATOR "."»«ip.toString»«ENDFOR»'''
+		} else {
+			'''«FOR hostPart : host.hostParts SEPARATOR "."»«hostPart.toString»«ENDFOR»'''
+		}
+		
+		
+	}
+	
+	def compile(Port port) {
+		'''
+		«IF !(port === null)  »:« port.toString »«ENDIF»'''
+	}
+	
+	def compile(URI uri) {
+		'''
+		«uri.name»/«FOR part : uri.path SEPARATOR "/"»«part.part»«ENDFOR»'''
+	}
+	
+	
+
+	
 }
