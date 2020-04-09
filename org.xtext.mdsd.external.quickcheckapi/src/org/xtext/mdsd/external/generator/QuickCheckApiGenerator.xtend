@@ -89,20 +89,20 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 		module APIConf =
 		struct
 		type cmd =
-		 Â«FOR request : test.requests Â»
-		     | Â«request.nameÂ»
-		 Â«ENDFORÂ»
-		 Â«FOR request : test.requests Â»
-		     let Â«request.nameÂ»URL=Â«request.url.protocolÂ»://Â«request.url.domain.host.compile()Â»Â«request.url.domain.port.compile()Â»/Â«request.url.domain.uri.compile()Â»
-		 Â«ENDFORÂ»'''
+		 «FOR request : test.requests »
+		     | «request.name»
+		 «ENDFOR»
+		 «FOR request : test.requests »
+		     let «request.name»URL=«request.url.protocol»://«request.url.domain.host.compile()»«request.url.domain.port.compile()»/«request.url.domain.uri.compile()»
+		 «ENDFOR»'''
 	
 	}
 	
 	def CharSequence compile(Host host) {
 		if(host.hostParts.empty) {
-			'''Â«FOR ip : host.ips SEPARATOR "."Â»Â«ip.toStringÂ»Â«ENDFORÂ»'''
+			'''«FOR ip : host.ips SEPARATOR "."»«ip.toString»«ENDFOR»'''
 		} else {
-			'''Â«FOR hostPart : host.hostParts SEPARATOR "."Â»Â«hostPart.toStringÂ»Â«ENDFORÂ»'''
+			'''«FOR hostPart : host.hostParts SEPARATOR "."»«hostPart.toString»«ENDFOR»'''
 		}
 		
 		
@@ -110,12 +110,12 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 	
 	def compile(Port port) {
 		'''
-		Â«IF !(port === null)  Â»:Â« port.toString Â»Â«ENDIFÂ»'''
+		«IF !(port === null)  »:« port.toString »«ENDIF»'''
 	}
 	
 	def compile(URI uri) {
 		'''
-		Â«uri.nameÂ»/Â«FOR part : uri.path SEPARATOR "/"Â»Â«part.partÂ»Â«ENDFORÂ»'''
+		«uri.name»/«FOR part : uri.path SEPARATOR "/"»«part.part»«ENDFOR»'''
 	}
 	
 	
