@@ -3,7 +3,7 @@ grammar org.xtext.mdsd.external.QuickCheckApi with org.eclipse.xtext.common.Term
 generate quickCheckApi "http://www.xtext.org/mdsd/external/QuickCheckApi"
 
 Builder: 
-	"TestBuilder" tests+=Test+;
+	"TestBuilder" name=ID tests+=Test+;
 
 Test:
 	"Test" name=ID requests+=(Request)+
