@@ -126,11 +126,6 @@ class QCBoilerplate {
 
 		  let checkInvariant state sut = List.length state = List.length !sut
 
-
-		  let lookupId ix state = let mItem = lookupItem ix state in
-		    let json  = Yojson.Basic.from_string mItem in
-		    List.hd (extract_id json)
-		    
 		  let rec remove_item pos list = match (list, pos) with
 		    | ([], _) -> []
 		    | (head::tail, 0) -> tail
