@@ -102,17 +102,16 @@ PostConjunction returns Postproposition:
 
 
 Postcondition returns Postproposition:
-	StateCondition | RequestCondition 
+	{BodyCondition}requestOp=RequestOp requestValue=ResponseBody | {CodeCondition}requestOp=RequestOp statusCode=StatusCode 
 ;
 
-StateCondition:
-	stateOp=StateOp stateValue=STRING | stateOp=StateOp
+StatusCode:
+	"code" code=INT
 ;
 
-RequestCondition:
-	requestOp=RequestOp requestValue=STRING
+ResponseBody:
+	"body" body=STRING
 ;
-
 
 RequestOp:
 	{RequestOp} notOp=NotOp? "returns"	

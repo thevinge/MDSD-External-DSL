@@ -135,4 +135,35 @@ class QCBoilerplate {
 		  let getPos ix list = ((List.length list - 1) - (ix mod List.length list))
 		'''
 	}
+	
+	def CharSequence initExternals() {
+		'''
+		«combine()»
+		
+		«extractId()»
+		'''
+	}
+	
+	private def CharSequence combine() {
+		'''
+		(* Implement this method to combine your state and id *)
+		let combine_state_id stateItem id =
+			let combined = ... in
+			
+			
+			combined
+			
+		'''
+	}
+	
+	private def CharSequence extractId() {
+		'''
+		(* Implement this method to extract your id from a json body *)
+		let extractIdFromContent content =
+			let extracted = ... in
+			
+			extracted
+		'''
+	}
+	
 }

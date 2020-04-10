@@ -52,6 +52,9 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 		open Curl
 		open Format
 		
+
+		«boilerplate.initExternals»
+
 		«boilerplate.initHttpModule»
 				
 		module APIConf =
