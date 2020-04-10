@@ -61,7 +61,7 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 		
 		type cmd =
 		 «FOR request : test.requests »
-		     | «request.name.toUpperCaseFunction»
+		     | «QCUtils.toUpperCaseFunction(request.name)»
 		 «ENDFOR»
 		 [@@deriving show { with_path = false }]
 		 «FOR request : test.requests »
@@ -93,9 +93,6 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 	
 	}
 	
-	def toUpperCaseFunction(String s) {
-		 s.substring(0,1).toUpperCase + s.substring(1)
-	}
 	
 	
 	def CharSequence compile(Host host) {
