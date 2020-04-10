@@ -1,11 +1,20 @@
 package org.xtext.mdsd.external.generator
 
 import org.xtext.mdsd.external.quickCheckApi.Test
+import org.xtext.mdsd.external.quickCheckApi.Action
+import org.xtext.mdsd.external.quickCheckApi.DeleteAction
+import org.xtext.mdsd.external.quickCheckApi.UpdateAction
+import org.xtext.mdsd.external.quickCheckApi.NoAction
+import org.xtext.mdsd.external.quickCheckApi.Request
 
 class QCRunCmd {
 	def initRun_cmd(Test test ) {
 		'''
 		let run_cmd cmd state sut = match cmd with
+			«FOR request : test.requests»
+			| «request.name» «request.action.determineIndex» if (checkInvariant state sut) then «request.compileRunCmd»
+			«ENDFOR»
+			
 		    | Get ix -> if (checkInvariant state sut) then 
 		                   let id = lookupSutItem ix !sut in
 		                  let code,content = Http.get (getUrl ^ id) in
@@ -35,4 +44,18 @@ class QCRunCmd {
 		                    else
 		                      false
 		'''
-	}}
+	}
+	
+	def CharSequence determineIndex(Action action){
+		var actionOp = action.actionOp
+		if (actionOp instanceof DeleteAction || actionOp instanceof UpdateAction || actionOp instanceof NoAction){
+			'''ix ->'''
+		} else {
+			''' ->'''
+		}
+	}
+	
+	def CharSequence compileRunCmd(Request request){
+		''''''
+	}
+}
