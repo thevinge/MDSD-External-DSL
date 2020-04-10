@@ -1,0 +1,53 @@
+package org.xtext.mdsd.external.generator
+
+import org.xtext.mdsd.external.quickCheckApi.Test
+import org.xtext.mdsd.external.quickCheckApi.Host
+import org.xtext.mdsd.external.quickCheckApi.Port
+import org.xtext.mdsd.external.quickCheckApi.URI
+import org.xtext.mdsd.external.quickCheckApi.Request
+import org.xtext.mdsd.external.quickCheckApi.CreateAction
+
+class QCCmd {
+	def CharSequence initCmd(Test test){
+		'''
+		type cmd =
+			 «FOR request : test.requests »
+			 | «QCUtils.toUpperCaseFunction(request.name)»«request.indexSnippet»
+			 «ENDFOR»
+			 [@@deriving show { with_path = false }]
+		
+		«FOR request : test.requests »
+		let «request.name»URL="«request.url.protocol»://«request.url.domain.host.compile()»«request.url.domain.port.compile()»/«request.url.domain.uri.compile()»"
+		«ENDFOR»
+		'''
+	}
+			
+	 private def CharSequence compile(Host host) {
+		if(host.hostParts.empty) {
+			'''«FOR ip : host.ips SEPARATOR "."»«ip.toString»«ENDFOR»'''
+		} else {
+			'''«FOR hostPart : host.hostParts SEPARATOR "."»«hostPart.toString»«ENDFOR»'''
+		}	
+	}
+	
+	 private def CharSequence compile(Port port) {
+		'''
+		«IF !(port === null)  »:« port.toString »«ENDIF»'''
+	}
+	
+	 private def CharSequence compile(URI uri) {
+		'''
+		«uri.name»/«FOR part : uri.path SEPARATOR "/"»«part.part»«ENDFOR»'''
+	}
+	
+	
+	
+	private def CharSequence indexSnippet(Request request){
+		if (QCUtils.requireIndex(request)) {
+			''' of int'''
+		} else {
+			''''''
+		}
+	}
+	
+}

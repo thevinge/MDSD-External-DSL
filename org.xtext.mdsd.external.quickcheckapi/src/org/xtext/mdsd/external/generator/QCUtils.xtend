@@ -1,12 +1,12 @@
 package org.xtext.mdsd.external.generator
 
 import org.eclipse.emf.common.util.EList
-import org.xtext.mdsd.external.quickCheckApi.Request
 import org.xtext.mdsd.external.quickCheckApi.Method
 import java.util.List
 import java.util.ArrayList
-import org.xtext.mdsd.external.quickCheckApi.POST
-import org.xtext.mdsd.external.quickCheckApi.PreProposition
+
+import org.xtext.mdsd.external.quickCheckApi.CreateAction
+import org.xtext.mdsd.external.quickCheckApi.Request
 
 class QCUtils {
 	
@@ -26,12 +26,26 @@ class QCUtils {
 		 s.substring(0,1).toUpperCase + s.substring(1)
 	}
 	
-	
-	def static hasNotEmptyPreCondition(Request request){
-		
+	def static boolean requireIndex(Request request){
+		// If anything else than a CreateAction then True
+		 (CreateAction.isAssignableFrom(request.action.actionOp.class) == false)
 	}
 	
-	private def dispatch CharSequence name(PreProposition proposition) {
-		
+	def static List<Request> filterRequireIndex(EList<Request> requests){
+		requests.filterIndex(true)
+	}
+	
+	def static List<Request> filterRequireNoIndex(EList<Request> requests){
+		requests.filterIndex(false)
+	}
+	
+	def static List<Request> filterIndex(EList<Request> requests, boolean require){
+		val filtered = new ArrayList
+		for (request : requests) {
+			if (request.requireIndex == require) {
+				filtered.add(request)
+			}
+		}
+		filtered
 	}
 }

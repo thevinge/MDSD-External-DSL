@@ -24,6 +24,7 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 
 	QCBoilerplate boilerplate = new QCBoilerplate;
 	QCModelSystem modelSystem = new QCModelSystem;
+	QCCmd cmd = new QCCmd;
 	QCArbCmd arbCmd = new QCArbCmd;
 	QCNextState nextState = new QCNextState;
 	QCRunCmd runCmd = new QCRunCmd;
@@ -56,17 +57,10 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 		module APIConf =
 		struct
 		
-		type sut = (string list) ref
-		type state = string list
+		  type sut = (string list) ref
+		  type state = string list
 		
-		type cmd =
-		 «FOR request : test.requests »
-		     | «QCUtils.toUpperCaseFunction(request.name)»
-		 «ENDFOR»
-		 [@@deriving show { with_path = false }]
-		 «FOR request : test.requests »
-		 let «request.name»URL="«request.url.protocol»://«request.url.domain.host.compile()»«request.url.domain.port.compile()»/«request.url.domain.uri.compile()»"
-		 «ENDFOR»
+		  «cmd.initCmd(test)»
 		 
 		  «modelSystem.initModelSystem()»
 		  
@@ -94,26 +88,6 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 	}
 	
 	
-	
-	def CharSequence compile(Host host) {
-		if(host.hostParts.empty) {
-			'''«FOR ip : host.ips SEPARATOR "."»«ip.toString»«ENDFOR»'''
-		} else {
-			'''«FOR hostPart : host.hostParts SEPARATOR "."»«hostPart.toString»«ENDFOR»'''
-		}
-		
-		
-	}
-	
-	def compile(Port port) {
-		'''
-		«IF !(port === null)  »:« port.toString »«ENDIF»'''
-	}
-	
-	def compile(URI uri) {
-		'''
-		«uri.name»/«FOR part : uri.path SEPARATOR "/"»«part.part»«ENDFOR»'''
-	}
-	
+
 	
 }
