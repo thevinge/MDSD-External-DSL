@@ -32,7 +32,11 @@ URL:
 ;
 
 Domain:
-	host=Host (":" port=Port)? "/" (uri=URI)?
+	host=Host (":" port=Port)? "/" (uri=URI)? ("/@" requestID=RequestID)?
+;
+
+RequestID:
+	name=ID
 ;
 
 URI:

@@ -5,15 +5,17 @@ import org.xtext.mdsd.external.quickCheckApi.Request
 import org.xtext.mdsd.external.quickCheckApi.Method
 import java.util.List
 import java.util.ArrayList
+import org.xtext.mdsd.external.quickCheckApi.POST
+import org.xtext.mdsd.external.quickCheckApi.PreProposition
 
 class QCUtils {
 	
 
 	
-	def List<Request> filterbyMethod(EList<Request> requests, Class<? extends Method> method){
+	def static List<Request> filterbyMethod(EList<Request> requests, Class<? extends Method> method){
 		val filtered = new ArrayList
 		for (request : requests) {
-			if (request.method.class == method.class) {
+			if (method.isAssignableFrom(request.method.class)) {
 				filtered.add(request)
 			}
 		}
@@ -22,5 +24,14 @@ class QCUtils {
 	
 	def static toUpperCaseFunction(String s) {
 		 s.substring(0,1).toUpperCase + s.substring(1)
+	}
+	
+	
+	def static hasNotEmptyPreCondition(Request request){
+		
+	}
+	
+	private def dispatch CharSequence name(PreProposition proposition) {
+		
 	}
 }
