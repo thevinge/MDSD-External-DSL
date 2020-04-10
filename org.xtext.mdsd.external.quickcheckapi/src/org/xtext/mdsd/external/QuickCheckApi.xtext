@@ -11,7 +11,15 @@ Test:
 
 Request:
 	"request" name=ID method=Method url=URL ("PRE:" preconditions=PreLogicExp)? 
-	(params=Param)? body=Body? ("POST:"postconditions=PostLogicExp)?
+	(params=Param)? body=Body? ("STATE:" action=Action) ("POST:"postconditions=PostLogicExp)?
+;
+
+Action:
+	actionOp=ActionOperator value=STRING | actionOp=ActionOperator
+;
+
+ActionOperator:
+	{CreateAction} "create" | {DeleteAction} "delete" | {UpdateAction} "update" | {NoAction} "none"
 ;
 
 
@@ -68,37 +76,46 @@ Body:
 	"body" value=STRING
 ;
 
-PreLogicExp returns PreProposition:
+PreLogicExp returns Preproposition:
 	PreConjunction("OR" {PreDisjunction.left=current} right=PreConjunction)*
 ;
 
-PreConjunction returns PreProposition:
+PreConjunction returns Preproposition:
 	Precondition ("AND" {PreConjunction.left=current} right=Precondition)*	
 ;
 
-Precondition returns PreProposition:
+Precondition returns Preproposition:
 	stateOp=StateOp value=STRING | stateOp=StateOp	
 ;
 
-PostLogicExp returns PostProposition:
-	PostConjunction("OR" {PostDisjunction.left=current} right=PostConjunction)*
+PostLogicExp returns Postproposition:
+	PostConjunction ("OR" {PostDisjunction.left=current} right=PostConjunction)*
 ;
 
-PostConjunction returns PostProposition:
+PostConjunction returns Postproposition:
 	Postcondition ("AND" {PostConjunction.left=current} right=Postcondition)*	
 ;
 
 
-Postcondition returns PostProposition:
-	(stateOp=StateOp stateValue=STRING) | (requestOp=RequestOp requestValue=STRING) | stateOp=StateOp
+Postcondition returns Postproposition:
+	StateCondition | RequestCondition 
 ;
+
+StateCondition:
+	stateOp=StateOp stateValue=STRING | stateOp=StateOp
+;
+
+RequestCondition:
+	requestOp=RequestOp requestValue=STRING
+;
+
 
 RequestOp:
 	{RequestOp} notOp=NotOp? "returns"	
 ;
 
 StateOp :
-	{StateOp}notOp=NotOp? "contains" | {StateOp}NotOperator=NotOp? "empty"
+	{StateOp} notOp=NotOp? "contains" | {StateOp} notOp=NotOp? "empty"
 ;
 
 NotOp:
