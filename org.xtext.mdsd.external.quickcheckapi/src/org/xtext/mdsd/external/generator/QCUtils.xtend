@@ -6,7 +6,7 @@ import org.xtext.mdsd.external.quickCheckApi.Method
 import java.util.List
 import java.util.ArrayList
 import org.xtext.mdsd.external.quickCheckApi.POST
-import org.xtext.mdsd.external.quickCheckApi.PreProposition
+import org.xtext.mdsd.external.quickCheckApi.Preproposition
 
 class QCUtils {
 	
@@ -31,7 +31,7 @@ class QCUtils {
 		
 	}
 	
-	private def dispatch CharSequence name(PreProposition proposition) {
+	private def dispatch CharSequence name(Preproposition proposition) {
 		
 	}
 }
