@@ -12,7 +12,7 @@ import org.xtext.mdsd.external.quickCheckApi.Host
 import org.xtext.mdsd.external.quickCheckApi.Port
 import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.URI
-import org.xtext.mdsd.external.quickCheckApi.POST
+
 
 /**
  * Generates code from your model files on save.
@@ -23,7 +23,11 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 
 
 	QCBoilerplate boilerplate = new QCBoilerplate;
-	QCUtils utils = new QCUtils;
+	QCModelSystem modelSystem = new QCModelSystem;
+	QCArbCmd arbCmd = new QCArbCmd;
+	QCNextState nextState = new QCNextState;
+	QCRunCmd runCmd = new QCRunCmd;
+	QCPreconditions preconditions = new QCPreconditions;
 	
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		val variable = resource.allContents.filter(Builder).next;
@@ -64,17 +68,17 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 		 let «request.name»URL="«request.url.protocol»://«request.url.domain.host.compile()»«request.url.domain.port.compile()»/«request.url.domain.uri.compile()»"
 		 «ENDFOR»
 		 
-		  «initModelSystem()»
+		  «modelSystem.initModelSystem()»
 		  
 		  «boilerplate.initUtilities()»
 		 
-		  «arb_cmd(test)»
+		  «arbCmd.initArb_cmd(test)»
 		 
-		  «next_State(test)»
+		  «nextState.initNext_State(test)»
 		 
-		  «run_cmd(test)»
+		  «runCmd.initRun_cmd(test)»
 		 
-		  «preconditions(test)»
+		  «preconditions.initPreconditions(test)»
 		 
 		 end
 		 
@@ -93,89 +97,6 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 		 s.substring(0,1).toUpperCase + s.substring(1)
 	}
 	
-	def next_State(Test test ) {
-		'''
-		let next_state cmd state = match cmd with
-		    | Get ix -> state
-		    | Create -> state@["{\"name\": \"bar\"}"]
-		    | Delete ix -> let pos = getPos ix state in
-		                   (* Returns a list of all items except that which is 'item' found above *)
-		                   let l = remove_item pos state in
-		                   l
-		'''
-	}
-	
-	def arb_cmd(Test test ) {
-		
-		'''
-		let arb_cmd state = 
-		  let int_gen = Gen.oneof [Gen.small_int] in
-		  if state = [] then
-		    QCheck.make ~print:show_cmd
-		    (Gen.oneof [
-		    «FOR postRequest: test.requests.filter(POST) SEPARATOR ";"»
-		    (Gen.return «postRequest»)
-		    «ENDFOR»
-		    ])
-		    
-		  else
-		    QCheck.make ~print:show_cmd
-		      (Gen.oneof [ Gen.return Create;
-		                  Gen.map (fun i -> Delete i) int_gen;
-		                  Gen.map (fun i -> Get i) int_gen])
-		'''
-	}
-	
-	def run_cmd(Test test ) {
-		'''
-		let run_cmd cmd state sut = match cmd with
-		    | Get ix -> if (checkInvariant state sut) then 
-		                   let id = lookupSutItem ix !sut in
-		                  let code,content = Http.get (getUrl ^ id) in
-		                  let extractedState = lookupItem ix state in
-		                    let stateJson = Yojson.Basic.from_string extractedState in
-		                    let sutJson = Yojson.Basic.from_string ("{\"id\": " ^ id ^ "}") in
-		                    let combinedJson = Yojson.Basic.Util.combine stateJson sutJson in
-		                  String.compare (Yojson.Basic.to_string content) (Yojson.Basic.to_string combinedJson) == 0
-		                else
-		                  false
-		    | Create -> let code,content = Http.post (createUrl) "{\"name\": \"bar\"}" in
-		                (* Get contents id and add it to sut *)
-		                let id = content |> member "id" |> to_int in 
-		                  sut := !sut@[string_of_int id];
-		                true
-		    | Delete ix -> if (checkInvariant state sut) then (
-		                     let id = lookupSutItem ix !sut in
-		                     let pos = getPos ix !sut in
-		                     let code,content = Http.delete (deleteUrl ^ id) in
-		                     if code == 200 then (
-		                       sut := remove_item pos !sut;
-		                       true;
-		                     )
-		                      else 
-		                        false
-		                    )
-		                    else
-		                      false
-		'''
-	}
-	
-	def preconditions(Test test ) {
-		'''
-		let precond cmd state = match cmd with
-		    | Get ix -> List.length state > 0 
-		    | Delete ix-> List.length state > 0
-		    | Create -> true
-		'''
-	}
-	
-	private def CharSequence initModelSystem()
-		'''
-		let init_state = []
-		let init_sut() = ref []
-		let cleanup _  =  ignore(Http.rawpost ("http://167.172.184.103" ^ "/api/shop/reset") "")
-		'''
-		// TODO Require Cleanup HTTP-endpoint in DSL
 	
 	def CharSequence compile(Host host) {
 		if(host.hostParts.empty) {
