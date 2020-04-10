@@ -2,9 +2,10 @@ package org.xtext.mdsd.external.generator
 
 import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.POST
+import org.xtext.mdsd.external.quickCheckApi.Request
 
 class QCArbCmd {
-	QCUtils utils = new QCUtils;
+	
 	def initArb_cmd(Test test ) {
 		
 		'''
@@ -13,8 +14,8 @@ class QCArbCmd {
 		  if state = [] then
 		    QCheck.make ~print:show_cmd
 		    (Gen.oneof [
-		    «FOR postRequest: utils.filterbyMethod(test.requests,POST) SEPARATOR ";"»
-		    (Gen.return «postRequest»)
+		    «FOR postRequest: QCUtils.filterbyMethod(test.requests,POST) SEPARATOR ";"»
+		    (Gen.return «postRequest.name»)
 		    «ENDFOR»
 		    ])
 		    
@@ -23,6 +24,9 @@ class QCArbCmd {
 		      (Gen.oneof [ Gen.return Create;
 		                  Gen.map (fun i -> Delete i) int_gen;
 		                  Gen.map (fun i -> Get i) int_gen])
+		                
 		'''
 	}
+	
+	
 }
