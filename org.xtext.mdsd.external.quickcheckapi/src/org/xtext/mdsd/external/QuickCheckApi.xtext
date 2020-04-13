@@ -89,7 +89,7 @@ PreConjunction returns Preproposition:
 ;
 
 Precondition returns Preproposition:
-	stateOp=StateOp value=STRING | stateOp=StateOp	
+	{ContainsCondition} notOp=NotOp? "contains" value=STRING | {EmptyCondition} notOp=NotOp? "empty"
 ;
 
 PostLogicExp returns Postproposition:
@@ -115,10 +115,6 @@ ResponseBody:
 
 RequestOp:
 	{RequestOp} notOp=NotOp? "returns"	
-;
-
-StateOp :
-	{StateOp} notOp=NotOp? "contains" | {StateOp} notOp=NotOp? "empty"
 ;
 
 NotOp:

@@ -133,6 +133,10 @@ class QCBoilerplate {
 		  
 		  (* Wanting to get the index of the id back, length of list will always start at 1 for a given element but the first element is at index 0*)
 		  let getPos ix list = ((List.length list - 1) - (ix mod List.length list))
+		  
+		  let inSpace value state = List.mem (value) state
+		  
+		  let isEmpty state = (List.length state = 0)
 		'''
 	}
 	
