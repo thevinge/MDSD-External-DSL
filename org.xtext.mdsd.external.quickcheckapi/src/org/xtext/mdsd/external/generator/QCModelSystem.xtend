@@ -6,7 +6,7 @@ class QCModelSystem {
 		'''
 		let init_state = []
 		let init_sut() = ref []
-		let cleanup _  =  ignore(Http.rawpost ("http://167.172.184.103" ^ "/api/shop/reset") "")
+		let cleanup _  =  afterTestcleanup
 		'''
 		// TODO Require Cleanup HTTP-endpoint in DSL
 	}

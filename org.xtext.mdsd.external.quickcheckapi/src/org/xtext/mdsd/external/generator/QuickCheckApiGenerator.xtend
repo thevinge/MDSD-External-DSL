@@ -51,11 +51,10 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 		open Yojson.Basic.Util
 		open Curl
 		open Format
-		
-
-		«boilerplate.initExternals»
 
 		«boilerplate.initHttpModule»
+		
+		«boilerplate.initExternals»
 				
 		module APIConf =
 		struct

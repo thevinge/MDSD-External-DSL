@@ -141,6 +141,8 @@ class QCBoilerplate {
 		«combine()»
 		
 		«extractId()»
+		
+		«cleanup()»
 		'''
 	}
 	
@@ -165,5 +167,15 @@ class QCBoilerplate {
 			extracted
 		'''
 	}
+	
+	private def CharSequence cleanup() {
+		'''
+		(* Implement this method to cleanup after each test *)
+		let afterTestcleanup =
+			...
+		'''
+	}
+	
+	
 	
 }
