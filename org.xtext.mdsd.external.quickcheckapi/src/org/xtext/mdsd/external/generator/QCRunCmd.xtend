@@ -41,13 +41,12 @@ class QCRunCmd {
 	def CharSequence createHttpCall(Request request) {
 		if (request.url.domain.requestID === null) {			
 			'''
-			let code,content = Http.«request.method.compileMethod» «QCUtils.firstCharLowerCase(request.name)»URL "«IF request.body !== null»«request.body.compileBody»«ENDIF»" in
+				let code,content = Http.«request.method.compileMethod» «QCUtils.firstCharLowerCase(request.name)»URL "«IF request.body !== null»«request.body.compileBody»«ENDIF»" in
 			'''
 		} else {
 			'''
 			let id = lookupSutItem ix !sut in
-			let code,content = Http.«request.method.compileMethod» («QCUtils.firstCharLowerCase(request.name)»URL^"/"^id) «IF request.body !== null»"«request.body.compileBody»"«ENDIF» in
-
+				let code,content = Http.«request.method.compileMethod» («QCUtils.firstCharLowerCase(request.name)»URL^"/"^id) «IF request.body !== null»"«request.body.compileBody»"«ENDIF» in
 			'''
 		}
 		
@@ -84,7 +83,9 @@ class QCRunCmd {
 	}
 	
 	def dispatch CharSequence compilePostCondition(PostConjunction and) {
-		'''(«and.left.compilePostCondition») && («and.right.compilePostCondition»)'''
+		'''
+		(«and.left.compilePostCondition») && («and.right.compilePostCondition»)
+		'''
 	}
 	
 	def dispatch CharSequence compilePostCondition(PostDisjunction or) {
@@ -92,31 +93,29 @@ class QCRunCmd {
 	}
 	
 	def dispatch CharSequence compilePostCondition(CodeCondition condition) {
-		'''
-		code == «condition.statusCode.code»
-		'''
+		'''code == «condition.statusCode.code»'''
 	}
 	
 	def dispatch CharSequence compilePostCondition(BodyCondition condition) {
 		'''
-        let extractedState = lookupItem ix state in
-        	let id = lookupSutItem ix !sut in
-        		let stateJson = Yojson.Basic.from_string extractedState in
-				let combined = combine_state_id stateJson id in
-				String.compare (Yojson.Basic.to_string combined) (Yojson.Basic.to_string content) == 0
+		let extractedState = lookupItem ix state in
+			let id = lookupSutItem ix !sut in
+				let stateJson = Yojson.Basic.from_string extractedState in
+					let combined = combine_state_id stateJson id in
+						String.compare (Yojson.Basic.to_string combined) (Yojson.Basic.to_string content) == 0
 		'''
 	}
 	
 	def dispatch CharSequence compileAction(CreateAction action) {
 		'''
 		let id = extractIdFromContent content in
-		sut := !sut@[id];
+			sut := !sut@[id];
 		'''
 	}
 	def dispatch CharSequence compileAction(DeleteAction action) {
 		'''
-        let pos = getPos ix !sut in
-	    sut := remove_item pos !sut;
+	    let pos = getPos ix !sut in
+	    	sut := remove_item pos !sut;
 		'''
 	}
 	def dispatch CharSequence compileAction(UpdateAction action) {
