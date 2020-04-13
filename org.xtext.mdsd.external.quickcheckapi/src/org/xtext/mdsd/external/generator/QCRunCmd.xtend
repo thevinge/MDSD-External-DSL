@@ -41,12 +41,12 @@ class QCRunCmd {
 	def CharSequence createHttpCall(Request request) {
 		if (request.url.domain.requestID === null) {			
 			'''
-			let code,content = Http.«request.method.compileMethod» «request.name»URL "«request.body.compileBody»" in
+			let code,content = Http.«request.method.compileMethod» «QCUtils.firstCharLowerCase(request.name)»URL "«IF request.body !== null»«request.body.compileBody»«ENDIF»" in
 			'''
 		} else {
 			'''
 			let id = lookupSutItem ix !sut in
-			let code,content = Http.«request.method.compileMethod» «request.name»URL^"/"^id "«request.body.compileBody»" in
+			let code,content = Http.«request.method.compileMethod» («QCUtils.firstCharLowerCase(request.name)»URL^"/"^id) «IF request.body !== null»"«request.body.compileBody»"«ENDIF» in
 
 			'''
 		}
@@ -54,11 +54,7 @@ class QCRunCmd {
 	}
 	
 	def CharSequence compileBody(Body body) {
-		if (body === null) {
-			''''''
-		} else {		
-			body.value
-		}
+		body.value.replace("\"", "\\\"")
 	}
 	
 	def dispatch CharSequence compileMethod(GET get) {
@@ -107,7 +103,7 @@ class QCRunCmd {
         	let id = lookupSutItem ix !sut in
         		let stateJson = Yojson.Basic.from_string extractedState in
 				let combined = combine_state_id stateJson id in
-				String.compare (Yojson.Basic.to_string combined) (Yojson.Basic.to_string "«condition.requestValue.body»") == 0
+				String.compare (Yojson.Basic.to_string combined) (Yojson.Basic.to_string content) == 0
 		'''
 	}
 	

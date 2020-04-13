@@ -159,7 +159,7 @@ class QCBoilerplate {
 	private def CharSequence extractId() {
 		'''
 		(* Implement this method to extract your id from a json body *)
-		let extractIdFromContent content =
+		let extractIdFromContent (content:Yojson.Basic.t) : string =
 			let extracted = ... in
 			
 			extracted

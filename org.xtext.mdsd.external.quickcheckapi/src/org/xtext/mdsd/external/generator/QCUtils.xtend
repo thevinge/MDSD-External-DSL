@@ -26,6 +26,10 @@ class QCUtils {
 		 s.substring(0,1).toUpperCase + s.substring(1)
 	}
 	
+	def static firstCharLowerCase(String s) {
+		 s.substring(0,1).toLowerCase + s.substring(1)
+	}
+	
 	def static boolean requireIndex(Request request){
 		// If anything else than a CreateAction then True
 		 (CreateAction.isAssignableFrom(request.action.actionOp.class) == false)

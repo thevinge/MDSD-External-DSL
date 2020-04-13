@@ -17,7 +17,7 @@ class QCCmd {
 			 [@@deriving show { with_path = false }]
 		
 		«FOR request : test.requests »
-		let «request.name»URL="«request.url.protocol»://«request.url.domain.host.compile()»«request.url.domain.port.compile()»/«request.url.domain.uri.compile()»"
+		let «QCUtils.firstCharLowerCase(request.name)»URL="«request.url.protocol»://«request.url.domain.host.compile()»«request.url.domain.port.compile()»/«request.url.domain.uri.compile()»"
 		«ENDFOR»
 		'''
 	}

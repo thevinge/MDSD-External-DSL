@@ -25,7 +25,7 @@ class QCNextState {
 	def CharSequence compile(Action action){
 		var actionOp = action.actionOp
 		if (actionOp instanceof CreateAction) {
-			''' -> state@["«action.value»"]'''	
+			''' -> state@["«action.value.replace("\"", "\\\"")»"]'''	
 		} else if (actionOp instanceof DeleteAction){
 			'''
 			ix -> let pos = getPos ix state in
@@ -45,6 +45,7 @@ class QCNextState {
 			''''''
 		}
 	}
+
 }
 	
 	
