@@ -15,7 +15,7 @@ Request:
 ;
 
 Action:
-	actionOp=ActionOperator value=STRING | actionOp=ActionOperator
+	actionOp=ActionOperator value=Json | actionOp=ActionOperator
 ;
 
 ActionOperator:
@@ -77,8 +77,31 @@ Key:
 ;
 
 Body:
-	"body" value=STRING
+	"body" value=Json
 ;
+
+Json:
+	JsonObject | JsonList
+	
+;
+
+JsonList returns Json:
+	{JsonList} "[" jsonPairs+=JsonPair ("," jsonPairs+=JsonPair)* "]"
+;
+
+JsonObject returns Json:
+	{JsonObject} "{" jsonPairs+=JsonPair ("," jsonPairs+=JsonPair)* "}"
+;
+
+JsonPair  returns Json:
+	{JsonPair} key=STRING ":" value=JsonValue
+;
+
+JsonValue returns Json:
+	{StringValue} value=STRING | {IntValue} value=INT | {NestedJsonValue} value=JsonObject | {ListJsonValue} value=JsonList
+;
+
+
 
 PreLogicExp returns Preproposition:
 	PreConjunction("OR" {PreDisjunction.left=current} right=PreConjunction)*
@@ -110,7 +133,7 @@ StatusCode:
 ;
 
 ResponseBody:
-	"body" body=STRING
+	{ResponseBody} "body" body=Json?
 ;
 
 RequestOp:

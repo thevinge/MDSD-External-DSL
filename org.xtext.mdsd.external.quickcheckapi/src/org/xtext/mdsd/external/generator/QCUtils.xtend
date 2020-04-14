@@ -7,6 +7,13 @@ import java.util.ArrayList
 
 import org.xtext.mdsd.external.quickCheckApi.CreateAction
 import org.xtext.mdsd.external.quickCheckApi.Request
+import org.xtext.mdsd.external.quickCheckApi.JsonList
+import org.xtext.mdsd.external.quickCheckApi.JsonObject
+import org.xtext.mdsd.external.quickCheckApi.JsonPair
+import org.xtext.mdsd.external.quickCheckApi.IntValue
+import org.xtext.mdsd.external.quickCheckApi.StringValue
+import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
+import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
 
 class QCUtils {
 	
@@ -52,4 +59,31 @@ class QCUtils {
 		}
 		filtered
 	}
+	
+	def static dispatch CharSequence compileJson(JsonObject json){
+		'''{«FOR pair : json.jsonPairs SEPARATOR ","»«pair.compileJson»«ENDFOR»}'''
+	}
+	def static dispatch CharSequence compileJson(JsonList json){
+		'''[«FOR pair : json.jsonPairs SEPARATOR ","»«pair.compileJson»«ENDFOR»]'''
+	}
+	def static dispatch CharSequence compileJson(JsonPair json){
+		'''\\\"«json.key»\\\":«json.value.compileJson»'''
+	}
+	def static dispatch CharSequence compileJson(IntValue json){
+		'''«json.value»'''
+	}
+	def static dispatch CharSequence compileJson(StringValue json){
+		'''\\\"«json.value»\\\"'''
+	}
+	def static dispatch CharSequence compileJson(NestedJsonValue json){
+		'''«json.value.compileJson»'''
+	}
+	def static dispatch CharSequence compileJson(ListJsonValue json){
+		'''«json.value.compileJson»'''
+	}
+	
+	
+	
+	
+	
 }

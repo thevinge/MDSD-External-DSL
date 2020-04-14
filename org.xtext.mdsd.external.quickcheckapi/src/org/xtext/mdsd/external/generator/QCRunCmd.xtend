@@ -8,7 +8,6 @@ import org.xtext.mdsd.external.quickCheckApi.NoAction
 import org.xtext.mdsd.external.quickCheckApi.Request
 import org.xtext.mdsd.external.quickCheckApi.PostConjunction
 import org.xtext.mdsd.external.quickCheckApi.PostDisjunction
-import org.xtext.mdsd.external.services.QuickCheckApiGrammarAccess.PostconditionElements
 import org.xtext.mdsd.external.quickCheckApi.GET
 import org.xtext.mdsd.external.quickCheckApi.DELETE
 import org.xtext.mdsd.external.quickCheckApi.PATCH
@@ -18,6 +17,7 @@ import org.xtext.mdsd.external.quickCheckApi.Body
 import org.xtext.mdsd.external.quickCheckApi.CreateAction
 import org.xtext.mdsd.external.quickCheckApi.BodyCondition
 import org.xtext.mdsd.external.quickCheckApi.CodeCondition
+import org.xtext.mdsd.external.quickCheckApi.RequestOp
 
 class QCRunCmd {
 	def initRun_cmd(Test test ) {
@@ -53,8 +53,8 @@ class QCRunCmd {
 	}
 	
 	def CharSequence compileBody(Body body) {
-		body.value.replace("\"", "\\\"")
-	}
+		QCUtils.compileJson(body.value)
+	}	
 	
 	def dispatch CharSequence compileMethod(GET get) {
 		'''get'''
@@ -93,18 +93,31 @@ class QCRunCmd {
 	}
 	
 	def dispatch CharSequence compilePostCondition(CodeCondition condition) {
-		'''code == «condition.statusCode.code»'''
+		'''«condition.requestOp.compileRequestOp» (code == «condition.statusCode.code»)'''
 	}
 	
 	def dispatch CharSequence compilePostCondition(BodyCondition condition) {
+		if(condition.requestValue.body !== null){
+			'''«condition.requestOp.compileRequestOp» (String.compare (Yojson.Basic.to_string «QCUtils.compileJson(condition.requestValue.body)») (Yojson.Basic.to_string content) == 0)'''
+		} else if (condition.requestValue.body === null){
 		'''
 		let extractedState = lookupItem ix state in
 			let id = lookupSutItem ix !sut in
 				let stateJson = Yojson.Basic.from_string extractedState in
 					let combined = combine_state_id stateJson id in
-						String.compare (Yojson.Basic.to_string combined) (Yojson.Basic.to_string content) == 0
+						«condition.requestOp.compileRequestOp» (String.compare (Yojson.Basic.to_string combined) (Yojson.Basic.to_string content) == 0)
 		'''
+		}
 	}
+	
+	def CharSequence compileRequestOp(RequestOp op){
+		if(op.notOp === null || op.notOp == ""){
+			''''''
+		} else {
+			'''not '''
+		}
+	}
+	
 	
 	def dispatch CharSequence compileAction(CreateAction action) {
 		'''
