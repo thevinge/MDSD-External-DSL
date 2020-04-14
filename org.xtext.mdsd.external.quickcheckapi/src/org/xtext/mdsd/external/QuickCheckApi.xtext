@@ -10,8 +10,8 @@ Test:
 ;
 
 Request:
-	"request" name=ID method=Method url=URL ("PRE:" preconditions=PreLogicExp)? 
-	(params=Param)? body=Body? ("STATE:" action=Action) ("POST:"postconditions=PostLogicExp)?
+    "request" name=ID method=Method url=URL ("Precondition:" preconditions=PreLogicExp)? 
+    (params=Param)? body=Body? ("STATE:" action=Action) ("Postcondition:"postconditions=PostLogicExp)?
 ;
 
 Action:

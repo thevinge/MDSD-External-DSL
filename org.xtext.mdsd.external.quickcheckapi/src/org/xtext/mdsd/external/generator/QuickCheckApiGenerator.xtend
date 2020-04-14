@@ -29,19 +29,35 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 	QCNextState nextState = new QCNextState;
 	QCRunCmd runCmd = new QCRunCmd;
 	QCPreconditions preconditions = new QCPreconditions;
+	QCMakeFile makeFile = new QCMakeFile;
+	QCSetup setup = new QCSetup;
 	
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
-		val variable = resource.allContents.filter(Builder).next;
-		createFile(fsa, variable);
+		val builder = resource.allContents.filter(Builder).next;
+		
+		createFile(fsa, builder);
+		setupFile(fsa);
+		CreateMakeFile(fsa, builder);
 		
 	}
 	
+	def CreateMakeFile(IFileSystemAccess2 fsa, Builder builder) {
+		
+		fsa.generateFile("MakeFile", makeFile.CompileMakeFile(builder));
+
+	}
+	
+	def setupFile(IFileSystemAccess2 fsa) {
+        fsa.generateFile("setup.sh", setup.setup);
+    }
+	
+	
+	
 	def createFile(IFileSystemAccess2 fsa, Builder builder) {
+		
 		for (test : builder.tests) {
 			fsa.generateFile(test.name + ".ml", test.compile());
-		}
-		
-		
+		}	
 	}
 	
 	
