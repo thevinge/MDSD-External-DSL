@@ -67,13 +67,13 @@ class QCUtils {
 		'''[«FOR pair : json.jsonPairs SEPARATOR ","»«pair.compileJson»«ENDFOR»]'''
 	}
 	def static dispatch CharSequence compileJson(JsonPair json){
-		'''\\\"«json.key»\\\":«json.value.compileJson»'''
+		'''\"«json.key»\":«json.value.compileJson»'''
 	}
 	def static dispatch CharSequence compileJson(IntValue json){
 		'''«json.value»'''
 	}
 	def static dispatch CharSequence compileJson(StringValue json){
-		'''\\\"«json.value»\\\"'''
+		'''\"«json.value»\"'''
 	}
 	def static dispatch CharSequence compileJson(NestedJsonValue json){
 		'''«json.value.compileJson»'''
