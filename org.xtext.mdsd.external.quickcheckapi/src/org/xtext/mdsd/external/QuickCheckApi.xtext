@@ -86,7 +86,7 @@ Json:
 ;
 
 JsonList returns Json:
-	{JsonList} "[" jsonPairs+=JsonPair ("," jsonPairs+=JsonPair)* "]"
+	{JsonList} "[" jsonValues+=JsonValue ("," jsonValues+=JsonValue)* "]"
 ;
 
 JsonObject returns Json:

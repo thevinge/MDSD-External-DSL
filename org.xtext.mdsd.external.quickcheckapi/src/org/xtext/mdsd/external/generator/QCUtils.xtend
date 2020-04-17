@@ -64,7 +64,7 @@ class QCUtils {
 		'''{«FOR pair : json.jsonPairs SEPARATOR ","»«pair.compileJson»«ENDFOR»}'''
 	}
 	def static dispatch CharSequence compileJson(JsonList json){
-		'''[«FOR pair : json.jsonPairs SEPARATOR ","»«pair.compileJson»«ENDFOR»]'''
+		'''[«FOR value : json.jsonValues SEPARATOR ","»«value.compileJson»«ENDFOR»]'''
 	}
 	def static dispatch CharSequence compileJson(JsonPair json){
 		'''\"«json.key»\":«json.value.compileJson»'''
