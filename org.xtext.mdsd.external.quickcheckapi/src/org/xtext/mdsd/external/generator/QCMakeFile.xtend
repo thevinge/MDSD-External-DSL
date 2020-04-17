@@ -12,7 +12,7 @@ class QCMakeFile {
 		«builder.tests.phonyHeader»
 		
 		«FOR test : builder.tests» 
-		«test.name»:
+		«QCUtils.firstCharLowerCase(test.name)»:
 			ocamlbuild -r \
 			-use-ocamlfind \
 			-package \
@@ -25,13 +25,14 @@ class QCMakeFile {
 			qcstm,\
 			curl \
 			-tag thread \
-			src/«test.name».native
+			«QCUtils.firstCharLowerCase(test.name)».native \
+			http.native \
+			«QCUtils.firstCharLowerCase(test.name)»externals.native
 
 		«ENDFOR»
 		run:
 			«FOR test : builder.tests»   
-			./«test.name».native
-				
+			./«QCUtils.firstCharLowerCase(test.name)».native
 			«ENDFOR»		
 		
 		clean:
@@ -42,6 +43,9 @@ class QCMakeFile {
 	
 	
 	def CharSequence phonyHeader(EList<Test> tests){
-		'''.PHONY: clean «FOR test : tests SEPARATOR ' '»«test.name»«ENDFOR»'''
+		'''
+		all: clean «FOR test : tests SEPARATOR ' '»«QCUtils.firstCharLowerCase(test.name)»«ENDFOR»
+		.PHONY: all
+		'''
 	}
 }

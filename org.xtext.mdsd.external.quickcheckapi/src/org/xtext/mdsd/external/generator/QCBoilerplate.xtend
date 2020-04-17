@@ -1,8 +1,28 @@
 package org.xtext.mdsd.external.generator
 
+import org.xtext.mdsd.external.quickCheckApi.Builder
+import org.eclipse.xtext.generator.IFileSystemAccess2
+
 class QCBoilerplate {
-	def CharSequence initHttpModule() {
+	
+	
+	
+	def initBoilerPlateFiles(IFileSystemAccess2 fsa,  Builder builder){
+		fsa.generateFile("http.ml", initHttpModule);
+		fsa.generateFile("externals.mli", initExternalsInterface);
+		for (test : builder.tests) {
+			val filename = test.name + "externals.ml";
+			if (!fsa.isFile(filename)) {
+				fsa.generateFile(QCUtils.firstCharLowerCase(filename), InitExternalsImplementation);
+			}
+		}
+		
+	}
+	
+	private def CharSequence initHttpModule() {
 		'''
+		open Curl
+		
 		module InternalHttp =
 		struct
 		  let get ?(header = "") url =
@@ -78,35 +98,31 @@ class QCBoilerplate {
 		    (code, Buffer.contents r)
 		end
 		
-		module Http =
-		struct
-		  (* Http Headers *)
-		  let get_header = "Content-Type:application/json; "
-		  let post_header = "Content-Type:application/json"
-		  let put_header = "Content-Type:application/json"
-		  let patch_header = "Content-Type:application/json"
-		  let delete_header = "Content-Type:application/json"
+		(* Http Headers *)
+		let get_header = "Content-Type:application/json; "
+		let post_header = "Content-Type:application/json"
+		let put_header = "Content-Type:application/json"
+		let patch_header = "Content-Type:application/json"
+		let delete_header = "Content-Type:application/json"
 		
-		  let get ?(header = get_header) url =
-		    let c,r = InternalHttp.get ~header:header url in
-		    (c, Yojson.Basic.from_string r)
-		  let rawpost ?(header = post_header) url data =
-		    let c,r = InternalHttp.post ~header:header url data in
-		    (c,r)
-		  let post ?(header = post_header) url data =
-		    let c,r = InternalHttp.post ~header:header url data in
-		    (c, Yojson.Basic.from_string r)
-		  let put ?(header = put_header) url data =
-		    let c,r = InternalHttp.put ~header:header url data in
-		    (c, Yojson.Basic.from_string r)
-		  let patch ?(header = patch_header) url data =
-		    let c,r = InternalHttp.patch ~header:header url data in
-		    (c, Yojson.Basic.from_string r)
-		  let delete ?(header = delete_header) url =
-		    let c,r = InternalHttp.delete ~header:header url in
-		    (c, r)
-		
-		end
+		let get ?(header = get_header) url =
+		  let c,r = InternalHttp.get ~header:header url in
+		  (c, Yojson.Basic.from_string r)
+		let rawpost ?(header = post_header) url data =
+		  let c,r = InternalHttp.post ~header:header url data in
+		  (c,r)
+		let post ?(header = post_header) url data =
+		  let c,r = InternalHttp.post ~header:header url data in
+		  (c, Yojson.Basic.from_string r)
+		let put ?(header = put_header) url data =
+		  let c,r = InternalHttp.put ~header:header url data in
+		  (c, Yojson.Basic.from_string r)
+		let patch ?(header = patch_header) url data =
+		  let c,r = InternalHttp.patch ~header:header url data in
+		  (c, Yojson.Basic.from_string r)
+		let delete ?(header = delete_header) url =
+		  let c,r = InternalHttp.delete ~header:header url in
+		  (c, r)
 		
 		'''
 	}
@@ -140,43 +156,57 @@ class QCBoilerplate {
 		'''
 	}
 	
-	def CharSequence initExternals() {
+	private def CharSequence initExternalsInterface() {
 		'''
-		«combine()»
+		open Yojson
+		«combineInterface()»
 		
-		«extractId()»
+		«extractIdinterface()»
 		
-		«cleanup()»
+		«cleanupInterface()»
 		'''
 	}
 	
-	private def CharSequence combine() {
+	private def CharSequence combineInterface() {
 		'''
 		(* Implement this method to combine your state and id *)
-		let combine_state_id stateItem id =
-			let combined = ... in
-			
-			
-			combined
+		val combine_state_id : Yojson.Basic.t -> string -> Yojson.Basic.t
 			
 		'''
 	}
 	
-	private def CharSequence extractId() {
+	private def CharSequence extractIdinterface() {
 		'''
 		(* Implement this method to extract your id from a json body *)
-		let extractIdFromContent (content:Yojson.Basic.t) : string =
-			let extracted = ... in
-			
-			extracted
+		val extractIdFromContent : Yojson.Basic.t -> string
 		'''
 	}
 	
-	private def CharSequence cleanup() {
+	private def CharSequence cleanupInterface() {
 		'''
 		(* Implement this method to cleanup after each test *)
-		let afterTestcleanup =
-			...
+		val afterTestcleanup : unit
+		'''
+	}
+	
+	
+	private def CharSequence InitExternalsImplementation(){
+		'''
+		(* Implement this method to combine your state and id *)
+				let combine_state_id stateItem id =
+					let combined = ... in
+
+					combined
+
+		(* Implement this method to extract your id from a json body *)
+				let extractIdFromContent (content:Yojson.Basic.t) : string =
+					let extracted = ... in
+
+					extracted
+
+		(* Implement this method to cleanup after each test *)
+				let afterTestcleanup =
+					...
 		'''
 	}
 	

@@ -5,7 +5,6 @@ import org.xtext.mdsd.external.quickCheckApi.Host
 import org.xtext.mdsd.external.quickCheckApi.Port
 import org.xtext.mdsd.external.quickCheckApi.URI
 import org.xtext.mdsd.external.quickCheckApi.Request
-import org.xtext.mdsd.external.quickCheckApi.CreateAction
 
 class QCCmd {
 	def CharSequence initCmd(Test test){

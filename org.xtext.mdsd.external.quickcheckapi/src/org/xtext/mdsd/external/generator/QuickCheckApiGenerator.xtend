@@ -8,10 +8,7 @@ import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
 import org.xtext.mdsd.external.quickCheckApi.Builder
-import org.xtext.mdsd.external.quickCheckApi.Host
-import org.xtext.mdsd.external.quickCheckApi.Port
 import org.xtext.mdsd.external.quickCheckApi.Test
-import org.xtext.mdsd.external.quickCheckApi.URI
 
 
 /**
@@ -37,14 +34,17 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 		
 		createFile(fsa, builder);
 		setupFile(fsa);
-		CreateMakeFile(fsa, builder);
+		createMakeFile(fsa, builder);
+		createBoilerPlate(fsa, builder);
 		
 	}
 	
-	def CreateMakeFile(IFileSystemAccess2 fsa, Builder builder) {
-		
-		fsa.generateFile("MakeFile", makeFile.CompileMakeFile(builder));
-
+	def createBoilerPlate(IFileSystemAccess2 fsa,  Builder builder) {
+		boilerplate.initBoilerPlateFiles(fsa, builder);
+	}
+	
+	def createMakeFile(IFileSystemAccess2 fsa, Builder builder) {
+		fsa.generateFile("Makefile", makeFile.CompileMakeFile(builder));
 	}
 	
 	def setupFile(IFileSystemAccess2 fsa) {
@@ -52,26 +52,19 @@ class QuickCheckApiGenerator extends AbstractGenerator {
     }
 	
 	
-	
 	def createFile(IFileSystemAccess2 fsa, Builder builder) {
 		
 		for (test : builder.tests) {
-			fsa.generateFile(test.name + ".ml", test.compile());
+			fsa.generateFile(QCUtils.firstCharLowerCase(test.name) + ".ml", test.compile());
 		}	
 	}
 	
 	
 	def CharSequence compile(Test test ) {
 		'''
-		open QCheck
-		open Yojson.Basic.Util
-		open Curl
-		open Format
-
-		«boilerplate.initHttpModule»
+		«initDependencies(test)»
 		
-		«boilerplate.initExternals»
-				
+			
 		module APIConf =
 		struct
 		
@@ -100,12 +93,20 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 		 
 		 QCheck_runner.run_tests ~verbose:true
 		   [APItest.agree_test ~count:500 ~name:"«test.name»"]
-		 
 		 '''
 	
 	}
 	
+	def initDependencies(Test test) {
+		'''
+		open QCheck
+		open Yojson.Basic.Util
+		open Curl
+		open Format
+		open Http
+		open «QCUtils.toUpperCaseFunction(test.name)»externals
+		'''
+	}
 	
-
 	
 }
