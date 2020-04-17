@@ -112,7 +112,7 @@ PreConjunction returns Preproposition:
 ;
 
 Precondition returns Preproposition:
-	{ContainsCondition} notOp=NotOp? "contains" value=STRING | {EmptyCondition} notOp=NotOp? "empty"
+	{ContainsCondition} notOp=NotOp? "contains" value=Json | {EmptyCondition} notOp=NotOp? "empty"
 ;
 
 PostLogicExp returns Postproposition:
