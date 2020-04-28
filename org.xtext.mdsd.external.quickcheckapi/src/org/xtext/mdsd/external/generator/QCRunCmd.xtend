@@ -24,7 +24,7 @@ class QCRunCmd {
 		'''
 		let run_cmd cmd state sut = match cmd with
 			«FOR request : test.requests»
-			| «request.name» «request.action.determineIndex» if (checkInvariant state sut) then «request.compileRunCmd» else false
+			| «QCUtils.toUpperCaseFunction(request.name)» «request.action.determineIndex» if (checkInvariant state sut) then «request.compileRunCmd» else false
 			«ENDFOR»
 		'''
 	}
@@ -46,7 +46,7 @@ class QCRunCmd {
 		} else {
 			'''
 			let id = lookupSutItem ix !sut in
-				let code,content = Http.«request.method.compileMethod» («QCUtils.firstCharLowerCase(request.name)»URL^"/"^id) «IF request.body !== null»"«request.body.compileBody»"«ENDIF» in
+				let code,content = Http.«request.method.compileMethod» («QCUtils.firstCharLowerCase(request.name)»URL^"/"^id) "«IF request.body !== null»«request.body.compileBody»«ENDIF»" in
 			'''
 		}
 		
