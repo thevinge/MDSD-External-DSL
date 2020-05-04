@@ -31,12 +31,16 @@ class QCCmd {
 	
 	 private def CharSequence compile(Port port) {
 		'''
-		«IF !(port === null)  »:« port.toString »«ENDIF»'''
+		«IF !(port === null)  »:« port.value.toString »«ENDIF»'''
 	}
 	
 	 private def CharSequence compile(URI uri) {
 		'''
-		«uri.name»/«FOR part : uri.path SEPARATOR "/"»«part.part»«ENDFOR»'''
+		«IF uri !== null»
+		«uri.name»/«FOR part : uri.path SEPARATOR "/"»«part.part»«ENDFOR»
+		«ELSE»
+		«ENDIF»
+		'''
 	}
 	
 	
