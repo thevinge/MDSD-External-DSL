@@ -3,16 +3,30 @@ grammar org.xtext.mdsd.external.QuickCheckApi with org.eclipse.xtext.common.Term
 generate quickCheckApi "http://www.xtext.org/mdsd/external/QuickCheckApi"
 
 Builder: 
-	"TestBuilder" tests+=Test+;
+	tests+=Test+;
 
 Test:
-	"Test" name=ID requests+=(Request)+
+	"Test" name=ID definitions+=(VarDefinition)*  requests+=(Request)+
+;
+
+VarDefinition:
+	(URLDefinition | StructureDefinition)
+;
+
+StructureDefinition returns VarDefinition:
+	{StructureDefinition} name=ID "="
+;
+
+URLDefinition returns VarDefinition:
+	{URLDefinition} name=ID "=" url=URL
 ;
 
 Request:
-    "request" name=ID method=Method url=URL ("Precondition:" preconditions=PreLogicExp)? 
+    "request" name=ID method=Method url=URLRef ("Precondition:" preconditions=PreLogicExp)? 
     (params=Param)? body=Body? ("STATE:" action=Action) ("Postcondition:"postconditions=PostLogicExp)?
 ;
+
+
 
 Action:
 	actionOp=ActionOperator value=Json | actionOp=ActionOperator
@@ -27,12 +41,20 @@ Method:
 	{GET} "GET" | {POST} "POST" | {PUT} "PUT" | {PATCH} "PATCH" | {DELETE} "DELETE"	
 ;
 
-URL:
-	protocol=Protocol "://" domain=Domain
+URLRef:
+	URL | URLDefRef
+;
+
+URLDefRef returns URLRef:
+	{URLDefRef} ref=[URLDefinition] ("/" extraUri=URI)? ("/@" requestID=RequestID)?
+;
+
+URL returns URLRef:
+	{URL} protocol=Protocol "://" domain=Domain "/" (uri=URI)? ("/@" requestID=RequestID)?
 ;
 
 Domain:
-	host=Host (":" port=Port)? "/" (uri=URI)? ("/@" requestID=RequestID)?
+	host=Host (":" port=Port)? 
 ;
 
 RequestID:

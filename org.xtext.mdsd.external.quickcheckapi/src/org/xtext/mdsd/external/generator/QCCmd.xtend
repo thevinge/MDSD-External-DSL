@@ -5,6 +5,8 @@ import org.xtext.mdsd.external.quickCheckApi.Host
 import org.xtext.mdsd.external.quickCheckApi.Port
 import org.xtext.mdsd.external.quickCheckApi.URI
 import org.xtext.mdsd.external.quickCheckApi.Request
+import org.xtext.mdsd.external.quickCheckApi.URL
+import org.xtext.mdsd.external.quickCheckApi.URLDefRef
 
 class QCCmd {
 	def CharSequence initCmd(Test test){
@@ -16,9 +18,31 @@ class QCCmd {
 			 [@@deriving show { with_path = false }]
 		
 		«FOR request : test.requests »
-		let «QCUtils.firstCharLowerCase(request.name)»URL="«request.url.protocol»://«request.url.domain.host.compile()»«request.url.domain.port.compile()»/«request.url.domain.uri.compile()»"
+		let «QCUtils.firstCharLowerCase(request.name)»URL="«request.url.chooseURL.protocol»://«request.url.chooseURL.domain.host.compile()»«request.url.chooseURL.domain.port.compile()»/«request.url.chooseURI.compile()»"
 		«ENDFOR»
 		'''
+	}
+	
+	def dispatch URL chooseURL(URL url){
+		return url
+	}
+	
+	
+	
+	def dispatch URL chooseURL(URLDefRef url){
+		
+		return url.ref.url.chooseURL
+	}
+	
+	def dispatch URI chooseURI(URL url){
+		return url.uri
+	}
+	
+	
+	
+	def dispatch URI chooseURI(URLDefRef url){
+		
+		return url.extraUri
 	}
 			
 	 private def CharSequence compile(Host host) {

@@ -18,6 +18,8 @@ import org.xtext.mdsd.external.quickCheckApi.CreateAction
 import org.xtext.mdsd.external.quickCheckApi.BodyCondition
 import org.xtext.mdsd.external.quickCheckApi.CodeCondition
 import org.xtext.mdsd.external.quickCheckApi.RequestOp
+import org.xtext.mdsd.external.quickCheckApi.URLDefRef
+import org.xtext.mdsd.external.quickCheckApi.URL
 
 class QCRunCmd {
 	def initRun_cmd(Test test ) {
@@ -39,7 +41,7 @@ class QCRunCmd {
 	}
 	
 	def CharSequence createHttpCall(Request request) {
-		if (request.url.domain.requestID === null) {			
+		if (request.url.CheckRequestID) {			
 			'''
 				let code,content = Http.«request.method.compileMethod» «QCUtils.firstCharLowerCase(request.name)»URL "«IF request.body !== null»«request.body.compileBody»«ENDIF»" in
 			'''
@@ -51,6 +53,15 @@ class QCRunCmd {
 		}
 		
 	}
+	
+	def dispatch boolean CheckRequestID(URL url){
+		return (url.requestID === null)
+	}
+	
+	def dispatch boolean CheckRequestID(URLDefRef url){
+		return (url.ref.url.CheckRequestID)
+	}
+	
 	
 	def CharSequence compileBody(Body body) {
 		QCUtils.compileJson(body.value)
