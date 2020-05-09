@@ -14,6 +14,8 @@ import org.xtext.mdsd.external.quickCheckApi.IntValue
 import org.xtext.mdsd.external.quickCheckApi.StringValue
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
 import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
+import org.xtext.mdsd.external.quickCheckApi.JsonDefRef
+import org.xtext.mdsd.external.quickCheckApi.Json
 
 class QCUtils {
 	
@@ -58,6 +60,14 @@ class QCUtils {
 			}
 		}
 		filtered
+	}
+	
+	def static dispatch CharSequence compileJson(JsonDefRef json){
+		json.ref.json.compileJson
+	}
+	
+	def static dispatch CharSequence compileJson(Json json){
+		json.data.compileJson
 	}
 	
 	def static dispatch CharSequence compileJson(JsonObject json){

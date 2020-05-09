@@ -10,11 +10,11 @@ Test:
 ;
 
 VarDefinition:
-	(URLDefinition | StructureDefinition)
+	(URLDefinition | JsonDefinition)
 ;
 
-StructureDefinition returns VarDefinition:
-	{StructureDefinition} name=ID "="
+JsonDefinition returns VarDefinition:
+	{JsonDefinition} name=ID "=" json=Json
 ;
 
 URLDefinition returns VarDefinition:
@@ -29,7 +29,7 @@ Request:
 
 
 Action:
-	actionOp=ActionOperator value=Json | actionOp=ActionOperator
+	actionOp=ActionOperator value=JsonRef | actionOp=ActionOperator
 ;
 
 ActionOperator:
@@ -99,11 +99,19 @@ Key:
 ;
 
 Body:
-	"body" value=Json
+	"body" value=JsonRef
+;
+
+JsonRef:
+	Json | JsonDefRef
+;
+
+JsonDefRef:
+	{JsonDefRef} ref=[JsonDefinition]
 ;
 
 Json:
-	JsonObject | JsonList
+	{Json} data=JsonObject | JsonList
 	
 ;
 
