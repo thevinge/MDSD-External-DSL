@@ -128,7 +128,15 @@ JsonPair returns Json:
 ;
 
 JsonValue returns Json:
-	{StringValue} value=STRING | {IntValue} value=INT | {NestedJsonValue} value=JsonObject | {ListJsonValue} value=JsonList
+	{StringValue} value=STRING | {IntValue} value=INT | {NestedJsonValue} value=JsonObject | {ListJsonValue} value=JsonList | {CustomValue} value=CustomValue
+;
+
+CustomValue:
+	{GeneratedValue} custom=GeneratedValue | {ExcludeValue} custom="-" | {ReuseValue} custom="^" 	
+;
+
+GeneratedValue:
+	{stringGen}"STRING" | {IntGen} "INT"
 ;
 
 
