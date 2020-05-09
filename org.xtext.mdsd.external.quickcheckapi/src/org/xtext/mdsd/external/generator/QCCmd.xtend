@@ -13,7 +13,7 @@ class QCCmd {
 		'''
 		type cmd =
 			 «FOR request : test.requests »
-			 | «QCUtils.firstCharToUpperCase(request.name)»«request.indexSnippet»
+			 | «QCUtils.firstCharToUpperCase(request.name)»«request.argumentsSnippet»
 			 «ENDFOR»
 			 [@@deriving show { with_path = false }]
 		
@@ -69,11 +69,11 @@ class QCCmd {
 	
 	
 	
-	private def CharSequence indexSnippet(Request request){
+	private def CharSequence argumentsSnippet(Request request){
 		if (QCUtils.requireIndex(request)) {
 			''' of int'''
 		} else {
-			''''''
+			''' of string'''
 		}
 	}
 	

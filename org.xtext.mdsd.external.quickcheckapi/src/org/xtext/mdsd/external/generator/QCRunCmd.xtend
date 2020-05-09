@@ -37,19 +37,19 @@ class QCRunCmd {
 		if (actionOp instanceof DeleteAction || actionOp instanceof UpdateAction || actionOp instanceof NoAction){
 			'''ix ->'''
 		} else {
-			''' ->'''
+			'''json ->'''
 		}
 	}
 	
 	def CharSequence createHttpCall(Request request) {
 		if (request.url.CheckRequestID) {			
 			'''
-				let code,content = Http.«request.method.compileMethod» «QCUtils.firstCharLowerCase(request.name)»URL«IF !isGetMethod(request.method)» "«IF request.body !== null»«request.body.compileBody»«ENDIF»"«ENDIF» in
+				let code,content = Http.«request.method.compileMethod» «QCUtils.firstCharLowerCase(request.name)»URL«IF !isGetMethod(request.method)» «IF request.body !== null»json«ENDIF»«ENDIF» in
 			'''
 		} else {
 			'''
 			let id = lookupSutItem ix !sut in
-				let code,content = Http.«request.method.compileMethod» («QCUtils.firstCharLowerCase(request.name)»URL^"/"^id)«IF !isGetMethod(request.method)» "«IF request.body !== null»«request.body.compileBody»«ENDIF»"«ENDIF» in
+				let code,content = Http.«request.method.compileMethod» («QCUtils.firstCharLowerCase(request.name)»URL^"/"^id)«IF !isGetMethod(request.method)» «IF request.body !== null»json«ENDIF»«ENDIF» in
 			'''
 		}
 		

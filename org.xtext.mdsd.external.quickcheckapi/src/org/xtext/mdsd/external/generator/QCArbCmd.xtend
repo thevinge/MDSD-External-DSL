@@ -13,7 +13,7 @@ class QCArbCmd {
 		    QCheck.make ~print:show_cmd
 		    (Gen.oneof [
 		    «FOR request: QCUtils.filterRequireNoIndex(test.requests) SEPARATOR ";"» 
-		    (Gen.return «QCUtils.firstCharToUpperCase(request.name)»)
+		    (Gen.return («QCUtils.firstCharToUpperCase(request.name)» "«QCUtils.compileJson(request.body.value)»"))
 		    «ENDFOR»
 		    ])
 		    
@@ -24,7 +24,7 @@ class QCArbCmd {
 			      		  «IF QCUtils.requireIndex(request) » 
 			      		  Gen.map (fun i -> «QCUtils.firstCharToUpperCase(request.name)» i) int_gen
 			      		  «ELSE» 
-			      		  (Gen.return «QCUtils.firstCharToUpperCase(request.name)»)
+			      		  (Gen.return («QCUtils.firstCharToUpperCase(request.name)» "«QCUtils.compileJson(request.body.value)»"))
 			      		  «ENDIF»
 						  «ENDFOR»
 		                 ])

@@ -115,8 +115,8 @@ JsonObject returns Json:
 	{JsonObject} "{" jsonPairs+=JsonPair ("," jsonPairs+=JsonPair)* "}"
 ;
 
-JsonPair  returns Json:
-	{JsonPair} key=STRING ":" value=JsonValue
+JsonPair returns Json:
+	{JsonPair} key=ID ":" value=JsonValue
 ;
 
 JsonValue returns Json:
