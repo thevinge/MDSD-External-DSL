@@ -13,7 +13,7 @@ class QCNextState {
 		'''
 		let next_state cmd state = match cmd with
 			«FOR request : test.requests»
-			| «QCUtils.toUpperCaseFunction(request.name)» «request.compileNextState»
+			| «QCUtils.firstCharToUpperCase(request.name)» «request.compileNextState»
 			«ENDFOR»
 		'''
 	}

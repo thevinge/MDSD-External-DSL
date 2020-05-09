@@ -29,7 +29,7 @@ class QCUtils {
 		filtered
 	}
 	
-	def static toUpperCaseFunction(String s) {
+	def static firstCharToUpperCase(String s) {
 		 s.substring(0,1).toUpperCase + s.substring(1)
 	}
 	

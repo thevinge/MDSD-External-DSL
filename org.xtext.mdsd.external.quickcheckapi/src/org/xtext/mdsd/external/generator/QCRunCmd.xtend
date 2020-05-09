@@ -20,13 +20,14 @@ import org.xtext.mdsd.external.quickCheckApi.CodeCondition
 import org.xtext.mdsd.external.quickCheckApi.RequestOp
 import org.xtext.mdsd.external.quickCheckApi.URLDefRef
 import org.xtext.mdsd.external.quickCheckApi.URL
+import org.xtext.mdsd.external.quickCheckApi.Method
 
 class QCRunCmd {
 	def initRun_cmd(Test test ) {
 		'''
 		let run_cmd cmd state sut = match cmd with
 			«FOR request : test.requests»
-			| «QCUtils.toUpperCaseFunction(request.name)» «request.action.determineIndex» if (checkInvariant state sut) then «request.compileRunCmd» else false
+			| «QCUtils.firstCharToUpperCase(request.name)» «request.action.determineIndex» if (checkInvariant state sut) then «request.compileRunCmd» else false
 			«ENDFOR»
 		'''
 	}
@@ -43,16 +44,21 @@ class QCRunCmd {
 	def CharSequence createHttpCall(Request request) {
 		if (request.url.CheckRequestID) {			
 			'''
-				let code,content = Http.«request.method.compileMethod» «QCUtils.firstCharLowerCase(request.name)»URL "«IF request.body !== null»«request.body.compileBody»«ENDIF»" in
+				let code,content = Http.«request.method.compileMethod» «QCUtils.firstCharLowerCase(request.name)»URL«IF !isGetMethod(request.method)» "«IF request.body !== null»«request.body.compileBody»«ENDIF»"«ENDIF» in
 			'''
 		} else {
 			'''
 			let id = lookupSutItem ix !sut in
-				let code,content = Http.«request.method.compileMethod» («QCUtils.firstCharLowerCase(request.name)»URL^"/"^id) "«IF request.body !== null»«request.body.compileBody»«ENDIF»" in
+				let code,content = Http.«request.method.compileMethod» («QCUtils.firstCharLowerCase(request.name)»URL^"/"^id)«IF !isGetMethod(request.method)» "«IF request.body !== null»«request.body.compileBody»«ENDIF»"«ENDIF» in
 			'''
 		}
 		
 	}
+	
+	def boolean isGetMethod(Method method){
+		return (GET.isAssignableFrom(method.class))
+	}
+	
 	
 	def dispatch boolean CheckRequestID(URL url){
 		return (url.requestID === null)

@@ -13,7 +13,7 @@ class QCCmd {
 		'''
 		type cmd =
 			 «FOR request : test.requests »
-			 | «QCUtils.toUpperCaseFunction(request.name)»«request.indexSnippet»
+			 | «QCUtils.firstCharToUpperCase(request.name)»«request.indexSnippet»
 			 «ENDFOR»
 			 [@@deriving show { with_path = false }]
 		

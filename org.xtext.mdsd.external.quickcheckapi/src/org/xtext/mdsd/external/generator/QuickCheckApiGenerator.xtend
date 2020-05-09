@@ -104,7 +104,7 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 		open Curl
 		open Format
 		open Http
-		open «QCUtils.toUpperCaseFunction(test.name)»externals
+		open «QCUtils.firstCharToUpperCase(test.name)»externals
 		'''
 	}
 	
