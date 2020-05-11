@@ -10,7 +10,7 @@ Test:
 ;
 
 VarDefinition:
-	(URLDefinition | JsonDefinition)
+	(URLDefinition | JsonDefinition | GenDefinition)
 ;
 
 JsonDefinition returns VarDefinition:
@@ -19,6 +19,10 @@ JsonDefinition returns VarDefinition:
 
 URLDefinition returns VarDefinition:
 	{URLDefinition} name=ID "=" url=URL
+;
+
+GenDefinition returns VarDefinition:
+	{GenDefinition} name=ID "=" 
 ;
 
 Request:
@@ -132,14 +136,16 @@ JsonValue returns Json:
 ;
 
 CustomValue:
-	{GeneratedValue} custom=GeneratedValue | {ExcludeValue} custom="-" | {ReuseValue} custom="^" 	
+	 GeneratedValue | {ExcludeValue} "-" | ReuseValue	
+;
+
+ReuseValue:
+	{ReuseValue} "^" (name=ID)?
 ;
 
 GeneratedValue:
-	{stringGen}"STRING" | {IntGen} "INT"
+	{RandomStringGen}"#STRING" | {IntGen} "#INT" |{NameStringGen}"#NAME"
 ;
-
-
 
 PreLogicExp returns Preproposition:
 	PreConjunction("OR" {PreDisjunction.left=current} right=PreConjunction)*

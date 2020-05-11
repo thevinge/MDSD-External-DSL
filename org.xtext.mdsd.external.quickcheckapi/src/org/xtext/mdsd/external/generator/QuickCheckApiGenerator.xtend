@@ -28,6 +28,7 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 	QCPreconditions preconditions = new QCPreconditions;
 	QCMakeFile makeFile = new QCMakeFile;
 	QCSetup setup = new QCSetup;
+	QCJSONHandler jsonHandler = new QCJSONHandler;
 	
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		val builder = resource.allContents.filter(Builder).next;
@@ -72,6 +73,8 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 		  type state = string list
 		
 		  «cmd.initCmd(test)»
+		  
+		  «jsonHandler.InitJsonVariables(test)»
 		 
 		  «modelSystem.initModelSystem()»
 		  

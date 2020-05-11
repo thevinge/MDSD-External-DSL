@@ -7,8 +7,11 @@ import org.xtext.mdsd.external.quickCheckApi.CreateAction
 import org.xtext.mdsd.external.quickCheckApi.DeleteAction
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
 import org.xtext.mdsd.external.quickCheckApi.NoAction
+import org.xtext.mdsd.external.quickCheckApi.Json
+import org.xtext.mdsd.external.quickCheckApi.JsonDefRef
+
 class QCNextState {
-	
+	private String jsonDefName;
 	def initNext_State(Test test ) {
 		'''
 		let next_state cmd state = match cmd with
@@ -19,13 +22,17 @@ class QCNextState {
 	}
 	
 	def CharSequence compileNextState(Request request){
+		if (request.action.value !== null) {
+			jsonDefName = request.action.value.compileJsonDefName(request.name);
+		}
+		
 		request.action.compile
 	}
 	
 	def CharSequence compile(Action action){
 		var actionOp = action.actionOp
 		if (actionOp instanceof CreateAction) {
-			'''json -> state@["«QCUtils.compileJson(action.value)»"]'''	
+			'''json -> state@[«jsonDefName»()]'''	
 		} else if (actionOp instanceof DeleteAction){
 			'''
 			ix -> let pos = getPos ix state in
@@ -35,7 +42,7 @@ class QCNextState {
 	        '''
 		} else if (actionOp instanceof UpdateAction){
 			'''
-			ix -> let newelem = "«QCUtils.compileJson(action.value)»" in
+			ix -> let newelem = «jsonDefName»() in
 			      let pos = getPos ix state in
 			      replaceElem pos state newelem
 			'''	
@@ -44,6 +51,14 @@ class QCNextState {
 		} else {
 			''''''
 		}
+	}
+	
+	private def dispatch String compileJsonDefName(Json json, String requestName){
+		QCUtils.firstCharLowerCase(requestName) + "LocalStateJsonDef"
+		
+	}
+	private def dispatch String compileJsonDefName(JsonDefRef json, String requestName){
+		QCUtils.firstCharLowerCase(json.ref.name) + "JsonDef"
 	}
 
 }

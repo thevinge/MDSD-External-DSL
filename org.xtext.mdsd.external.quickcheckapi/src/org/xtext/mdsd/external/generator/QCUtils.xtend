@@ -16,6 +16,8 @@ import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
 import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
 import org.xtext.mdsd.external.quickCheckApi.JsonDefRef
 import org.xtext.mdsd.external.quickCheckApi.Json
+import org.xtext.mdsd.external.quickCheckApi.VarDefinition
+import org.xtext.mdsd.external.quickCheckApi.JsonDefinition
 
 class QCUtils {
 	
@@ -26,6 +28,16 @@ class QCUtils {
 		for (request : requests) {
 			if (method.isAssignableFrom(request.method.class)) {
 				filtered.add(request)
+			}
+		}
+		filtered
+	}
+	
+	def static List<JsonDefinition> filterbyJsonDefinition(EList<VarDefinition> definitions){
+		val filtered = new ArrayList
+		for (definition : definitions) {
+			if (JsonDefinition.isAssignableFrom(definition.class)) {
+				filtered.add(definition as JsonDefinition)
 			}
 		}
 		filtered
