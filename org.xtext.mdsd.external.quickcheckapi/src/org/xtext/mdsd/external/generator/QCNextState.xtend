@@ -7,6 +7,7 @@ import org.xtext.mdsd.external.quickCheckApi.CreateAction
 import org.xtext.mdsd.external.quickCheckApi.DeleteAction
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
 import org.xtext.mdsd.external.quickCheckApi.NoAction
+
 class QCNextState {
 	
 	def initNext_State(Test test ) {
@@ -40,12 +41,11 @@ class QCNextState {
 			      replaceElem pos state newelem
 			'''	
 		} else if (actionOp instanceof NoAction){
-			'''ix -> state'''
+			''' ix -> state'''
 		} else {
 			''''''
 		}
 	}
-
 }
 	
 	

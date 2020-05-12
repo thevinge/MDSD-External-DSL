@@ -39,7 +39,12 @@ class QCUtils {
 	
 	def static boolean requireIndex(Request request){
 		// If anything else than a CreateAction then True
-		 (CreateAction.isAssignableFrom(request.action.actionOp.class) == false)
+		if(request.url.domain.requestID === null)
+			false
+		else if (CreateAction.isAssignableFrom(request.action.actionOp.class))
+			false
+		else
+			true
 	}
 	
 	def static List<Request> filterRequireIndex(EList<Request> requests){
