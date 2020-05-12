@@ -37,11 +37,11 @@ class QCArbCmd {
 	
 	private def dispatch CharSequence compileJsonDefName(Json json, Request request){
 		
-		'''«QCUtils.firstCharLowerCase(request.name)»LocalBodyJsonDef ()'''
+		'''«QCNames.LocalBodyJsonDef(request.name)» ()'''
 	}
 	
 	private def dispatch CharSequence compileJsonDefName(JsonDefRef json, Request request){
-		'''«QCUtils.firstCharLowerCase(json.ref.name)»JsonDef ()'''
+		'''«QCNames.JsonDef(json.ref.name)» ()'''
 	}
 	
 	

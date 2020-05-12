@@ -54,11 +54,11 @@ class QCNextState {
 	}
 	
 	private def dispatch String compileJsonDefName(Json json, String requestName){
-		QCUtils.firstCharLowerCase(requestName) + "LocalStateJsonDef"
-		
+		QCNames.LocalStateJsonDef(requestName)
 	}
+	
 	private def dispatch String compileJsonDefName(JsonDefRef json, String requestName){
-		QCUtils.firstCharLowerCase(json.ref.name) + "JsonDef"
+		QCNames.JsonDef(json.ref.name)
 	}
 
 }

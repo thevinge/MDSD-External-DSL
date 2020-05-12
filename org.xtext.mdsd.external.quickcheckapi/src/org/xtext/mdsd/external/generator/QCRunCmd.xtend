@@ -23,10 +23,15 @@ import org.xtext.mdsd.external.quickCheckApi.URL
 import org.xtext.mdsd.external.quickCheckApi.Method
 
 class QCRunCmd {
+	private String requestName;
+	private int declarationCounter = 0;
+	
 	def initRun_cmd(Test test ) {
 		'''
 		let run_cmd cmd state sut = match cmd with
 			«FOR request : test.requests»
+			«{declarationCounter = 0; ""}»
+			«{requestName = request.name; ""}»
 			| «QCUtils.firstCharToUpperCase(request.name)» «request.action.determineIndex» if (checkInvariant state sut) then «request.compileRunCmd» else false
 			«ENDFOR»
 		'''
@@ -66,11 +71,6 @@ class QCRunCmd {
 	
 	def dispatch boolean CheckRequestID(URLDefRef url){
 		return (url.ref.url.CheckRequestID)
-	}
-	
-	
-	def CharSequence compileBody(Body body) {
-		QCUtils.compileJson(body.value)
 	}	
 	
 	def dispatch CharSequence compileMethod(GET get) {
@@ -115,7 +115,8 @@ class QCRunCmd {
 	
 	def dispatch CharSequence compilePostCondition(BodyCondition condition) {
 		if(condition.requestValue.body !== null){
-			'''«condition.requestOp.compileRequestOp» (String.compare (Yojson.Basic.to_string «QCUtils.compileJson(condition.requestValue.body)») (Yojson.Basic.to_string content) == 0)'''
+			declarationCounter++
+			'''«condition.requestOp.compileRequestOp» (String.compare (Yojson.Basic.to_string «QCNames.LocalPostConditionJsonDef(requestName) + declarationCounter + "()"») (Yojson.Basic.to_string content) == 0)'''
 		} else if (condition.requestValue.body === null){
 		'''
 		let extractedState = lookupItem ix state in

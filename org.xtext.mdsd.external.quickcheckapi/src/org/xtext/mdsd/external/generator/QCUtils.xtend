@@ -74,36 +74,36 @@ class QCUtils {
 		filtered
 	}
 	
-	def static dispatch CharSequence compileJson(JsonDefRef json){
-		json.ref.json.compileJson
-	}
-	
-	def static dispatch CharSequence compileJson(Json json){
-		json.data.compileJson
-	}
-	
-	def static dispatch CharSequence compileJson(JsonObject json){
-		'''{«FOR pair : json.jsonPairs SEPARATOR ","»«pair.compileJson»«ENDFOR»}'''
-	}
-	def static dispatch CharSequence compileJson(JsonList json){
-		'''[«FOR value : json.jsonValues SEPARATOR ","»«value.compileJson»«ENDFOR»]'''
-	}
-	def static dispatch CharSequence compileJson(JsonPair json){
-		'''\"«json.key»\":«json.value.compileJson»'''
-	}
-	def static dispatch CharSequence compileJson(IntValue json){
-		'''«json.value»'''
-	}
-	def static dispatch CharSequence compileJson(StringValue json){
-		'''\"«json.value»\"'''
-	}
-	def static dispatch CharSequence compileJson(NestedJsonValue json){
-		'''«json.value.compileJson»'''
-	}
-	def static dispatch CharSequence compileJson(ListJsonValue json){
-		'''«json.value.compileJson»'''
-	}
-	
+//	def static dispatch CharSequence compileJson(JsonDefRef json){
+//		json.ref.json.compileJson
+//	}
+//	
+//	def static dispatch CharSequence compileJson(Json json){
+//		json.data.compileJson
+//	}
+//	
+//	def static dispatch CharSequence compileJson(JsonObject json){
+//		'''{«FOR pair : json.jsonPairs SEPARATOR ","»«pair.compileJson»«ENDFOR»}'''
+//	}
+//	def static dispatch CharSequence compileJson(JsonList json){
+//		'''[«FOR value : json.jsonValues SEPARATOR ","»«value.compileJson»«ENDFOR»]'''
+//	}
+//	def static dispatch CharSequence compileJson(JsonPair json){
+//		'''\"«json.key»\":«json.value.compileJson»'''
+//	}
+//	def static dispatch CharSequence compileJson(IntValue json){
+//		'''«json.value»'''
+//	}
+//	def static dispatch CharSequence compileJson(StringValue json){
+//		'''\"«json.value»\"'''
+//	}
+//	def static dispatch CharSequence compileJson(NestedJsonValue json){
+//		'''«json.value.compileJson»'''
+//	}
+//	def static dispatch CharSequence compileJson(ListJsonValue json){
+//		'''«json.value.compileJson»'''
+//	}
+//	
 	
 	
 	
