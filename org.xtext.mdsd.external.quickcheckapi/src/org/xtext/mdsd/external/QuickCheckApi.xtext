@@ -3,8 +3,63 @@ grammar org.xtext.mdsd.external.QuickCheckApi with org.eclipse.xtext.common.Term
 generate quickCheckApi "http://www.xtext.org/mdsd/external/QuickCheckApi"
 
 Builder: 
-	"TestBuilder" tests+=Test+;
+	"TestBuilder" (models+=Type)* (tests+=Test)+
+;
+ 
+Type:
+    Entity;
 
+Integer:
+	"integer"
+;
+
+_String:
+	"string"
+;
+
+DataType:
+    //"datatype" name=ID
+	_String | Integer
+;
+ 
+Entity:
+    "model" name=ID (features+=Feature)*
+;
+ 
+Feature:
+    name=ID (listof?="list" "of")? (typeRef=[Type] | typeData=DataType);
+
+
+
+
+/*Model:
+	 DataType|EntityType
+;
+DataType:
+	identifier=ID String2 | {DataType} Integer | List
+;
+
+Integer:
+	"integer"	
+;
+
+String2:
+	"string"
+;
+
+EntityType:
+	"Model" identifier=ID (features+=Feature)*
+;
+
+Entity:
+    'entity' name=ID ('extends' superType=[Entity])? '{'
+        (features+=Feature)*
+    '}';
+    
+Feature:
+    name=ID type=[Model];
+
+*/
 Test:
 	"Test" name=ID requests+=(Request)+
 ;
