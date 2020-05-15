@@ -136,7 +136,11 @@ JsonValue returns Json:
 ;
 
 CustomValue:
-	 GeneratedValue | {ExcludeValue} "-" | ReuseValue	
+	 GeneratedValue | {ExcludeValue} "-" | ReuseValue | IdentifierValue	
+;
+
+IdentifierValue:
+	{IdentifierValue} "@"name=ID
 ;
 
 ReuseValue:

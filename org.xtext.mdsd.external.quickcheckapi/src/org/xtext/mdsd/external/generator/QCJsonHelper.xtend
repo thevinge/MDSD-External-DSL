@@ -15,6 +15,7 @@ import org.xtext.mdsd.external.quickCheckApi.IntGen
 import org.xtext.mdsd.external.quickCheckApi.NameStringGen
 import org.xtext.mdsd.external.quickCheckApi.ExcludeValue
 import org.xtext.mdsd.external.quickCheckApi.ReuseValue
+import org.xtext.mdsd.external.quickCheckApi.IdentifierValue
 
 class QCJsonHelper {
 	def static dispatch CharSequence compileJson(JsonDefRef json){
@@ -59,7 +60,7 @@ class QCJsonHelper {
 	}
 	
 	def static dispatch CharSequence compileCustomValue(RandomStringGen gen){
-		''''''
+		'''`String (defaultStringGen())'''
 	}
 	
 	def static dispatch CharSequence compileCustomValue(IntGen gen){
@@ -75,6 +76,10 @@ class QCJsonHelper {
 	}
 	
 	def static dispatch CharSequence compileCustomValue(ReuseValue gen){
+		''''''
+	}
+	
+	def static dispatch CharSequence compileCustomValue(IdentifierValue gen){
 		''''''
 	}
 }

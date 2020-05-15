@@ -61,12 +61,14 @@ class QCJSONHandler {
 	private def CharSequence initJsonHelper(){
 		'''
 		let fromJsonToStr json = Yojson.Basic.to_string json
+		let fromStrToJson str = Yojson.Basic.from_string str
 		'''
 	}
 	
 	private def CharSequence initDefaultGen(){
 		'''
 		let defaultNameGen () = Gen.generate1( Gen.oneof[Gen.return "Jens"; Gen.return "Mads"; Gen.return "Andreas"; Gen.return "John"; Gen.return "Nikolaj";])		
+		let defaultStringGen() = Gen.generate1 (Gen.string_size (Gen.int_range 3 4))
 		'''
 	}
 	

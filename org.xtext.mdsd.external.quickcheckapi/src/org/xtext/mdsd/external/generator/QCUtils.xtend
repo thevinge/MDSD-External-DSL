@@ -53,7 +53,13 @@ class QCUtils {
 	
 	def static boolean requireIndex(Request request){
 		// If anything else than a CreateAction then True
-		 (CreateAction.isAssignableFrom(request.action.actionOp.class) == false)
+		 //(CreateAction.isAssignableFrom(request.action.actionOp.class) == false)
+		if(request.url.requestID === null)
+			false
+		else if (CreateAction.isAssignableFrom(request.action.actionOp.class))
+			false
+		else
+			true
 	}
 	
 	def static List<Request> filterRequireIndex(EList<Request> requests){
@@ -72,40 +78,5 @@ class QCUtils {
 			}
 		}
 		filtered
-	}
-	
-//	def static dispatch CharSequence compileJson(JsonDefRef json){
-//		json.ref.json.compileJson
-//	}
-//	
-//	def static dispatch CharSequence compileJson(Json json){
-//		json.data.compileJson
-//	}
-//	
-//	def static dispatch CharSequence compileJson(JsonObject json){
-//		'''{«FOR pair : json.jsonPairs SEPARATOR ","»«pair.compileJson»«ENDFOR»}'''
-//	}
-//	def static dispatch CharSequence compileJson(JsonList json){
-//		'''[«FOR value : json.jsonValues SEPARATOR ","»«value.compileJson»«ENDFOR»]'''
-//	}
-//	def static dispatch CharSequence compileJson(JsonPair json){
-//		'''\"«json.key»\":«json.value.compileJson»'''
-//	}
-//	def static dispatch CharSequence compileJson(IntValue json){
-//		'''«json.value»'''
-//	}
-//	def static dispatch CharSequence compileJson(StringValue json){
-//		'''\"«json.value»\"'''
-//	}
-//	def static dispatch CharSequence compileJson(NestedJsonValue json){
-//		'''«json.value.compileJson»'''
-//	}
-//	def static dispatch CharSequence compileJson(ListJsonValue json){
-//		'''«json.value.compileJson»'''
-//	}
-//	
-	
-	
-	
-	
+	}	
 }
