@@ -20,6 +20,7 @@ class QCMakeFile {
 			cohttp-lwt-unix,\
 			cohttp,\
 			lwt,\
+			str,\
 			yojson,\
 			ppx_deriving.show,\
 			qcstm,\
