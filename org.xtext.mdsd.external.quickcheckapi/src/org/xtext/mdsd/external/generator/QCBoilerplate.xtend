@@ -168,6 +168,8 @@ class QCBoilerplate {
 		  
 		  let isEmpty state = (List.length state = 0)
 		  
+		  «initExtractor()»
+		  
 		'''
 	}
 	
@@ -223,7 +225,34 @@ class QCBoilerplate {
 		'''
 	}
 	
-
+	private def CharSequence initExtractor(){
+		'''
+		let jsonElementExtractor id json = 
+		  let jsonlist = Util.to_assoc json in 
+		    let jsonExtractor json = 
+		        let extracted = member id json in 
+		          match extracted with
+		          |`Null -> ""
+		          |`String s -> s
+		          |`Float f -> string_of_float f
+		          |`Int i -> string_of_int i
+		          |`Bool b -> string_of_bool b
+		          |`Assoc a -> ""
+		          |`List l -> ""
+		        in
+		          let rec jsonIterator json = match json with
+		            | [] -> ""
+		            | (key,value)::rest -> match value with 
+		              |`Assoc a -> let extracted = jsonExtractor (value) in 
+		                if String.length extracted > 0 then extracted 
+		                else let innerExtract = jsonIterator a in
+		                if String.length innerExtract > 0 then innerExtract else jsonIterator rest;
+		              | _ -> jsonIterator rest
+		        
+		  in let firstExtract = (jsonExtractor json) in if String.length firstExtract > 0 then firstExtract else jsonIterator jsonlist ;;
+		
+		'''
+	}
 	
 	
 }

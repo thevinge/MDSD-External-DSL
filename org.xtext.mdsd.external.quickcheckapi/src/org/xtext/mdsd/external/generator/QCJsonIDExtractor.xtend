@@ -24,16 +24,7 @@ class QCJsonIDExtractor {
 
 	 def static CharSequence InitExtractIdImpl(){
 		'''
-        let extractIdFromContent id json = 
-          let extracted = member id json in 
-                match extracted with
-                |`Null -> ""
-                |`String s -> s
-                |`Float f -> string_of_float f
-                |`Int i -> string_of_int i
-                |`Bool b -> string_of_bool b
-                |`Assoc a -> ""
-                |`List l -> ""
+        let extractIdFromContent id json = jsonElementExtractor id json
 		'''
 	}
 	
