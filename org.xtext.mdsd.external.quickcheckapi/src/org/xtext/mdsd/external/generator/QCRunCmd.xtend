@@ -131,7 +131,7 @@ class QCRunCmd {
 	
 	def dispatch CharSequence compilePostCondition(BodyCondition condition) {
 		if(condition.requestValue.body !== null){
-			declarationCounter++
+
 			'''«condition.requestOp.compileRequestOp» (String.compare («currentRequest.name.jsonDefName») («condition.requestValue.body.compileExcluder») == 0)'''
 		} else if (condition.requestValue.body === null){
 		'''
@@ -153,6 +153,7 @@ class QCRunCmd {
 	}
 	
 	def CharSequence jsonDefName(String name){
+		declarationCounter++
 		QCNames.LocalPostConditionJsonDef(name) + declarationCounter + "()"
 	}
 	

@@ -19,11 +19,12 @@ import org.xtext.mdsd.external.quickCheckApi.IdentifierValue
 
 class QCJsonHelper {
 	def static dispatch CharSequence compileJson(JsonDefRef json){
-		json.ref.json.compileJson
+		
+		json.ref.json.compileJson.toString.replaceAll("(\\;{2,})","")
 	}
 	
 	def static dispatch CharSequence compileJson(Json json){
-		json.data.compileJson
+		json.data.compileJson.toString.replaceAll("(\\;{2,})","")
 	}
 	
 	def static dispatch CharSequence compileJson(JsonObject json){
@@ -35,6 +36,11 @@ class QCJsonHelper {
 	}
 	
 	def static dispatch CharSequence compileJson(JsonPair json){
+		if(json.value instanceof CustomValue){
+			if ((json.value as CustomValue).value instanceof ExcludeValue){
+				return ''''''
+			} 
+		}
 		'''("«json.key»",«json.value.compileJson»)'''
 	}
 	
@@ -82,4 +88,81 @@ class QCJsonHelper {
 	def static dispatch CharSequence compileCustomValue(IdentifierValue gen){
 		''''''
 	}
+	
+	
+	
+//	def static dispatch boolean isExclusionJson(JsonDefRef json){
+//		json.ref.json.isExclusionJson
+//	}
+//	
+//	def static dispatch boolean isExclusionJson(Json json){
+//		json.data.isExclusionJson
+//	}
+//	
+//	def static dispatch boolean isExclusionJson(JsonObject json){
+//		for (pair : json.jsonPairs) {
+//			if (pair.isExclusionJson){
+//				return true
+//			}
+//		}
+//		false
+//	}
+//	
+//	def static dispatch boolean isExclusionJson(JsonList json){
+//		for (value : json.jsonValues) {
+//			if (value.isExclusionJson){
+//				return true
+//			}
+//		}
+//		false
+//	}
+//	
+//	def static dispatch boolean isExclusionJson(JsonPair json){
+//		json.value.isExclusionJson
+//	}
+//	
+//	def static dispatch boolean isExclusionJson(IntValue json){
+//		false
+//	}
+//	
+//	def static dispatch boolean isExclusionJson(StringValue json){
+//		false
+//	}
+//	
+//	def static dispatch boolean isExclusionJson(NestedJsonValue json){
+//		json.value.isExclusionJson
+//	}
+//	
+//	def static dispatch boolean isExclusionJson(ListJsonValue json){
+//		json.value.isExclusionJson
+//	}
+//	
+//	
+//	def static dispatch boolean isExclusionJson(CustomValue json){
+//		json.value.isExclusionJson
+//	}
+//	
+//	def static dispatch boolean isExclusionJson(RandomStringGen gen){
+//		false
+//	}
+//	
+//	def static dispatch boolean isExclusionJson(IntGen gen){
+//		false
+//	}
+//	
+//	def static dispatch boolean isExclusionJson(NameStringGen gen){
+//		false
+//	}
+//	
+//	def static dispatch boolean isExclusionJson(ExcludeValue gen){
+//		true
+//	}
+//	
+//	def static dispatch boolean isExclusionJson(ReuseValue gen){
+//		false
+//	}
+//	
+//	def static dispatch boolean isExclusionJson(IdentifierValue gen){
+//		false
+//	}
 }

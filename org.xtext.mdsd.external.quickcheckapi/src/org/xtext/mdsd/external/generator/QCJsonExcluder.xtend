@@ -61,7 +61,8 @@ class QCJsonExcluder {
 	
 	def CharSequence compileJsonExclusionList(Json json){
 		exclusionKeys = new ArrayList
-		'''[«FOR key : exclusionKeys SEPARATOR ";"»key«ENDFOR»]'''	
+		json.data.compileExclusionJson
+		'''[«FOR key : exclusionKeys SEPARATOR ";"»"«key»"«ENDFOR»]'''	
 	}
 	
 	private def dispatch void compileExclusionJson(JsonObject json){
@@ -79,7 +80,11 @@ class QCJsonExcluder {
 	}
 	
 	private def dispatch void compileExclusionJson(JsonPair json){
-		currentKey = json.key
+		if(json.value instanceof CustomValue){
+			if ((json.value as CustomValue).value instanceof ExcludeValue){
+				exclusionKeys.add (json.key)
+			} 
+		}
 		json.value.compileExclusionJson
 	}
 	
@@ -117,7 +122,7 @@ class QCJsonExcluder {
 	}
 	
 	private def dispatch void compileExclusionJson(ExcludeValue gen){
-		exclusionKeys.add (currentKey)
+		
 	}
 	
 	private def dispatch void compileExclusionJson(ReuseValue gen){
