@@ -21,34 +21,41 @@ import org.xtext.mdsd.external.quickCheckApi.RequestOp
 import org.xtext.mdsd.external.quickCheckApi.URLDefRef
 import org.xtext.mdsd.external.quickCheckApi.URL
 import org.xtext.mdsd.external.quickCheckApi.Method
+import org.xtext.mdsd.external.quickCheckApi.Json
+import org.xtext.mdsd.external.quickCheckApi.JsonDefRef
+import com.google.inject.Inject
 
 class QCRunCmd {
 	private int declarationCounter = 0;
 	private Request currentRequest;
+	
+	private QCJsonExcluder excluder = new QCJsonExcluder;
+
 	
 	def initRun_cmd(Test test ) {
 		'''
 		let run_cmd cmd state sut = match cmd with
 			«test.iterateRequests»
 		'''
+		
 	}
 	
 	def CharSequence iterateRequests(Test test){
-		var result = ''''''
+		var result = ''''''	
 		for (request : test.requests){
 			declarationCounter = 0
 			currentRequest = request
 			result +=
 			'''
-			| «QCUtils.firstCharToUpperCase(request.name)» «request.action.determineIndex» if (checkInvariant state sut) then «request.compileRunCmd» else false
+			| «QCUtils.firstCharToUpperCase(request.name)» «request.action.determineIndex» «request.compileRunCmd»
 			'''
 		}
 		result
 	}
 	
 	def CharSequence determineIndex(Action action){
-		var actionOp = action.actionOp
-		if (actionOp instanceof DeleteAction || actionOp instanceof UpdateAction || actionOp instanceof NoAction){
+	
+		if (action instanceof DeleteAction || action instanceof UpdateAction || action instanceof NoAction){
 			'''ix ->'''
 		} else {
 			'''json ->'''
@@ -103,7 +110,7 @@ class QCRunCmd {
 		'''
 		
 		«request.createHttpCall»
-		«request.action.actionOp.compileAction»
+		«request.action.compileAction»
 		«request.postconditions.compilePostCondition»
 		'''
 	}
@@ -125,7 +132,7 @@ class QCRunCmd {
 	def dispatch CharSequence compilePostCondition(BodyCondition condition) {
 		if(condition.requestValue.body !== null){
 			declarationCounter++
-			'''«condition.requestOp.compileRequestOp» (String.compare (Yojson.Basic.to_string «QCNames.LocalPostConditionJsonDef(currentRequest.name) + declarationCounter + "()"») (Yojson.Basic.to_string content) == 0)'''
+			'''«condition.requestOp.compileRequestOp» (String.compare («currentRequest.name.jsonDefName») («condition.requestValue.body.compileExcluder») == 0)'''
 		} else if (condition.requestValue.body === null){
 		'''
 		let extractedState = lookupItem ix state in
@@ -135,6 +142,18 @@ class QCRunCmd {
 						«condition.requestOp.compileRequestOp» (String.compare (Yojson.Basic.to_string combined) (Yojson.Basic.to_string content) == 0)
 		'''
 		}
+	}
+	
+	def dispatch CharSequence compileExcluder(Json json){
+		'''jsonExcluder « excluder.compileJsonExclusionList(json)» content'''
+	}
+	
+	def dispatch CharSequence compileExcluder(JsonDefRef json){
+		'''jsonExcluder «excluder.compileJsonExclusionList(json.ref.json)» content'''
+	}
+	
+	def CharSequence jsonDefName(String name){
+		QCNames.LocalPostConditionJsonDef(name) + declarationCounter + "()"
 	}
 	
 	def CharSequence compileRequestOp(RequestOp op){

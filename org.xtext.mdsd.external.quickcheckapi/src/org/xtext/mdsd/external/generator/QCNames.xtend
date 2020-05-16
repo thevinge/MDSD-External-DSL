@@ -5,7 +5,7 @@ class QCNames {
 		QCUtils.firstCharLowerCase(name) + "LocalStateJsonDef"
 	}
 	
-	def static String JsonDef(String name){
+	def static String JsonDefName(String name){
 		QCUtils.firstCharLowerCase(name) + "JsonDef"
 	}
 	

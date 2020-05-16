@@ -8,12 +8,19 @@ import org.xtext.mdsd.external.quickCheckApi.PostDisjunction
 import org.xtext.mdsd.external.quickCheckApi.CodeCondition
 import org.xtext.mdsd.external.quickCheckApi.BodyCondition
 import java.util.ArrayList
+import org.xtext.mdsd.external.quickCheckApi.CreateAction
+import org.xtext.mdsd.external.quickCheckApi.Request
+import org.xtext.mdsd.external.quickCheckApi.UpdateAction
+import org.xtext.mdsd.external.quickCheckApi.DeleteAction
+import org.xtext.mdsd.external.quickCheckApi.NoAction
+import javax.inject.Inject
 
 class QCJSONHandler {
 	
 	private ArrayList<String> postCondJsonBodies 
 	private String requestName
 	private int declarationCounter
+	
 	
 	def CharSequence InitJsonVariables(Test test){
 		postCondJsonBodies = new ArrayList
@@ -35,15 +42,10 @@ class QCJSONHandler {
 		}
 		'''
 		«FOR defi : QCUtils.filterbyJsonDefinition(test.definitions)»
-		let «QCNames.JsonDef(defi.name)» () = fromJsonToStr («QCJsonHelper.compileJson(defi.json)»)
+		let «QCNames.JsonDefName(defi.name)» () = fromJsonToStr («QCJsonHelper.compileJson(defi.json)»)
 		«ENDFOR»
 		«FOR request : test.requests»
-			«IF request.action.value !== null»
-				«var json = request.action.value.compileJson»
-				«IF json.length > 0»
-					let «QCNames.LocalStateJsonDef(request.name)» () = fromJsonToStr («json»)
-				«ENDIF»
-			«ENDIF»
+			«request.action.compileAction(request)»
 			«IF request.body !== null»
 				«var json = request.body.value.compileJson»
 				«IF json.length > 0»
@@ -57,6 +59,30 @@ class QCJSONHandler {
 		'''
 	}
 	
+	
+	private def dispatch CharSequence compileAction(CreateAction action, Request request){
+		var json = action.value.compileJson
+		if (json.length > 0){
+			'''let «QCNames.LocalStateJsonDef(request.name)» () = fromJsonToStr («json»)'''
+		}
+	}
+	
+	private def dispatch CharSequence compileAction(UpdateAction action, Request request){
+		var json = action.value.compileJson
+		if (json.length > 0){
+			'''let «QCNames.LocalStateJsonDef(request.name)» () = fromJsonToStr («json»)'''
+		}
+	}
+	
+	private def dispatch CharSequence compileAction(DeleteAction action, Request request){
+		var json = action.value.compileJson
+		if (json.length > 0){
+			'''let «QCNames.LocalStateJsonDef(request.name)» () = fromJsonToStr («json»)'''
+		}
+	}
+	private def dispatch CharSequence compileAction(NoAction action, Request request){
+		''''''
+	}
 	
 	private def CharSequence initJsonHelper(){
 		'''
@@ -103,7 +129,7 @@ class QCJSONHandler {
 	def dispatch Object compilePostCondition(BodyCondition condition) {
 		if(condition.requestValue.body !== null){
 			declarationCounter++
-		 	var defDeclaration =  QCNames.LocalPostConditionJsonDef(requestName) + declarationCounter + "() = fromJsonToStr (" + QCJsonHelper.compileJson(condition.requestValue.body) + ")"
+		 	var defDeclaration = QCNames.LocalPostConditionJsonDef(requestName) + declarationCounter + "() = fromJsonToStr (" + QCJsonHelper.compileJson(condition.requestValue.body) + ")"
 		 	postCondJsonBodies.add(defDeclaration)
 		} 
 	}

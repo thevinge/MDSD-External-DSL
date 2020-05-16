@@ -5,8 +5,10 @@ import org.xtext.mdsd.external.generator.QCUtils
 import org.xtext.mdsd.external.quickCheckApi.JsonDefRef
 import org.xtext.mdsd.external.quickCheckApi.Json
 import org.xtext.mdsd.external.quickCheckApi.Request
+import javax.inject.Inject
 
 class QCArbCmd {
+
 	
 	def initArb_cmd(Test test ) {
 		
@@ -41,7 +43,7 @@ class QCArbCmd {
 	}
 	
 	private def dispatch CharSequence compileJsonDefName(JsonDefRef json, Request request){
-		'''«QCNames.JsonDef(json.ref.name)» ()'''
+		'''«QCNames.JsonDefName(json.ref.name)» ()'''
 	}
 	
 	

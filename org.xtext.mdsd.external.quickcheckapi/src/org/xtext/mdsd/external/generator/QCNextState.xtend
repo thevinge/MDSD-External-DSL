@@ -9,9 +9,11 @@ import org.xtext.mdsd.external.quickCheckApi.UpdateAction
 import org.xtext.mdsd.external.quickCheckApi.NoAction
 import org.xtext.mdsd.external.quickCheckApi.Json
 import org.xtext.mdsd.external.quickCheckApi.JsonDefRef
+import javax.inject.Inject
 
 class QCNextState {
-	private String jsonDefName;
+
+
 	def initNext_State(Test test ) {
 		'''
 		let next_state cmd state = match cmd with
@@ -22,31 +24,27 @@ class QCNextState {
 	}
 	
 	def CharSequence compileNextState(Request request){
-		if (request.action.value !== null) {
-			jsonDefName = request.action.value.compileJsonDefName(request.name);
-		}
-		
-		request.action.compile
+		request.action.compile(request)
 	}
 	
-	def CharSequence compile(Action action){
-		var actionOp = action.actionOp
-		if (actionOp instanceof CreateAction) {
-			'''json -> state@[«jsonDefName»()]'''	
-		} else if (actionOp instanceof DeleteAction){
+	def CharSequence compile(Action action, Request request){
+		if (action instanceof CreateAction) {
+
+			'''json -> state@[«action.value.compileJsonDefName(request.name)»()]'''	
+		} else if (action instanceof DeleteAction){
 			'''
 			ix -> let pos = getPos ix state in
 			      (* Returns a list of all items except that which is 'item' found above *)
 			      let l = remove_item pos state in
 			      l
 	        '''
-		} else if (actionOp instanceof UpdateAction){
+		} else if (action instanceof UpdateAction){
 			'''
-			ix -> let newelem = «jsonDefName»() in
+			ix -> let newelem = «action.value.compileJsonDefName(request.name)»() in
 			      let pos = getPos ix state in
 			      replaceElem pos state newelem
 			'''	
-		} else if (actionOp instanceof NoAction){
+		} else if (action instanceof NoAction){
 			'''ix -> state'''
 		} else {
 			''''''
@@ -58,7 +56,7 @@ class QCNextState {
 	}
 	
 	private def dispatch String compileJsonDefName(JsonDefRef json, String requestName){
-		QCNames.JsonDef(json.ref.name)
+		QCNames.JsonDefName(json.ref.name)
 	}
 
 }

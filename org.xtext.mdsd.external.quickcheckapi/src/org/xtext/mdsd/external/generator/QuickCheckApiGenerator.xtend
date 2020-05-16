@@ -79,6 +79,8 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 		  «modelSystem.initModelSystem()»
 		  
 		  «boilerplate.initUtilities()»
+		  
+		  «QCJsonExcluder.InitJsonExcluder»
 		 
 		  «arbCmd.initArb_cmd(test)»
 		 
@@ -103,7 +105,9 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 	def initDependencies(Test test) {
 		'''
 		open QCheck
+		open Yojson.Basic
 		open Yojson.Basic.Util
+		open Str
 		open Curl
 		open Format
 		open Http

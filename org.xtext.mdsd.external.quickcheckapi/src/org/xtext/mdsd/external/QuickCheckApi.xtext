@@ -32,12 +32,12 @@ Request:
 
 
 
-Action:
-	actionOp=ActionOperator value=JsonRef | actionOp=ActionOperator
-;
+//Action:
+//	actionOp=ActionOperator value=JsonRef | actionOp=ActionOperator
+//;
 
-ActionOperator:
-	{CreateAction} "create" | {DeleteAction} "delete" | {UpdateAction} "update" | {NoAction} "none"
+Action:
+	{CreateAction} "create" value=JsonRef  | {DeleteAction} "delete" value=JsonRef  | {UpdateAction} "update" value=JsonRef  | {NoAction} "none"
 ;
 
 
@@ -181,7 +181,7 @@ StatusCode:
 ;
 
 ResponseBody:
-	{ResponseBody} "body" body=Json?
+	{ResponseBody} "body" body=JsonRef?
 ;
 
 RequestOp:
