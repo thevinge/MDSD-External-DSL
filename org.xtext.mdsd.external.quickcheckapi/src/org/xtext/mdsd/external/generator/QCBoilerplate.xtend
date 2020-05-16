@@ -167,6 +167,7 @@ class QCBoilerplate {
 		  let inSpace value state = List.mem (value) state
 		  
 		  let isEmpty state = (List.length state = 0)
+		  
 		'''
 	}
 	
@@ -174,8 +175,6 @@ class QCBoilerplate {
 		'''
 		open Yojson
 		«combineInterface()»
-		
-		«extractIdinterface()»
 		
 		«cleanupInterface()»
 		'''
@@ -224,6 +223,7 @@ class QCBoilerplate {
 		'''
 	}
 	
+
 	
 	
 }

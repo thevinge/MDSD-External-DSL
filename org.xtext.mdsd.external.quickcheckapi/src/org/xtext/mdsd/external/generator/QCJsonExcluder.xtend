@@ -20,7 +20,6 @@ import org.xtext.mdsd.external.quickCheckApi.JsonList
 class QCJsonExcluder {
 	
 	private ArrayList<String> exclusionKeys;
-	private String currentKey
 	def static CharSequence InitJsonExcluder(){
 		'''
 		let jsonCleanup json = let ite1 =  global_replace (Str.regexp "{,") "{" json in

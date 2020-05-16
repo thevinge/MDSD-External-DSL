@@ -20,11 +20,11 @@ import org.xtext.mdsd.external.quickCheckApi.IdentifierValue
 class QCJsonHelper {
 	def static dispatch CharSequence compileJson(JsonDefRef json){
 		
-		json.ref.json.compileJson.toString.replaceAll("(\\;{2,})","")
+		json.ref.json.compileJson.trim
 	}
 	
 	def static dispatch CharSequence compileJson(Json json){
-		json.data.compileJson.toString.replaceAll("(\\;{2,})","")
+		json.data.compileJson.trim
 	}
 	
 	def static dispatch CharSequence compileJson(JsonObject json){
@@ -37,7 +37,7 @@ class QCJsonHelper {
 	
 	def static dispatch CharSequence compileJson(JsonPair json){
 		if(json.value instanceof CustomValue){
-			if ((json.value as CustomValue).value instanceof ExcludeValue){
+			if ((json.value as CustomValue).value instanceof ExcludeValue || (json.value as CustomValue).value instanceof IdentifierValue){
 				return ''''''
 			} 
 		}
@@ -88,6 +88,17 @@ class QCJsonHelper {
 	def static dispatch CharSequence compileCustomValue(IdentifierValue gen){
 		''''''
 	}
+	
+	def static CharSequence trim(CharSequence json){
+		json.toString.replaceAll("(\\;{2,})",";").replace(",,",",")
+					.replace("{;","{")
+					.replace("[;","[")
+					.replace(";]","]")
+					.replace(";}","}")
+					
+	}
+					 
+	
 	
 	
 	

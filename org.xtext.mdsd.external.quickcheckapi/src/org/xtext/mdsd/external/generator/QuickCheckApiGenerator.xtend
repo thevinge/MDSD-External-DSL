@@ -80,6 +80,8 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 		  
 		  «boilerplate.initUtilities()»
 		  
+		  «QCJsonIDExtractor.InitExtractIdImpl»
+		  
 		  «QCJsonExcluder.InitJsonExcluder»
 		 
 		  «arbCmd.initArb_cmd(test)»
