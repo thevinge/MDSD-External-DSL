@@ -92,7 +92,7 @@ class QCJsonHelper {
 	}
 	
 	def static dispatch CharSequence compileCustomValue(ReuseValue gen){
-		'''(Hashtbl.find tbl "«gen.name»")'''
+		'''`String (Hashtbl.find tbl "«gen.name»")'''
 	}
 	
 	def static dispatch CharSequence compileCustomValue(IdentifierValue gen){

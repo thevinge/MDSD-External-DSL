@@ -17,6 +17,8 @@ class QCNextState {
 
 	def initNext_State(Test test ) {
 		'''
+		«compileJsonValueTables(test)»
+		
 		let next_state cmd state = match cmd with
 			«FOR request : test.requests»
 			| «QCUtils.firstCharToUpperCase(request.name)» «request.compileNextState»
@@ -41,7 +43,7 @@ class QCNextState {
 	        '''
 		} else if (action instanceof UpdateAction){
 			'''
-			ix -> let newelem = «QCRequestProcess.get(request.name).stateJsonDef.declarationUse» () in
+			ix -> let newelem = «QCRequestProcess.get(request.name).stateJsonDef.declarationUse» in
 			      let pos = getPos ix state in
 			      replaceElem pos state newelem
 			'''	
@@ -52,31 +54,17 @@ class QCNextState {
 		}
 	}
 	
-//	private def dispatch String compileJsonDefName(Json json, String requestName){
-//		QCNames.LocalStateJsonDef(requestName)
-//	}
-//	
-//	private def dispatch String compileJsonDefName(JsonDefRef json, String requestName){
-//		QCNames.JsonDefName(json.ref.name)
-//	}
-//
-//	private def dispatch CharSequence compileReuseJson(Json json, String requestName){
-//		if(QCJsonReuse.isReuseJson(json)){
-//			'''(«QCNames.LocalStateValueTable(requestName)»(json))'''
-//		} else{
-//			'''()'''
-//		}
-//		
-//	}
-//	
-//	private def dispatch CharSequence compileReuseJson(JsonDefRef json, String requestName){
-//		if(QCJsonReuse.isReuseJson(json)){
-//			'''(«QCNames.LocalStateValueTable(json.ref.name)»(json))'''
-//		} else{
-//			'''()'''
-//		}
-//		
-//	}
+	def CharSequence compileJsonValueTables(Test test){
+		'''
+		«FOR request : test.requests»
+			«QCRequestProcess.get(request.name).bodyJsonDef?.valueTableDeclaration»
+			«QCRequestProcess.get(request.name).stateJsonDef?.valueTableDeclaration»
+			«FOR jsonDef : QCRequestProcess.get(request.name).postCondJsonDefs»
+				«jsonDef.valueTableDeclaration»
+			«ENDFOR»
+		«ENDFOR»
+		'''
+	}
 
 
 }

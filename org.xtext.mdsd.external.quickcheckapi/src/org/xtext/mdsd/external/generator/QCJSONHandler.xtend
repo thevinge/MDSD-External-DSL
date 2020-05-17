@@ -34,18 +34,6 @@ class QCJSONHandler {
 			QCRequestProcess.processRequest(request)
 		}
 		'''
-«««		«FOR defi : QCUtils.filterbyJsonDefinition(test.definitions)»
-«««		let «QCNames.JsonDefName(defi.name)» «defi.json.compileReuseJson» = fromJsonToStr («QCJsonHelper.compileJson(defi.json)»)
-«««		«ENDFOR»
-«««		«FOR request : test.requests»
-«««			«request.action.compileAction(request)»
-«««			«IF request.body !== null»
-«««				«var json = request.body.value.compileJson»
-«««				«IF json.length > 0»
-«««					let «QCNames.LocalBodyJsonDef(request.name)» «request.body.value.compileReuseJson» = fromJsonToStr («json»)
-«««				«ENDIF»
-«««			«ENDIF»
-«««		«ENDFOR»	
 		«FOR request : test.requests»
 			«QCRequestProcess.get(request.name).bodyJsonDef?.declaration»
 			«QCRequestProcess.get(request.name).stateJsonDef?.declaration»
