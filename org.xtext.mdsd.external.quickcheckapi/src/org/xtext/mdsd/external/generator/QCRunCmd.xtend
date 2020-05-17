@@ -86,7 +86,8 @@ class QCRunCmd {
 	}
 	
 	def dispatch boolean CheckRequestID(URLDefRef url){
-		return (url.ref.url.CheckRequestID)
+		return (url.requestID === null)
+		
 	}	
 	
 	def dispatch CharSequence compileMethod(GET get) {

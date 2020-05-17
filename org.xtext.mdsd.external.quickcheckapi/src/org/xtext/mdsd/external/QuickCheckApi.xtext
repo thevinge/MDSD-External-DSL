@@ -49,11 +49,11 @@ URLRef:
 	URL | URLDefRef
 ;
 
-URLDefRef returns URLRef:
+URLDefRef:
 	{URLDefRef} ref=[URLDefinition] ("/" extraUri=URI)? ("/@" requestID=RequestID)?
 ;
 
-URL returns URLRef:
+URL:
 	{URL} protocol=Protocol "://" domain=Domain "/" (uri=URI)? ("/@" requestID=RequestID)?
 ;
 
