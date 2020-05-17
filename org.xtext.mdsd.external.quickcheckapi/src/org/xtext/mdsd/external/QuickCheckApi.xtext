@@ -144,7 +144,7 @@ IdentifierValue:
 ;
 
 ReuseValue:
-	{ReuseValue} "^" (name=ID)?
+	{ReuseValue} "^"name=ID
 ;
 
 GeneratedValue:

@@ -16,6 +16,16 @@ import org.xtext.mdsd.external.quickCheckApi.NameStringGen
 import org.xtext.mdsd.external.quickCheckApi.ExcludeValue
 import org.xtext.mdsd.external.quickCheckApi.ReuseValue
 import org.xtext.mdsd.external.quickCheckApi.IdentifierValue
+import org.xtext.mdsd.external.quickCheckApi.PostConjunction
+import org.xtext.mdsd.external.quickCheckApi.BodyCondition
+import org.xtext.mdsd.external.quickCheckApi.CodeCondition
+import org.xtext.mdsd.external.quickCheckApi.PostDisjunction
+import java.util.ArrayList
+import org.xtext.mdsd.external.quickCheckApi.Postproposition
+import org.xtext.mdsd.external.quickCheckApi.CreateAction
+import org.xtext.mdsd.external.quickCheckApi.UpdateAction
+import org.xtext.mdsd.external.quickCheckApi.DeleteAction
+import org.xtext.mdsd.external.quickCheckApi.NoAction
 
 class QCJsonHelper {
 	def static dispatch CharSequence compileJson(JsonDefRef json){
@@ -82,7 +92,7 @@ class QCJsonHelper {
 	}
 	
 	def static dispatch CharSequence compileCustomValue(ReuseValue gen){
-		''''''
+		'''(Hashtbl.find tbl "«gen.name»")'''
 	}
 	
 	def static dispatch CharSequence compileCustomValue(IdentifierValue gen){
@@ -97,83 +107,66 @@ class QCJsonHelper {
 					.replace(";}","}")
 					
 	}
-					 
+
+	private static ArrayList<QCJsonDef> jsonBodies
+	private static int declarationCounter
 	
+	def static ArrayList<QCJsonDef> compileConditionBodies(Postproposition cond){
+		jsonBodies = new ArrayList
+		declarationCounter = 0
+		cond.compilePostCondition
+		jsonBodies
+	}
+
+	private def static dispatch void compilePostCondition(PostConjunction and) {
+		and.left.compilePostCondition 
+		and.right.compilePostCondition
+	}
 	
+	private def static dispatch void compilePostCondition(PostDisjunction or) {
+		or.left.compilePostCondition
+		or.right.compilePostCondition
+	}
 	
+	private def static dispatch void compilePostCondition(CodeCondition condition) {
+		
+	}
 	
-//	def static dispatch boolean isExclusionJson(JsonDefRef json){
-//		json.ref.json.isExclusionJson
-//	}
-//	
-//	def static dispatch boolean isExclusionJson(Json json){
-//		json.data.isExclusionJson
-//	}
-//	
-//	def static dispatch boolean isExclusionJson(JsonObject json){
-//		for (pair : json.jsonPairs) {
-//			if (pair.isExclusionJson){
-//				return true
-//			}
-//		}
-//		false
-//	}
-//	
-//	def static dispatch boolean isExclusionJson(JsonList json){
-//		for (value : json.jsonValues) {
-//			if (value.isExclusionJson){
-//				return true
-//			}
-//		}
-//		false
-//	}
-//	
-//	def static dispatch boolean isExclusionJson(JsonPair json){
-//		json.value.isExclusionJson
-//	}
-//	
-//	def static dispatch boolean isExclusionJson(IntValue json){
-//		false
-//	}
-//	
-//	def static dispatch boolean isExclusionJson(StringValue json){
-//		false
-//	}
-//	
-//	def static dispatch boolean isExclusionJson(NestedJsonValue json){
-//		json.value.isExclusionJson
-//	}
-//	
-//	def static dispatch boolean isExclusionJson(ListJsonValue json){
-//		json.value.isExclusionJson
-//	}
-//	
-//	
-//	def static dispatch boolean isExclusionJson(CustomValue json){
-//		json.value.isExclusionJson
-//	}
-//	
-//	def static dispatch boolean isExclusionJson(RandomStringGen gen){
-//		false
-//	}
-//	
-//	def static dispatch boolean isExclusionJson(IntGen gen){
-//		false
-//	}
-//	
-//	def static dispatch boolean isExclusionJson(NameStringGen gen){
-//		false
-//	}
-//	
-//	def static dispatch boolean isExclusionJson(ExcludeValue gen){
-//		true
-//	}
-//	
-//	def static dispatch boolean isExclusionJson(ReuseValue gen){
-//		false
-//	}
-//	
-//	def static dispatch boolean isExclusionJson(IdentifierValue gen){
-//		false
-//	}
+	private def static dispatch void compilePostCondition(BodyCondition condition) {
+		if(condition.requestValue.body !== null){
+			declarationCounter++  
+			var QCJsonDef jsondef = new QCJsonDef(QCNames.LocalPostConditionJsonDef() + declarationCounter, defType.dtCondition)
+		 	jsondef.processedJson = QCJsonHelper.compileJson(condition.requestValue.body)
+		 	
+		 	QCJsonReuse.isReuseJson(condition.requestValue.body)
+		 	jsondef.reuseVars = QCJsonReuse.reuseKeys
+		 	jsondef.IdentifierKey = QCJsonIDExtractor.compileJsonID(condition.requestValue.body).toString
+		 	jsonBodies.add(jsondef)
+		} 
+	}
+
+
+
+
+
+
+	def static dispatch CharSequence compileJsonAction(CreateAction action){
+		action.value.compileJson
+	}
+	
+	def static dispatch CharSequence compileJsonAction(UpdateAction action){
+		action.value.compileJson
+	}
+	
+	def static dispatch CharSequence compileJsonAction(DeleteAction action){
+		action.value.compileJson
+	}
+	def static dispatch CharSequence compileJsonAction(NoAction action){
+		''''''
+	}
+
+
+
+
+				 
 }

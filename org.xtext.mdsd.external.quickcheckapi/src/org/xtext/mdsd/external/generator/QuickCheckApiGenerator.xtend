@@ -56,6 +56,7 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 	def createFile(IFileSystemAccess2 fsa, Builder builder) {
 		
 		for (test : builder.tests) {
+			QCRequestProcess.init
 			fsa.generateFile(QCUtils.firstCharLowerCase(test.name) + ".ml", test.compile());
 		}	
 	}

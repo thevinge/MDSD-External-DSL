@@ -190,12 +190,6 @@ class QCBoilerplate {
 		'''
 	}
 	
-	private def CharSequence extractIdinterface() {
-		'''
-		(* Implement this method to extract your id from a json body *)
-		val extractIdFromContent : Yojson.Basic.t -> string
-		'''
-	}
 	
 	private def CharSequence cleanupInterface() {
 		'''

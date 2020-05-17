@@ -10,6 +10,7 @@ import org.xtext.mdsd.external.quickCheckApi.NoAction
 import org.xtext.mdsd.external.quickCheckApi.Json
 import org.xtext.mdsd.external.quickCheckApi.JsonDefRef
 import javax.inject.Inject
+import org.xtext.mdsd.external.quickCheckApi.JsonRef
 
 class QCNextState {
 
@@ -30,7 +31,7 @@ class QCNextState {
 	def CharSequence compile(Action action, Request request){
 		if (action instanceof CreateAction) {
 
-			'''json -> state@[«action.value.compileJsonDefName(request.name)»()]'''	
+			'''json -> state@[«QCRequestProcess.get(request.name).stateJsonDef.declarationUse»]'''	
 		} else if (action instanceof DeleteAction){
 			'''
 			ix -> let pos = getPos ix state in
@@ -40,7 +41,7 @@ class QCNextState {
 	        '''
 		} else if (action instanceof UpdateAction){
 			'''
-			ix -> let newelem = «action.value.compileJsonDefName(request.name)»() in
+			ix -> let newelem = «QCRequestProcess.get(request.name).stateJsonDef.declarationUse» () in
 			      let pos = getPos ix state in
 			      replaceElem pos state newelem
 			'''	
@@ -51,13 +52,32 @@ class QCNextState {
 		}
 	}
 	
-	private def dispatch String compileJsonDefName(Json json, String requestName){
-		QCNames.LocalStateJsonDef(requestName)
-	}
-	
-	private def dispatch String compileJsonDefName(JsonDefRef json, String requestName){
-		QCNames.JsonDefName(json.ref.name)
-	}
+//	private def dispatch String compileJsonDefName(Json json, String requestName){
+//		QCNames.LocalStateJsonDef(requestName)
+//	}
+//	
+//	private def dispatch String compileJsonDefName(JsonDefRef json, String requestName){
+//		QCNames.JsonDefName(json.ref.name)
+//	}
+//
+//	private def dispatch CharSequence compileReuseJson(Json json, String requestName){
+//		if(QCJsonReuse.isReuseJson(json)){
+//			'''(«QCNames.LocalStateValueTable(requestName)»(json))'''
+//		} else{
+//			'''()'''
+//		}
+//		
+//	}
+//	
+//	private def dispatch CharSequence compileReuseJson(JsonDefRef json, String requestName){
+//		if(QCJsonReuse.isReuseJson(json)){
+//			'''(«QCNames.LocalStateValueTable(json.ref.name)»(json))'''
+//		} else{
+//			'''()'''
+//		}
+//		
+//	}
+
 
 }
 	

@@ -91,7 +91,7 @@ class QCJsonIDExtractor {
 	}
 	
 	def static dispatch CharSequence compileCustomValue(IdentifierValue value){
-		'''«value.name»'''
+		'''«value?.name»'''
 	}
 }
 	

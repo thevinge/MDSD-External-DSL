@@ -87,13 +87,7 @@ class QCJsonExcluder {
 		json.value.compileExclusionJson
 	}
 	
-	private def dispatch void compileExclusionJson(IntValue json){
-		
-	}
-	
-	private def dispatch void compileExclusionJson(StringValue json){
-		
-	}
+
 	
 	private def dispatch void compileExclusionJson(NestedJsonValue json){
 		json.value.compileExclusionJson
@@ -108,28 +102,13 @@ class QCJsonExcluder {
 		json.value.compileExclusionJson
 	}
 	
-	private def dispatch void compileExclusionJson(RandomStringGen gen){
-		
-	}
-	
-	private def dispatch void compileExclusionJson(IntGen gen){
-		
-	}
-	
-	private def dispatch void compileExclusionJson(NameStringGen gen){
-		
-	}
-	
-	private def dispatch void compileExclusionJson(ExcludeValue gen){
-		
-	}
-	
-	private def dispatch void compileExclusionJson(ReuseValue gen){
-		
-	}
-	
-	private def dispatch void compileExclusionJson(IdentifierValue gen){
-		
-	}
+	private def dispatch void compileExclusionJson(RandomStringGen gen){}
+	private def dispatch void compileExclusionJson(IntGen gen){}
+	private def dispatch void compileExclusionJson(NameStringGen gen){}
+	private def dispatch void compileExclusionJson(ExcludeValue gen){}
+	private def dispatch void compileExclusionJson(ReuseValue gen){}
+	private def dispatch void compileExclusionJson(IdentifierValue gen){}
+	private def dispatch void compileExclusionJson(IntValue json){}
+	private def dispatch void compileExclusionJson(StringValue json){}
 
 }

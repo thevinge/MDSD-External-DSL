@@ -19,7 +19,7 @@ class QCArbCmd {
 		    QCheck.make ~print:show_cmd
 		    (Gen.oneof [
 		    «FOR request: QCUtils.filterRequireNoIndex(test.requests) SEPARATOR ";"» 
-		    (Gen.return («QCUtils.firstCharToUpperCase(request.name)»(«request.body.value.compileJsonDefName(request)»)))
+		    (Gen.return («QCUtils.firstCharToUpperCase(request.name)» («QCRequestProcess.get(request.name).bodyJsonDef.declarationUse»)))
 		    «ENDFOR»
 		    ])
 		    
@@ -30,22 +30,11 @@ class QCArbCmd {
 			      		  «IF QCUtils.requireIndex(request) » 
 			      		  Gen.map (fun i -> «QCUtils.firstCharToUpperCase(request.name)» i) int_gen
 			      		  «ELSE» 
-			      		  (Gen.return («QCUtils.firstCharToUpperCase(request.name)» («request.body.value.compileJsonDefName(request)»)))
+			      		  (Gen.return («QCUtils.firstCharToUpperCase(request.name)» («QCRequestProcess.get(request.name).bodyJsonDef.declarationUse»)))
 			      		  «ENDIF»
 						  «ENDFOR»
 		                 ])
 		'''
 	}
-	
-	private def dispatch CharSequence compileJsonDefName(Json json, Request request){
 		
-		'''«QCNames.LocalBodyJsonDef(request.name)» ()'''
-	}
-	
-	private def dispatch CharSequence compileJsonDefName(JsonDefRef json, Request request){
-		'''«QCNames.JsonDefName(json.ref.name)» ()'''
-	}
-	
-	
-	
 }

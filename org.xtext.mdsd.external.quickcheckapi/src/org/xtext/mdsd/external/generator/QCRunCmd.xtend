@@ -132,7 +132,7 @@ class QCRunCmd {
 	def dispatch CharSequence compilePostCondition(BodyCondition condition) {
 		if(condition.requestValue.body !== null){
 
-			'''«condition.requestOp.compileRequestOp» (String.compare («currentRequest.name.jsonDefName») («condition.requestValue.body.compileExcluder») == 0)'''
+			'''«condition.requestOp.compileRequestOp» (String.compare («currentRequest.name.jsonDefName») («condition.requestValue.body.compileExcluder» content) == 0)'''
 		} else if (condition.requestValue.body === null){
 		'''
 		let extractedState = lookupItem ix state in
@@ -145,16 +145,16 @@ class QCRunCmd {
 	}
 	
 	def dispatch CharSequence compileExcluder(Json json){
-		'''jsonExcluder « excluder.compileJsonExclusionList(json)» content'''
+		'''jsonExcluder « excluder.compileJsonExclusionList(json)»'''
 	}
 	
 	def dispatch CharSequence compileExcluder(JsonDefRef json){
-		'''jsonExcluder «excluder.compileJsonExclusionList(json.ref.json)» content'''
+		'''jsonExcluder «excluder.compileJsonExclusionList(json.ref.json)»'''
 	}
 	
 	def CharSequence jsonDefName(String name){
 		declarationCounter++
-		QCNames.LocalPostConditionJsonDef(name) + declarationCounter + "()"
+		QCRequestProcess.get(name).postCondJsonDefs.get(declarationCounter-1).declarationUse
 	}
 	
 	def CharSequence compileRequestOp(RequestOp op){
