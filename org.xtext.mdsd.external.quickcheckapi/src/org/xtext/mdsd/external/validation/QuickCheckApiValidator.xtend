@@ -6,6 +6,8 @@ package org.xtext.mdsd.external.validation
 import org.xtext.mdsd.external.quickCheckApi.QuickCheckApiPackage
 import org.xtext.mdsd.external.quickCheckApi.Builder
 import org.eclipse.xtext.validation.Check
+import org.xtext.mdsd.external.quickCheckApi.Test
+import org.xtext.mdsd.external.quickCheckApi.JsonDefinition
 
 /**
  * This class contains custom validation rules. 
@@ -23,5 +25,18 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 		 }
 		
 	}
+	
+	@Check
+	def checkDuplicateDefinitions(Test test){
+		val duplicates = test.definitions.groupBy[it.name].filter[k,v| v.size >= 2]
+		if (duplicates.size > 0){
+		 	duplicates.forEach[k, v|v.forEach[error("Json name duplicate",it, QuickCheckApiPackage.Literals.VAR_DEFINITION__NAME)]]
+		 	
+		 }
+	}
+	
+	
+	
+	
 	
 }
