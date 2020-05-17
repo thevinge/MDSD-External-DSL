@@ -3,6 +3,9 @@
  */
 package org.xtext.mdsd.external.validation
 
+import org.xtext.mdsd.external.quickCheckApi.QuickCheckApiPackage
+import org.xtext.mdsd.external.quickCheckApi.Builder
+import org.eclipse.xtext.validation.Check
 
 /**
  * This class contains custom validation rules. 
@@ -11,15 +14,14 @@ package org.xtext.mdsd.external.validation
  */
 class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 	
-//	public static val INVALID_NAME = 'invalidName'
-//
-//	@Check
-//	def checkGreetingStartsWithCapital(Greeting greeting) {
-//		if (!Character.isUpperCase(greeting.name.charAt(0))) {
-//			warning('Name should start with a capital', 
-//					QuickCheckApiPackage.Literals.GREETING__NAME,
-//					INVALID_NAME)
-//		}
-//	}
+	@Check
+	def checkDuplicateTestname(Builder builder){
+		val duplicates = builder.tests.groupBy[it.name].filter[k,v| v.size >= 2]
+		 if (duplicates.size > 0){
+		 	duplicates.forEach[k, v|v.forEach[error("Test name duplicate",it, QuickCheckApiPackage.Literals.TEST__NAME)]]
+		 	
+		 }
+		
+	}
 	
 }
