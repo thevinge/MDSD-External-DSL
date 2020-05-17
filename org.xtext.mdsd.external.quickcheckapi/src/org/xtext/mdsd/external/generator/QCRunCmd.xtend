@@ -65,12 +65,12 @@ class QCRunCmd {
 	def CharSequence createHttpCall(Request request) {
 		if (request.url.CheckRequestID) {			
 			'''
-				let code,content = Http.«request.method.compileMethod» «QCUtils.firstCharLowerCase(request.name)»URL«IF !isGetMethod(request.method)» «IF request.body !== null»json«ENDIF»«ENDIF» in
+				let code,content = Http.«request.method.compileMethod» «QCUtils.firstCharLowerCase(request.name)»URL «IF request.body !== null»json«ELSE»""«ENDIF» in
 			'''
 		} else {
 			'''
 			let id = lookupSutItem ix !sut in
-				let code,content = Http.«request.method.compileMethod» («QCUtils.firstCharLowerCase(request.name)»URL^"/"^id)«IF !isGetMethod(request.method)» «IF request.body !== null»json«ENDIF»«ENDIF» in
+				let code,content = Http.«request.method.compileMethod» («QCUtils.firstCharLowerCase(request.name)»URL^"/"^id) «IF request.body !== null»json«ELSE»""«ENDIF» in
 			'''
 		}
 		

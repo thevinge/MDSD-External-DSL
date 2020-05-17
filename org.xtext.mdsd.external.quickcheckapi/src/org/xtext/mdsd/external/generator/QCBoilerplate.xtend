@@ -25,7 +25,7 @@ class QCBoilerplate {
 		
 		module InternalHttp =
 		struct
-		  let get ?(header = "") url =
+		  let get ?(header = "") url data =
 		    let r = Buffer.create 16384 in
 		    let c = Curl.init () in
 		    set_url c url;
@@ -105,8 +105,8 @@ class QCBoilerplate {
 		let patch_header = "Content-Type:application/json"
 		let delete_header = "Content-Type:application/json"
 		
-		let get ?(header = get_header) url =
-		  let c,r = InternalHttp.get ~header:header url in
+		let get ?(header = get_header) url data =
+		  let c,r = InternalHttp.get ~header:header url data in
 		  if String.length r == 0 then
 		      (c, Yojson.Basic.from_string "{}")
 		    else
