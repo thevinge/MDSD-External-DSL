@@ -1,4 +1,4 @@
-package org.xtext.mdsd.external.generator
+package org.xtext.mdsd.external.generator.ocaml
 
 import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.Host
@@ -7,19 +7,20 @@ import org.xtext.mdsd.external.quickCheckApi.URI
 import org.xtext.mdsd.external.quickCheckApi.Request
 import org.xtext.mdsd.external.quickCheckApi.URL
 import org.xtext.mdsd.external.quickCheckApi.URLDefRef
+import org.xtext.mdsd.external.generator.QCUtils
 
 class QCCmd {
 	def CharSequence initCmd(Test test){
 		'''
-		type cmd =
-			 «FOR request : test.requests »
-			 | «QCUtils.firstCharToUpperCase(request.name)»«request.argumentsSnippet»
-			 «ENDFOR»
-			 [@@deriving show { with_path = false }]
-		
-		«FOR request : test.requests »
-		let «QCUtils.firstCharLowerCase(request.name)»URL="«request.url.chooseURL.protocol»://«request.url.chooseURL.domain.host.compile()»«request.url.chooseURL.domain.port.compile()»/«request.url.chooseURI.compile()»"
-		«ENDFOR»
+			type cmd =
+				 «FOR request : test.requests »
+				 	| «QCUtils.firstCharToUpperCase(request.name)»«request.argumentsSnippet»
+				 «ENDFOR»
+				 [@@deriving show { with_path = false }]
+			
+			«FOR request : test.requests »
+				let «QCUtils.firstCharLowerCase(request.name)»URL="«request.url.chooseURL.protocol»://«request.url.chooseURL.domain.host.compile()»«request.url.chooseURL.domain.port.compile()»/«request.url.chooseURI.compile()»"
+			«ENDFOR»
 		'''
 	}
 	
@@ -60,10 +61,10 @@ class QCCmd {
 	
 	 private def CharSequence compile(URI uri) {
 		'''
-		«IF uri !== null»
-		«uri.name»/«FOR part : uri.path SEPARATOR "/"»«part.part»«ENDFOR»
-		«ELSE»
-		«ENDIF»
+			«IF uri !== null»
+				«uri.name»/«FOR part : uri.path SEPARATOR "/"»«part.part»«ENDFOR»
+			«ELSE»
+			«ENDIF»
 		'''
 	}
 	

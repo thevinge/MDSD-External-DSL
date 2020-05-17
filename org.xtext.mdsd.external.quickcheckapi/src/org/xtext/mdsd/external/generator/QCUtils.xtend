@@ -1,23 +1,13 @@
 package org.xtext.mdsd.external.generator
 
-import org.eclipse.emf.common.util.EList
-import org.xtext.mdsd.external.quickCheckApi.Method
-import java.util.List
 import java.util.ArrayList
-
+import java.util.List
+import org.eclipse.emf.common.util.EList
 import org.xtext.mdsd.external.quickCheckApi.CreateAction
-import org.xtext.mdsd.external.quickCheckApi.Request
-import org.xtext.mdsd.external.quickCheckApi.JsonList
-import org.xtext.mdsd.external.quickCheckApi.JsonObject
-import org.xtext.mdsd.external.quickCheckApi.JsonPair
-import org.xtext.mdsd.external.quickCheckApi.IntValue
-import org.xtext.mdsd.external.quickCheckApi.StringValue
-import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
-import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
-import org.xtext.mdsd.external.quickCheckApi.JsonDefRef
-import org.xtext.mdsd.external.quickCheckApi.Json
-import org.xtext.mdsd.external.quickCheckApi.VarDefinition
 import org.xtext.mdsd.external.quickCheckApi.JsonDefinition
+import org.xtext.mdsd.external.quickCheckApi.Method
+import org.xtext.mdsd.external.quickCheckApi.Request
+import org.xtext.mdsd.external.quickCheckApi.VarDefinition
 
 class QCUtils {
 	

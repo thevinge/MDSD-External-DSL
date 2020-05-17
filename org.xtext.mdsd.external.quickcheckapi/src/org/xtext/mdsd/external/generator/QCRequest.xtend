@@ -1,15 +1,15 @@
 package org.xtext.mdsd.external.generator
 
 import java.util.ArrayList
-import org.xtext.mdsd.external.quickCheckApi.Request
-import org.xtext.mdsd.external.quickCheckApi.Postproposition
-import org.xtext.mdsd.external.quickCheckApi.Body
 import org.xtext.mdsd.external.quickCheckApi.Action
+import org.xtext.mdsd.external.quickCheckApi.Body
 import org.xtext.mdsd.external.quickCheckApi.CreateAction
-import org.xtext.mdsd.external.quickCheckApi.JsonRef
 import org.xtext.mdsd.external.quickCheckApi.DeleteAction
-import org.xtext.mdsd.external.quickCheckApi.UpdateAction
+import org.xtext.mdsd.external.quickCheckApi.JsonRef
 import org.xtext.mdsd.external.quickCheckApi.NoAction
+import org.xtext.mdsd.external.quickCheckApi.Postproposition
+import org.xtext.mdsd.external.quickCheckApi.Request
+import org.xtext.mdsd.external.quickCheckApi.UpdateAction
 
 class QCRequest {
 	

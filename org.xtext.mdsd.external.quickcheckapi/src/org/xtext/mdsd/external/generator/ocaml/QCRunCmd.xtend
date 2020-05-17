@@ -1,29 +1,31 @@
-package org.xtext.mdsd.external.generator
+package org.xtext.mdsd.external.generator.ocaml
 
-import org.xtext.mdsd.external.quickCheckApi.Test
+import org.xtext.mdsd.external.generator.QCJsonExcluder
+import org.xtext.mdsd.external.generator.QCJsonIDExtractor
+import org.xtext.mdsd.external.generator.QCRequestProcess
+import org.xtext.mdsd.external.generator.QCUtils
 import org.xtext.mdsd.external.quickCheckApi.Action
-import org.xtext.mdsd.external.quickCheckApi.DeleteAction
-import org.xtext.mdsd.external.quickCheckApi.UpdateAction
-import org.xtext.mdsd.external.quickCheckApi.NoAction
-import org.xtext.mdsd.external.quickCheckApi.Request
-import org.xtext.mdsd.external.quickCheckApi.PostConjunction
-import org.xtext.mdsd.external.quickCheckApi.PostDisjunction
-import org.xtext.mdsd.external.quickCheckApi.GET
-import org.xtext.mdsd.external.quickCheckApi.DELETE
-import org.xtext.mdsd.external.quickCheckApi.PATCH
-import org.xtext.mdsd.external.quickCheckApi.PUT
-import org.xtext.mdsd.external.quickCheckApi.POST
-import org.xtext.mdsd.external.quickCheckApi.Body
-import org.xtext.mdsd.external.quickCheckApi.CreateAction
 import org.xtext.mdsd.external.quickCheckApi.BodyCondition
 import org.xtext.mdsd.external.quickCheckApi.CodeCondition
-import org.xtext.mdsd.external.quickCheckApi.RequestOp
-import org.xtext.mdsd.external.quickCheckApi.URLDefRef
-import org.xtext.mdsd.external.quickCheckApi.URL
-import org.xtext.mdsd.external.quickCheckApi.Method
+import org.xtext.mdsd.external.quickCheckApi.CreateAction
+import org.xtext.mdsd.external.quickCheckApi.DELETE
+import org.xtext.mdsd.external.quickCheckApi.DeleteAction
+import org.xtext.mdsd.external.quickCheckApi.GET
 import org.xtext.mdsd.external.quickCheckApi.Json
 import org.xtext.mdsd.external.quickCheckApi.JsonDefRef
-import com.google.inject.Inject
+import org.xtext.mdsd.external.quickCheckApi.Method
+import org.xtext.mdsd.external.quickCheckApi.NoAction
+import org.xtext.mdsd.external.quickCheckApi.PATCH
+import org.xtext.mdsd.external.quickCheckApi.POST
+import org.xtext.mdsd.external.quickCheckApi.PUT
+import org.xtext.mdsd.external.quickCheckApi.PostConjunction
+import org.xtext.mdsd.external.quickCheckApi.PostDisjunction
+import org.xtext.mdsd.external.quickCheckApi.Request
+import org.xtext.mdsd.external.quickCheckApi.RequestOp
+import org.xtext.mdsd.external.quickCheckApi.Test
+import org.xtext.mdsd.external.quickCheckApi.URL
+import org.xtext.mdsd.external.quickCheckApi.URLDefRef
+import org.xtext.mdsd.external.quickCheckApi.UpdateAction
 
 class QCRunCmd {
 	private int declarationCounter = 0;

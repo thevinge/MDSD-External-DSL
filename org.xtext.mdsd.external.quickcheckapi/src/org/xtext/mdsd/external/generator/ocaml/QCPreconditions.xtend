@@ -1,19 +1,20 @@
-package org.xtext.mdsd.external.generator
+package org.xtext.mdsd.external.generator.ocaml
 
 import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.PreConjunction
 import org.xtext.mdsd.external.quickCheckApi.PreDisjunction
 import org.xtext.mdsd.external.quickCheckApi.EmptyCondition
 import org.xtext.mdsd.external.quickCheckApi.ContainsCondition
+import org.xtext.mdsd.external.generator.QCUtils
 
 class QCPreconditions {
 	def initPreconditions(Test test ) {
 		'''
-		let precond cmd state = match cmd with
-		    «FOR request : test.requests»
-		    | «QCUtils.firstCharToUpperCase(request.name)»«IF QCUtils.requireIndex(request)» ix -> (List.length state > 0) «ELSE» json -> true«ENDIF» 
-		    	«IF request.preconditions !== null» && («request.preconditions.compilePrecondition»)«ENDIF»
-		    «ENDFOR»
+			let precond cmd state = match cmd with
+			    «FOR request : test.requests»
+			    	| «QCUtils.firstCharToUpperCase(request.name)»«IF QCUtils.requireIndex(request)» ix -> (List.length state > 0) «ELSE» json -> true«ENDIF» 
+			    		«IF request.preconditions !== null» && («request.preconditions.compilePrecondition»)«ENDIF»
+			    «ENDFOR»
 		'''
 	}
 	

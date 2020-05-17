@@ -1,21 +1,21 @@
 package org.xtext.mdsd.external.generator
 
-import org.xtext.mdsd.external.quickCheckApi.Json
 import java.util.ArrayList
-import org.xtext.mdsd.external.quickCheckApi.IdentifierValue
-import org.xtext.mdsd.external.quickCheckApi.ReuseValue
-import org.xtext.mdsd.external.quickCheckApi.ExcludeValue
-import org.xtext.mdsd.external.quickCheckApi.NameStringGen
-import org.xtext.mdsd.external.quickCheckApi.IntGen
-import org.xtext.mdsd.external.quickCheckApi.RandomStringGen
 import org.xtext.mdsd.external.quickCheckApi.CustomValue
-import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
-import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
-import org.xtext.mdsd.external.quickCheckApi.StringValue
+import org.xtext.mdsd.external.quickCheckApi.ExcludeValue
+import org.xtext.mdsd.external.quickCheckApi.IdentifierValue
+import org.xtext.mdsd.external.quickCheckApi.IntGen
 import org.xtext.mdsd.external.quickCheckApi.IntValue
-import org.xtext.mdsd.external.quickCheckApi.JsonPair
-import org.xtext.mdsd.external.quickCheckApi.JsonObject
+import org.xtext.mdsd.external.quickCheckApi.Json
 import org.xtext.mdsd.external.quickCheckApi.JsonList
+import org.xtext.mdsd.external.quickCheckApi.JsonObject
+import org.xtext.mdsd.external.quickCheckApi.JsonPair
+import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
+import org.xtext.mdsd.external.quickCheckApi.NameStringGen
+import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
+import org.xtext.mdsd.external.quickCheckApi.RandomStringGen
+import org.xtext.mdsd.external.quickCheckApi.ReuseValue
+import org.xtext.mdsd.external.quickCheckApi.StringValue
 
 class QCJsonExcluder {
 	

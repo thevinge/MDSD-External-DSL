@@ -1,20 +1,8 @@
 package org.xtext.mdsd.external.generator
 
-import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.Json
 import org.xtext.mdsd.external.quickCheckApi.JsonDefRef
-import org.xtext.mdsd.external.quickCheckApi.PostConjunction
-import org.xtext.mdsd.external.quickCheckApi.PostDisjunction
-import org.xtext.mdsd.external.quickCheckApi.CodeCondition
-import org.xtext.mdsd.external.quickCheckApi.BodyCondition
-import java.util.ArrayList
-import org.xtext.mdsd.external.quickCheckApi.CreateAction
-import org.xtext.mdsd.external.quickCheckApi.Request
-import org.xtext.mdsd.external.quickCheckApi.UpdateAction
-import org.xtext.mdsd.external.quickCheckApi.DeleteAction
-import org.xtext.mdsd.external.quickCheckApi.NoAction
-import javax.inject.Inject
-import org.xtext.mdsd.external.quickCheckApi.JsonRef
+import org.xtext.mdsd.external.quickCheckApi.Test
 
 class QCJSONHandler {
 		

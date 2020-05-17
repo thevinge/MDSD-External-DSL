@@ -8,6 +8,7 @@ import org.xtext.mdsd.external.quickCheckApi.Builder
 import org.eclipse.xtext.validation.Check
 import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.JsonDefinition
+import org.xtext.mdsd.external.quickCheckApi.Postproposition
 
 /**
  * This class contains custom validation rules. 
@@ -36,7 +37,10 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 	}
 	
 	
-	
+	@Check
+	def checkPostCondition(Postproposition postcondition){
+		
+	}
 	
 	
 }
