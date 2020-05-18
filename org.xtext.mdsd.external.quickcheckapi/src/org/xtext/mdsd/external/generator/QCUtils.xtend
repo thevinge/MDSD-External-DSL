@@ -8,6 +8,8 @@ import org.xtext.mdsd.external.quickCheckApi.JsonDefinition
 import org.xtext.mdsd.external.quickCheckApi.Method
 import org.xtext.mdsd.external.quickCheckApi.Request
 import org.xtext.mdsd.external.quickCheckApi.VarDefinition
+import org.xtext.mdsd.external.quickCheckApi.URL
+import org.xtext.mdsd.external.quickCheckApi.URLDefRef
 
 class QCUtils {
 	
@@ -67,5 +69,14 @@ class QCUtils {
 			}
 		}
 		filtered
+	}	
+	
+	def static dispatch boolean CheckNoRequestID(URL url){
+		return (url.requestID === null)
+	}
+	
+	def static dispatch boolean CheckNoRequestID(URLDefRef url){
+		return (url.requestID === null)
+		
 	}	
 }

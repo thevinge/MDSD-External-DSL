@@ -33,7 +33,7 @@ class QCRequest {
 	
 	private def dispatch process(Postproposition condition){
 		postCondJsonDefs = new ArrayList
-		for (jsonDef : QCJsonHelper.compileConditionBodies(condition)) {
+		for (jsonDef : QCJsonCompiler.compileConditionBodies(condition)) {
 			jsonDef.requestName = requestName
 			postCondJsonDefs.add (jsonDef)
 		}
@@ -42,7 +42,7 @@ class QCRequest {
 	
 	private def dispatch process(Body body){
 		bodyJsonDef = new QCJsonDef(QCNames.LocalBodyJsonDef, defType.dtBody)		
-		bodyJsonDef.processedJson = QCJsonHelper.compileJson(body.value)
+		bodyJsonDef.processedJson = QCJsonCompiler.compileJson(body.value)
 		bodyJsonDef.requestName = requestName
 		QCJsonReuse.resetKeys
 		QCJsonReuse.isReuseJson(body.value)
@@ -69,7 +69,7 @@ class QCRequest {
 	
 	private def processAction(Action action, JsonRef json){
 		stateJsonDef = new QCJsonDef(QCNames.LocalStateJsonDef, defType.dtState)		
-		stateJsonDef.processedJson = QCJsonHelper.compileJsonAction(action)
+		stateJsonDef.processedJson = QCJsonCompiler.compileJsonAction(action)
 		stateJsonDef.requestName = requestName
 		QCJsonReuse.resetKeys
 		QCJsonReuse.isReuseJson(json)

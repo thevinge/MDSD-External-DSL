@@ -27,7 +27,7 @@ import org.xtext.mdsd.external.quickCheckApi.ReuseValue
 import org.xtext.mdsd.external.quickCheckApi.StringValue
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
 
-class QCJsonHelper {
+class QCJsonCompiler {
 	def static dispatch CharSequence compileJson(JsonDefRef json){
 		
 		json.ref.json.compileJson.trim
@@ -136,7 +136,7 @@ class QCJsonHelper {
 		if(condition.requestValue.body !== null){
 			declarationCounter++  
 			var QCJsonDef jsondef = new QCJsonDef(QCNames.LocalPostConditionJsonDef() + declarationCounter, defType.dtCondition)
-		 	jsondef.processedJson = QCJsonHelper.compileJson(condition.requestValue.body)
+		 	jsondef.processedJson = QCJsonCompiler.compileJson(condition.requestValue.body)
 		 	
 		 	QCJsonReuse.isReuseJson(condition.requestValue.body)
 		 	jsondef.reuseVars = QCJsonReuse.reuseKeys

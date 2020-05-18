@@ -25,12 +25,12 @@ class QCJsonUtils {
 	
 	def static dispatch boolean jsonContainsType(JsonDefRef json, Class<? extends Json> type){
 
-		json.ref.json.jsonContainsType(type)
+		json.ref?.json?.jsonContainsType(type)
 	}
 	
 	def static dispatch boolean jsonContainsType(Json json, Class<? extends Json> type){
 
-		json.data.jsonContainsType(type)
+		json.data?.jsonContainsType(type)
 	}
 	
 	def static dispatch boolean jsonContainsType(JsonObject json, Class<? extends Json> type){
@@ -52,73 +52,73 @@ class QCJsonUtils {
 	}
 	
 	def static dispatch boolean jsonContainsType(JsonPair json, Class<? extends Json> type){
-		json.value.jsonContainsType(type)
+		json.value?.jsonContainsType(type)
 	}
 	
 	def static dispatch boolean jsonContainsType(IntValue value, Class<? extends Json> type){
-		if(type.isAssignableFrom(value.class)){
+		if(type.isAssignableFrom(value?.class)){
 			return true
 		}
 		false
 	}
 	
 	def static dispatch boolean jsonContainsType(StringValue value, Class<? extends Json> type){
-		if(type.isAssignableFrom(value.class)){
+		if(type.isAssignableFrom(value?.class)){
 			return true
 		}
 		false
 	}
 	
 	def static dispatch boolean jsonContainsType(NestedJsonValue json, Class<? extends Json> type){
-		json.value.jsonContainsType(type)
+		json.value?.jsonContainsType(type)
 	}
 	
 	def static dispatch boolean jsonContainsType(ListJsonValue json, Class<? extends Json> type){
-		json.value.jsonContainsType(type)
+		json.value?.jsonContainsType(type)
 	}
 	
 	
 	def static dispatch boolean jsonContainsType(CustomValue json, Class<? extends Json> type){
-		json.value.jsonContainsType(type)
+		json.value?.jsonContainsType(type)
 	}
 	
 	def static dispatch boolean jsonContainsType(RandomStringGen value, Class<? extends Json> type){
-		if(type.isAssignableFrom(value.class)){
+		if(type.isAssignableFrom(value?.class)){
 			return true
 		}
 		false
 	}
 	
 	def static dispatch boolean jsonContainsType(IntGen value, Class<? extends Json> type){
-		if(type.isAssignableFrom(value.class)){
+		if(type.isAssignableFrom(value?.class)){
 			return true
 		}
 		false
 	}
 	
 	def static dispatch boolean jsonContainsType(NameStringGen value, Class<? extends Json> type){
-		if(type.isAssignableFrom(value.class)){
+		if(type.isAssignableFrom(value?.class)){
 			return true
 		}
 		false
 	}
 	
 	def static dispatch boolean jsonContainsType(ExcludeValue value, Class<? extends Json> type){
-		if(type.isAssignableFrom(value.class)){
+		if(type.isAssignableFrom(value?.class)){
 			return true
 		}
 		false
 	}
 	
 	def static dispatch boolean jsonContainsType(ReuseValue value, Class<? extends Json> type){
-		if(type.isAssignableFrom(value.class)){
+		if(type.isAssignableFrom(value?.class)){
 			return true
 		}
 		false
 	}
 	
 	def static dispatch boolean jsonContainsType(IdentifierValue value, Class<? extends Json> type){
-		if(type.isAssignableFrom(value.class)){
+		if(type.isAssignableFrom(value?.class)){
 			return true
 		}
 		false

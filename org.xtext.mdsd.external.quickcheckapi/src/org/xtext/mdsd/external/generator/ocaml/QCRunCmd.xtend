@@ -65,7 +65,7 @@ class QCRunCmd {
 	}
 	
 	def CharSequence createHttpCall(Request request) {
-		if (request.url.CheckRequestID) {			
+		if (QCUtils.CheckNoRequestID(request.url)) {			
 			'''
 				let code,content = Http.«request.method.compileMethod» «QCUtils.firstCharLowerCase(request.name)»URL «IF request.body !== null»json«ELSE»""«ENDIF» in
 			'''
@@ -82,15 +82,6 @@ class QCRunCmd {
 		return (GET.isAssignableFrom(method.class))
 	}
 	
-	
-	def dispatch boolean CheckRequestID(URL url){
-		return (url.requestID === null)
-	}
-	
-	def dispatch boolean CheckRequestID(URLDefRef url){
-		return (url.requestID === null)
-		
-	}	
 	
 	def dispatch CharSequence compileMethod(GET get) {
 		'''get'''
@@ -134,8 +125,16 @@ class QCRunCmd {
 	
 	def dispatch CharSequence compilePostCondition(BodyCondition condition) {
 		if(condition.requestValue.body !== null){
-
-			'''«condition.requestOp.compileRequestOp» (String.compare («currentRequest.name.jsonDefName») («condition.requestValue.body.compileExcluder» content) == 0)'''
+			'''
+			«IF QCRequestProcess.get(currentRequest.name).postCondJsonDefs.get(declarationCounter).IdentifierKey.isEmpty»
+			let json = lookupItem ix state in
+				«condition.requestOp.compileRequestOp» (String.compare («currentRequest.name.nextJsonDefUse») («condition.requestValue.body.compileExcluder» content) == 0)
+			«ELSE»
+			let json = lookupItem ix state in
+				let combined = combine_state_id (fromStrToJson(«currentRequest.name.nextJsonDefUse»)) id in	
+				«condition.requestOp.compileRequestOp» (String.compare (fromJsonToStr combined) («condition.requestValue.body.compileExcluder» content) == 0)
+			«ENDIF»
+			'''
 		} else if (condition.requestValue.body === null){
 		'''
 		let extractedState = lookupItem ix state in
@@ -155,9 +154,11 @@ class QCRunCmd {
 		'''jsonExcluder «excluder.compileJsonExclusionList(json.ref.json)»'''
 	}
 	
-	def CharSequence jsonDefName(String name){
-		declarationCounter++
-		QCRequestProcess.get(name).postCondJsonDefs.get(declarationCounter-1).declarationUse
+	def CharSequence nextJsonDefUse(String name){
+		
+		val defName = QCRequestProcess.get(name).postCondJsonDefs.get(declarationCounter).declarationUse
+		true? declarationCounter++ : declarationCounter = declarationCounter
+		defName
 	}
 	
 	def CharSequence compileRequestOp(RequestOp op){

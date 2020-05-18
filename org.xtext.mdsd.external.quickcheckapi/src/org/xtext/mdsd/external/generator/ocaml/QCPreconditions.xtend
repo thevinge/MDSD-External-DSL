@@ -30,7 +30,7 @@ class QCPreconditions {
 		'''inSpace («condition.value») state«IF condition.notOp.toLowerCase === "not"» = false«ENDIF»'''	
 	}
 	def dispatch CharSequence compilePrecondition(EmptyCondition condition){
-		'''isEmpty state«IF condition.notOp.compareTo("not") === 0» = false«ENDIF»'''
+		'''isEmpty state«IF condition.notOp?.compareTo("not") === 0» = false«ENDIF»'''
 	}
 
 }
