@@ -3,12 +3,22 @@
  */
 package org.xtext.mdsd.external.validation
 
-import org.xtext.mdsd.external.quickCheckApi.QuickCheckApiPackage
-import org.xtext.mdsd.external.quickCheckApi.Builder
 import org.eclipse.xtext.validation.Check
+import org.xtext.mdsd.external.generator.QCConditionUtils
+import org.xtext.mdsd.external.generator.QCJsonUtils
+import org.xtext.mdsd.external.generator.QCUtils
+import org.xtext.mdsd.external.quickCheckApi.BodyCondition
+import org.xtext.mdsd.external.quickCheckApi.Builder
+import org.xtext.mdsd.external.quickCheckApi.EmptyCondition
+import org.xtext.mdsd.external.quickCheckApi.IdentifierValue
+import org.xtext.mdsd.external.quickCheckApi.JsonList
+import org.xtext.mdsd.external.quickCheckApi.JsonObject
+import org.xtext.mdsd.external.quickCheckApi.QuickCheckApiPackage
+import org.xtext.mdsd.external.quickCheckApi.Request
 import org.xtext.mdsd.external.quickCheckApi.Test
-import org.xtext.mdsd.external.quickCheckApi.JsonDefinition
-import org.xtext.mdsd.external.quickCheckApi.Postproposition
+import org.xtext.mdsd.external.quickCheckApi.URLRef
+
+import static extension org.eclipse.xtext.EcoreUtil2.*
 
 /**
  * This class contains custom validation rules. 
@@ -38,9 +48,47 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 	
 	
 	@Check
-	def checkPostCondition(Postproposition postcondition){
+	def checkPostCondition(BodyCondition condition){
+		if (condition.requestValue.body !== null){
+			if(QCJsonUtils.jsonContainsType(condition.requestValue.body,IdentifierValue)){
+				val request = condition.getContainerOfType(Request)
+				if(request.preconditions !== null){
+					if (QCConditionUtils.preconditionContainsType(request.preconditions, false, EmptyCondition)){
+						error("Identifier not allowed with current precondition 'Empty'", condition, QuickCheckApiPackage.eINSTANCE.bodyCondition_RequestValue)
+					}
+				}
+			}
+		}
+	}	
+	
+	
+	@Check
+	def checkURL(URLRef url){
 		
+		if(!QCUtils.CheckNoRequestID(url)){
+			val request = url.getContainerOfType(Request)
+			if(request !== null){
+				if (QCConditionUtils.preconditionContainsType(request.preconditions, false, EmptyCondition)){
+					error("@Id not allowed with current precondition 'Empty'", url, QuickCheckApiPackage.eINSTANCE.URLRef_RequestID)
+				}
+			}
+		}
+		
+	}	
+	
+	
+	@Check
+	def checkMultipleIdentifiers(JsonObject json){
+		val filtered = QCJsonUtils.jsonNumberOfType(json, IdentifierValue)
+		if(filtered.filter[k,v| v.size > 1].size > 1 || filtered.size > 1){
+			filtered.forEach[k,v| v.forEach[error("Only one identifier allowed", it, QuickCheckApiPackage.eINSTANCE.identifierValue_Name)]]
+		}
 	}
 	
+	
+	@Check
+	def checkForJsonList(JsonList json){
+		error("Current Implementation of the DSL does not handle Json List due to limitation in OCaml", json, QuickCheckApiPackage.eINSTANCE.jsonList_JsonValues)
+	}
 	
 }
