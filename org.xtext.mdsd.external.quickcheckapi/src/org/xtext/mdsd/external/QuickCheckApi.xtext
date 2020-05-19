@@ -12,49 +12,20 @@ Model:
 
 DataType:
     //"datatype" name=ID
-	{StringData} "string" | {IntData} "int" | {BooleanData} "bool" | {UserData} type=[Model] 
+	{StringData} "string" ("regex" regex=STRING)? | {IntData} "int" ("regex" regex=STRING)? | {BooleanData} "bool" | {UserData} type=[Model] 
 ;
- 
- 
+
 Feature:
-    name=ID (listof?="list" "of")?  typeData=DataType;
-
-
-/*Model:
-	 DataType|EntityType
-;
-DataType:
-	identifier=ID String2 | {DataType} Integer | List
+    name=ID (listof?="list" "of")?  typeData=DataType ("limit" limit=INT)?
 ;
 
-Integer:
-	"integer"	
-;
-
-String2:
-	"string"
-;
-
-EntityType:
-	"Model" identifier=ID (features+=Feature)*
-;
-
-Entity:
-    'entity' name=ID ('extends' superType=[Entity])? '{'
-        (features+=Feature)*
-    '}';
-    
-Feature:
-    name=ID type=[Model];
-
-*/
 Test:
 	"Test" name=ID requests+=(Request)+
 ;
 
 Request:
-    "request" name=ID method=Method url=URL ("Precondition:" preconditions=PreLogicExp)? 
-    (params=Param)? body=Body? ("STATE:" action=Action) ("Postcondition:"postconditions=PostLogicExp)?
+    "request" name=ID method=Method url=URL ("precondition" preconditions=PreLogicExp)? 
+    (params=Param)? body=Body? ("state" action=Action) ("postcondition"postconditions=PostLogicExp)?
 ;
 
 Action:
