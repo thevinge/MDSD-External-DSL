@@ -81,7 +81,7 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 	def checkMultipleIdentifiers(JsonObject json){
 		val filtered = QCJsonUtils.jsonNumberOfType(json, IdentifierValue)
 		if(filtered.filter[k,v| v.size > 1].size > 1 || filtered.size > 1){
-			filtered.forEach[k,v| v.forEach[error("Only one identifier allowed", it, QuickCheckApiPackage.eINSTANCE.identifierValue_Name)]]
+			filtered.forEach[k,v| v.forEach[error("Only one identifier allowed", it, QuickCheckApiPackage.Literals.CUSTOM_VALUE__VALUE)]]
 		}
 	}
 	

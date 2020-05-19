@@ -140,7 +140,7 @@ CustomValue:
 ;
 
 IdentifierValue:
-	{IdentifierValue} "@"name=ID
+	{IdentifierValue} "@id"
 ;
 
 ReuseValue:

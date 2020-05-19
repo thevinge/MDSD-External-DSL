@@ -39,21 +39,14 @@ class QCJsonReuse {
 	}
 	
 	def static dispatch boolean isReuseJson(JsonObject json){
+		var result = false
 		for (pair : json.jsonPairs) {
 			if (pair.isReuseJson){
-				if (pair instanceof JsonPair){
-					var pairValue = pair.value
-					if (pairValue instanceof CustomValue){
-						var custom = pairValue.value
-						if (custom instanceof ReuseValue){
-							reuseKeys.put(pair.key, custom.name)
-						}
-					}
-				}
-				return true
+
+				result = true
 			}
 		}
-		false
+		result
 	}
 	
 	def static dispatch boolean isReuseJson(JsonList json){
@@ -66,7 +59,20 @@ class QCJsonReuse {
 	}
 	
 	def static dispatch boolean isReuseJson(JsonPair json){
-		json.value.isReuseJson
+		if (json.value.isReuseJson){
+			var pairValue = json.value
+			if (pairValue instanceof CustomValue){
+				var custom = pairValue.value
+				if (custom instanceof ReuseValue){
+					reuseKeys.put(json.key, custom.name)
+				}
+			}
+			
+			return true
+		} else {
+			false
+		}
+		
 	}
 	
 	def static dispatch boolean isReuseJson(IntValue json){

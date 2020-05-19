@@ -19,77 +19,95 @@ import org.xtext.mdsd.external.quickCheckApi.StringValue
 
 class QCJsonIDExtractor {
 		
-
-	 def static CharSequence InitExtractIdImpl(){
+	private static String idKey
+	def static CharSequence InitExtractIdImpl(){
 		'''
         let extractIdFromContent id json = jsonElementExtractor id json
 		'''
 	}
 	
-	def static dispatch CharSequence compileJsonID(JsonDefRef json){
+	def static dispatch String compileJsonID(JsonDefRef json){
+		idKey = ""
+		json.ref.json.extractJsonID
+		idKey
+	}
+	
+	def static dispatch String compileJsonID(Json json){
+		idKey = ""
+		json.data.extractJsonID
+		idKey
+	}
+	
+	def static dispatch boolean extractJsonID(JsonObject json){
+		for (pair : json.jsonPairs) {
+			if (pair.extractJsonID){
+				return true
+			}
+		}
+	}
+	
+	def static dispatch boolean extractJsonID(JsonList json){
+		for (value : json.jsonValues) {
+			if (value.extractJsonID){
+				return true
+			}
+		}
+		false
+	}
+	
+	def static dispatch boolean extractJsonID(JsonPair json){
+		if (json.value.extractJsonID){
+			idKey = json.key
+			return true
+		} else {
+			false
+		}
 		
-		json.ref.json.compileJsonID.toString.replaceAll("(\\;{1,})","")
 	}
 	
-	def static dispatch CharSequence compileJsonID(Json json){
-		json.data.compileJsonID.toString.replaceAll("(\\;{1,})","")
+	def static dispatch boolean extractJsonID(IntValue json){
+		false
 	}
 	
-	def static dispatch CharSequence compileJsonID(JsonObject json){
-		'''«FOR pair : json.jsonPairs SEPARATOR ";"»«pair.compileJsonID»«ENDFOR»'''
+	def static dispatch boolean extractJsonID(StringValue json){
+		false
 	}
 	
-	def static dispatch CharSequence compileJsonID(JsonList json){
-		'''«FOR value : json.jsonValues SEPARATOR ";"»«value.compileJsonID»«ENDFOR»'''
+	def static dispatch boolean extractJsonID(NestedJsonValue json){
+		json.value.extractJsonID
 	}
 	
-	def static dispatch CharSequence compileJsonID(JsonPair json){
-		json.value.compileJsonID
-	}
-	
-	def static dispatch CharSequence compileJsonID(IntValue json){
-		''''''
-	}
-	
-	def static dispatch CharSequence compileJsonID(StringValue json){
-		''''''
-	}
-	
-	def static dispatch CharSequence compileJsonID(NestedJsonValue json){
-		'''«json.value.compileJsonID»'''
-	}
-	
-	def static dispatch CharSequence compileJsonID(ListJsonValue json){
-		'''«json.value.compileJsonID»'''
+	def static dispatch boolean extractJsonID(ListJsonValue json){
+		json.value.extractJsonID
 	}
 	
 	
-	def static dispatch CharSequence compileJsonID(CustomValue json){
-		'''«json.value.compileCustomValue»'''
+	def static dispatch boolean extractJsonID(CustomValue json){
+		json.value.extractJsonID
 	}
 	
-	def static dispatch CharSequence compileCustomValue(RandomStringGen value){
-		''''''
+	def static dispatch boolean extractJsonID(RandomStringGen value){
+		false
 	}
 	
-	def static dispatch CharSequence compileCustomValue(IntGen value){
-		''''''
+	def static dispatch boolean extractJsonID(IntGen value){
+		false
 	}
 	
-	def static dispatch CharSequence compileCustomValue(NameStringGen value){
-		''''''
+	def static dispatch boolean extractJsonID(NameStringGen gen){
+		false
 	}
 	
-	def static dispatch CharSequence compileCustomValue(ExcludeValue value){
-		''''''
+	def static dispatch boolean extractJsonID(ExcludeValue value){
+		false
 	}
 	
-	def static dispatch CharSequence compileCustomValue(ReuseValue value){
-		''''''
+	def static dispatch boolean extractJsonID(ReuseValue value){
+		false
 	}
 	
-	def static dispatch CharSequence compileCustomValue(IdentifierValue value){
-		'''«value?.name»'''
+	def static dispatch boolean extractJsonID(IdentifierValue value){
+		true
 	}
 }
 	

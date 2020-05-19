@@ -169,6 +169,11 @@ class QCBoilerplate {
 			
 			let isEmpty state = (List.length state = 0)
 			
+			let combine_state_id stateItem idKey idValue  =
+			  let key = if String.length idKey > 0 then idKey else "id" in
+			    let idJson = (`Assoc[(key,`String idValue)]) in
+			      Yojson.Basic.Util.combine idJson stateItem 
+			
 			«initExtractor()»
 			
 		'''
@@ -176,18 +181,8 @@ class QCBoilerplate {
 	
 	private def CharSequence initExternalsInterface() {
 		'''
-			open Yojson
-			«combineInterface()»
-			
+			open Yojson			
 			«cleanupInterface()»
-		'''
-	}
-	
-	private def CharSequence combineInterface() {
-		'''
-			(* Implement this method to combine your state and id *)
-			val combine_state_id : Yojson.Basic.t -> string -> Yojson.Basic.t
-				
 		'''
 	}
 	
@@ -202,12 +197,6 @@ class QCBoilerplate {
 	
 	private def CharSequence InitExternalsImplementation(){
 		'''
-			(* Implement this method to combine your state and id *)
-					let combine_state_id stateItem id =
-						let combined = ... in
-			
-						combined
-			
 			(* Implement this method to cleanup after each test *)
 					let afterTestcleanup =
 						...

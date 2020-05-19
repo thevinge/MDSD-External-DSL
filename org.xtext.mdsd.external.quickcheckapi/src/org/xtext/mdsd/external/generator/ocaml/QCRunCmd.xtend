@@ -124,14 +124,15 @@ class QCRunCmd {
 	}
 	
 	def dispatch CharSequence compilePostCondition(BodyCondition condition) {
+		val qcRequest = QCRequestProcess.get(currentRequest.name)
 		if(condition.requestValue.body !== null){
 			'''
-			«IF QCRequestProcess.get(currentRequest.name).postCondJsonDefs.get(declarationCounter).IdentifierKey.isEmpty»
+			«IF qcRequest.postCondJsonDefs.get(declarationCounter).IdentifierKey.isEmpty»
 			let json = lookupItem ix state in
-				«condition.requestOp.compileRequestOp» (String.compare («currentRequest.name.nextJsonDefUse») («condition.requestValue.body.compileExcluder» content) == 0)
+				«condition.requestOp.compileRequestOp» (String.compare («currentRequest.name.nextJsonDefUse(false)») («condition.requestValue.body.compileExcluder» content) == 0)
 			«ELSE»
 			let json = lookupItem ix state in
-				let combined = combine_state_id (fromStrToJson(«currentRequest.name.nextJsonDefUse»)) id in	
+				let combined = combine_state_id (fromStrToJson(«currentRequest.name.nextJsonDefUse(false)»)) "«qcRequest.postCondJsonDefs.get(declarationCounter).IdentifierKey»" id in	
 				«condition.requestOp.compileRequestOp» (String.compare (fromJsonToStr combined) («condition.requestValue.body.compileExcluder» content) == 0)
 			«ENDIF»
 			'''
@@ -140,7 +141,7 @@ class QCRunCmd {
 		let extractedState = lookupItem ix state in
 			let id = lookupSutItem ix !sut in
 				let stateJson = Yojson.Basic.from_string extractedState in
-					let combined = combine_state_id stateJson id in
+					let combined = combine_state_id stateJson "" id in
 						«condition.requestOp.compileRequestOp» (String.compare (Yojson.Basic.to_string combined) (Yojson.Basic.to_string content) == 0)
 		'''
 		}
@@ -154,10 +155,10 @@ class QCRunCmd {
 		'''jsonExcluder «excluder.compileJsonExclusionList(json.ref.json)»'''
 	}
 	
-	def CharSequence nextJsonDefUse(String name){
+	def CharSequence nextJsonDefUse(String name, boolean next){
 		
 		val defName = QCRequestProcess.get(name).postCondJsonDefs.get(declarationCounter).declarationUse
-		true? declarationCounter++ : declarationCounter = declarationCounter
+		next? declarationCounter++ : declarationCounter = declarationCounter
 		defName
 	}
 	
