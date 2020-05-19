@@ -133,9 +133,15 @@ class QCJsonUtils {
 	private static String currentkey
 
 	
-	def static jsonNumberOfType(JsonRef json, Class<? extends Json> type){
+	def static jsonAllOfType(JsonRef json){
 		jsonDistribution = new HashMap
-		json.jsonCountType
+		json?.jsonCountType
+		jsonDistribution
+	}
+	
+	def static jsonAllOfType(JsonRef json, Class<? extends Json> type){
+		jsonDistribution = new HashMap
+		json?.jsonCountType
 		var filtered = jsonDistribution.filter[k,v| v?.filter[lk| type.isAssignableFrom(lk?.class) ].size > 0]
 		filtered
 	}

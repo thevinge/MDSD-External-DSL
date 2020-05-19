@@ -65,7 +65,7 @@ class QCCmd {
 				«uri.name»/«FOR part : uri.path SEPARATOR "/"»«part.part»«ENDFOR»
 			«ELSE»
 			«ENDIF»
-		'''
+		'''.toString.trim
 	}
 	
 	

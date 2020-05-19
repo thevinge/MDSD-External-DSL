@@ -28,7 +28,7 @@ class QCJsonIDExtractor {
 	
 	def static dispatch String compileJsonID(JsonDefRef json){
 		idKey = ""
-		json.ref.json.extractJsonID
+		json.ref.json.compileJsonID
 		idKey
 	}
 	
