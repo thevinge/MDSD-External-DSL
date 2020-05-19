@@ -12,6 +12,7 @@ import org.xtext.mdsd.external.quickCheckApi.JsonObject
 import org.xtext.mdsd.external.quickCheckApi.JsonPair
 import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
 import org.xtext.mdsd.external.quickCheckApi.NameStringGen
+import org.xtext.mdsd.external.quickCheckApi.NestedJsonDef
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
 import org.xtext.mdsd.external.quickCheckApi.RandomStringGen
 import org.xtext.mdsd.external.quickCheckApi.ReuseValue
@@ -57,7 +58,7 @@ class QCJsonIDExtractor {
 	
 	def static dispatch boolean extractJsonID(JsonPair json){
 		if (json.value.extractJsonID){
-			idKey = json.key
+			idKey.empty? idKey = json.key : idKey = idKey
 			return true
 		} else {
 			false
@@ -75,6 +76,10 @@ class QCJsonIDExtractor {
 	
 	def static dispatch boolean extractJsonID(NestedJsonValue json){
 		json.value.extractJsonID
+	}
+	
+	def static dispatch boolean extractJsonID(NestedJsonDef json){
+		(json?.value?.json.compileJsonID.length > 0)
 	}
 	
 	def static dispatch boolean extractJsonID(ListJsonValue json){

@@ -17,6 +17,7 @@ import org.xtext.mdsd.external.quickCheckApi.JsonObject
 import org.xtext.mdsd.external.quickCheckApi.JsonPair
 import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
 import org.xtext.mdsd.external.quickCheckApi.NameStringGen
+import org.xtext.mdsd.external.quickCheckApi.NestedJsonDef
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
 import org.xtext.mdsd.external.quickCheckApi.NoAction
 import org.xtext.mdsd.external.quickCheckApi.PostConjunction
@@ -68,6 +69,10 @@ class QCJsonCompiler {
 	
 	def static dispatch CharSequence compileJson(ListJsonValue json){
 		'''«json.value.compileJson»'''
+	}
+	
+	def static dispatch CharSequence compileJson(NestedJsonDef json){
+		'''«json.value.json.compileJson»'''
 	}
 	
 	

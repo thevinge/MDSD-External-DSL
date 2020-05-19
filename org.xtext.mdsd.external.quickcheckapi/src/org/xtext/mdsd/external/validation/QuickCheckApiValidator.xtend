@@ -68,7 +68,7 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 		if(!QCUtils.CheckNoRequestID(url)){
 			val request = url.getContainerOfType(Request)
 			if(request !== null){
-				if (QCConditionUtils.preconditionContainsType(request.preconditions, false, EmptyCondition)){
+				if (QCConditionUtils.preconditionContainsType(request?.preconditions, false, EmptyCondition)){
 					error("@Id not allowed with current precondition 'Empty'", url, QuickCheckApiPackage.eINSTANCE.URLRef_RequestID)
 				}
 			}
@@ -80,7 +80,8 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 	@Check
 	def checkMultipleIdentifiers(JsonObject json){
 		val filtered = QCJsonUtils.jsonAllOfType(json, IdentifierValue)
-		if(filtered.filter[k,v| v.size > 1].size > 1 || filtered.size > 1){
+		val filt = filtered.filter[k,v| v.size > 1]
+		if(filtered.filter[k,v| v.size > 1].size > 0 || filtered.size > 1){
 			filtered.forEach[k,v| v.forEach[error("Only one identifier allowed", it, QuickCheckApiPackage.Literals.CUSTOM_VALUE__VALUE)]]
 		}
 	}

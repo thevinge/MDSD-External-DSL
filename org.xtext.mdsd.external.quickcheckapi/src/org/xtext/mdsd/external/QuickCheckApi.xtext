@@ -31,11 +31,6 @@ Request:
 ;
 
 
-
-//Action:
-//	actionOp=ActionOperator value=JsonRef | actionOp=ActionOperator
-//;
-
 Action:
 	{CreateAction} "create" value=JsonRef  | {DeleteAction} "delete" value=JsonRef  | {UpdateAction} "update" value=JsonRef  | {NoAction} "none"
 ;
@@ -132,7 +127,7 @@ JsonPair returns Json:
 ;
 
 JsonValue returns Json:
-	{StringValue} value=STRING | {IntValue} value=INT | {NestedJsonValue} value=JsonObject | {ListJsonValue} value=JsonList | {CustomValue} value=CustomValue
+	{StringValue} value=STRING | {IntValue} value=INT | {NestedJsonValue} value=JsonObject | {ListJsonValue} value=JsonList | {NestedJsonDef} value=[JsonDefinition] | {CustomValue} value=CustomValue
 ;
 
 CustomValue:

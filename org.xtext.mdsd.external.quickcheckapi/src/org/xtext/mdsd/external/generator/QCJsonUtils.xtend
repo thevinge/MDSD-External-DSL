@@ -1,7 +1,7 @@
 package org.xtext.mdsd.external.generator
 
-import java.util.HashMap
 import java.util.ArrayList
+import java.util.HashMap
 import org.xtext.mdsd.external.quickCheckApi.CustomValue
 import org.xtext.mdsd.external.quickCheckApi.ExcludeValue
 import org.xtext.mdsd.external.quickCheckApi.IdentifierValue
@@ -15,6 +15,7 @@ import org.xtext.mdsd.external.quickCheckApi.JsonPair
 import org.xtext.mdsd.external.quickCheckApi.JsonRef
 import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
 import org.xtext.mdsd.external.quickCheckApi.NameStringGen
+import org.xtext.mdsd.external.quickCheckApi.NestedJsonDef
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
 import org.xtext.mdsd.external.quickCheckApi.RandomStringGen
 import org.xtext.mdsd.external.quickCheckApi.ReuseValue
@@ -181,6 +182,10 @@ class QCJsonUtils {
 	
 	def static dispatch void jsonCountType(NestedJsonValue json){
 		json.value?.jsonCountType
+	}
+	
+	def static dispatch void jsonCountType(NestedJsonDef json){
+		json.value?.json?.jsonCountType
 	}
 	
 	def static dispatch void jsonCountType(ListJsonValue json){
