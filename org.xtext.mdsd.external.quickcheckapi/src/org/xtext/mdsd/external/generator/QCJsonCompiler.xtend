@@ -27,6 +27,8 @@ import org.xtext.mdsd.external.quickCheckApi.RandomStringGen
 import org.xtext.mdsd.external.quickCheckApi.ReuseValue
 import org.xtext.mdsd.external.quickCheckApi.StringValue
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
+import org.xtext.mdsd.external.util.QCJsonReuse
+import org.xtext.mdsd.external.util.QCNames
 
 class QCJsonCompiler {
 	def static dispatch CharSequence compileJson(JsonDefRef json){

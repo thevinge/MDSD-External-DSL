@@ -1,4 +1,4 @@
-package org.xtext.mdsd.external.generator
+package org.xtext.mdsd.external.util
 
 import java.util.ArrayList
 import java.util.List
@@ -7,9 +7,9 @@ import org.xtext.mdsd.external.quickCheckApi.CreateAction
 import org.xtext.mdsd.external.quickCheckApi.JsonDefinition
 import org.xtext.mdsd.external.quickCheckApi.Method
 import org.xtext.mdsd.external.quickCheckApi.Request
-import org.xtext.mdsd.external.quickCheckApi.VarDefinition
 import org.xtext.mdsd.external.quickCheckApi.URL
 import org.xtext.mdsd.external.quickCheckApi.URLDefRef
+import org.xtext.mdsd.external.quickCheckApi.VarDefinition
 
 class QCUtils {
 	

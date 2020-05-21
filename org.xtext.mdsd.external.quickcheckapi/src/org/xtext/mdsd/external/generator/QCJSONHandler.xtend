@@ -3,6 +3,7 @@ package org.xtext.mdsd.external.generator
 import org.xtext.mdsd.external.quickCheckApi.Json
 import org.xtext.mdsd.external.quickCheckApi.JsonDefRef
 import org.xtext.mdsd.external.quickCheckApi.Test
+import org.xtext.mdsd.external.util.QCJsonReuse
 
 class QCJSONHandler {
 		

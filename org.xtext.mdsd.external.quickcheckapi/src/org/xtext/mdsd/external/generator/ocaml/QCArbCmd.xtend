@@ -1,8 +1,8 @@
 package org.xtext.mdsd.external.generator.ocaml
 
-import org.xtext.mdsd.external.quickCheckApi.Test
-import org.xtext.mdsd.external.generator.QCUtils
 import org.xtext.mdsd.external.generator.QCRequestProcess
+import org.xtext.mdsd.external.quickCheckApi.Test
+import org.xtext.mdsd.external.util.QCUtils
 
 class QCArbCmd {
 

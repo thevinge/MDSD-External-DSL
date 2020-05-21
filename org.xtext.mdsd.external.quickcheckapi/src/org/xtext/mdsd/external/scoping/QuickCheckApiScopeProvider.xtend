@@ -10,7 +10,6 @@ import org.eclipse.xtext.naming.QualifiedName
 import org.eclipse.xtext.scoping.IScope
 import org.eclipse.xtext.scoping.Scopes
 import org.xtext.mdsd.external.generator.QCJsonOrigin
-import org.xtext.mdsd.external.generator.QCJsonUtils
 import org.xtext.mdsd.external.quickCheckApi.Action
 import org.xtext.mdsd.external.quickCheckApi.BodyCondition
 import org.xtext.mdsd.external.quickCheckApi.CreateAction
@@ -21,6 +20,7 @@ import org.xtext.mdsd.external.quickCheckApi.QuickCheckApiPackage
 import org.xtext.mdsd.external.quickCheckApi.Request
 import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
+import org.xtext.mdsd.external.util.QCJsonUtils
 
 import static extension org.eclipse.xtext.EcoreUtil2.*
 

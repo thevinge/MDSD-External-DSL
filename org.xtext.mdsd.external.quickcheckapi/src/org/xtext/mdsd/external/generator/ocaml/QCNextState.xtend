@@ -1,7 +1,6 @@
 package org.xtext.mdsd.external.generator.ocaml
 
 import org.xtext.mdsd.external.generator.QCRequestProcess
-import org.xtext.mdsd.external.generator.QCUtils
 import org.xtext.mdsd.external.quickCheckApi.Action
 import org.xtext.mdsd.external.quickCheckApi.CreateAction
 import org.xtext.mdsd.external.quickCheckApi.DeleteAction
@@ -9,6 +8,7 @@ import org.xtext.mdsd.external.quickCheckApi.NoAction
 import org.xtext.mdsd.external.quickCheckApi.Request
 import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
+import org.xtext.mdsd.external.util.QCUtils
 
 class QCNextState {
 

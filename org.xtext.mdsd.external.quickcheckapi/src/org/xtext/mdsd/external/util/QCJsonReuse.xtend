@@ -1,4 +1,4 @@
-package org.xtext.mdsd.external.generator
+package org.xtext.mdsd.external.util
 
 import java.util.HashMap
 import org.xtext.mdsd.external.quickCheckApi.CustomValue

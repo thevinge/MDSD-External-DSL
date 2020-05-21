@@ -4,9 +4,6 @@
 package org.xtext.mdsd.external.validation
 
 import org.eclipse.xtext.validation.Check
-import org.xtext.mdsd.external.generator.QCConditionUtils
-import org.xtext.mdsd.external.generator.QCJsonUtils
-import org.xtext.mdsd.external.generator.QCUtils
 import org.xtext.mdsd.external.quickCheckApi.BodyCondition
 import org.xtext.mdsd.external.quickCheckApi.Builder
 import org.xtext.mdsd.external.quickCheckApi.CreateAction
@@ -20,6 +17,9 @@ import org.xtext.mdsd.external.quickCheckApi.ReuseValue
 import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.URLRef
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
+import org.xtext.mdsd.external.util.QCConditionUtils
+import org.xtext.mdsd.external.util.QCJsonUtils
+import org.xtext.mdsd.external.util.QCUtils
 
 import static extension org.eclipse.xtext.EcoreUtil2.*
 
@@ -80,7 +80,6 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 	@Check
 	def checkMultipleIdentifiers(JsonObject json){
 		val filtered = QCJsonUtils.jsonAllOfType(json, IdentifierValue)
-		val filt = filtered.filter[k,v| v.size > 1]
 		if(filtered.filter[k,v| v.size > 1].size > 0 || filtered.size > 1){
 			filtered.forEach[k,v| v.forEach[error("Only one identifier allowed", it, QuickCheckApiPackage.Literals.CUSTOM_VALUE__VALUE)]]
 		}

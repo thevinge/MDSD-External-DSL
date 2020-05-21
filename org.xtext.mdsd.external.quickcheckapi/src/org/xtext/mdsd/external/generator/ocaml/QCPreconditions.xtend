@@ -1,11 +1,11 @@
 package org.xtext.mdsd.external.generator.ocaml
 
-import org.xtext.mdsd.external.quickCheckApi.Test
+import org.xtext.mdsd.external.quickCheckApi.ContainsCondition
+import org.xtext.mdsd.external.quickCheckApi.EmptyCondition
 import org.xtext.mdsd.external.quickCheckApi.PreConjunction
 import org.xtext.mdsd.external.quickCheckApi.PreDisjunction
-import org.xtext.mdsd.external.quickCheckApi.EmptyCondition
-import org.xtext.mdsd.external.quickCheckApi.ContainsCondition
-import org.xtext.mdsd.external.generator.QCUtils
+import org.xtext.mdsd.external.quickCheckApi.Test
+import org.xtext.mdsd.external.util.QCUtils
 
 class QCPreconditions {
 	def initPreconditions(Test test ) {

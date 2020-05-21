@@ -1,4 +1,4 @@
-package org.xtext.mdsd.external.generator
+package org.xtext.mdsd.external.util
 
 import org.xtext.mdsd.external.quickCheckApi.ContainsCondition
 import org.xtext.mdsd.external.quickCheckApi.EmptyCondition

@@ -1,4 +1,4 @@
-package org.xtext.mdsd.external.generator
+package org.xtext.mdsd.external.util
 
 import java.util.ArrayList
 import java.util.HashMap

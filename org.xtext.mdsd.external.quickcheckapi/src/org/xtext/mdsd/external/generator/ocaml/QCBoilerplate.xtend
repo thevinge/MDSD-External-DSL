@@ -1,8 +1,8 @@
 package org.xtext.mdsd.external.generator.ocaml
 
-import org.xtext.mdsd.external.quickCheckApi.Builder
 import org.eclipse.xtext.generator.IFileSystemAccess2
-import org.xtext.mdsd.external.generator.QCUtils
+import org.xtext.mdsd.external.quickCheckApi.Builder
+import org.xtext.mdsd.external.util.QCUtils
 
 class QCBoilerplate {
 	

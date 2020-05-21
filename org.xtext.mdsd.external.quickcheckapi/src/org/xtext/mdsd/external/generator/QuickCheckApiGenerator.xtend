@@ -18,6 +18,7 @@ import org.xtext.mdsd.external.generator.ocaml.QCRunCmd
 import org.xtext.mdsd.external.generator.ocaml.QCSetup
 import org.xtext.mdsd.external.quickCheckApi.Builder
 import org.xtext.mdsd.external.quickCheckApi.Test
+import org.xtext.mdsd.external.util.QCUtils
 
 /**
  * Generates code from your model files on save.

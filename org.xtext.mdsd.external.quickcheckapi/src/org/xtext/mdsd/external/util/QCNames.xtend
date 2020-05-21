@@ -1,4 +1,4 @@
-package org.xtext.mdsd.external.generator
+package org.xtext.mdsd.external.util
 
 class QCNames {
 	def static String LocalStateJsonDef(String name){

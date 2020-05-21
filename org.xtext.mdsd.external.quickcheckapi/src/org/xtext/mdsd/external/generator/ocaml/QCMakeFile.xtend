@@ -1,9 +1,9 @@
 package org.xtext.mdsd.external.generator.ocaml
 
 import org.eclipse.emf.common.util.EList
-import org.xtext.mdsd.external.generator.QCUtils
 import org.xtext.mdsd.external.quickCheckApi.Builder
 import org.xtext.mdsd.external.quickCheckApi.Test
+import org.xtext.mdsd.external.util.QCUtils
 
 class QCMakeFile {
 	

@@ -1,7 +1,8 @@
 package org.xtext.mdsd.external.generator
 
 import java.util.HashMap
-
+import org.xtext.mdsd.external.util.QCNames
+import org.xtext.mdsd.external.util.QCUtils
 
 enum defType {
 		dtState,

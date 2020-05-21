@@ -10,6 +10,8 @@ import org.xtext.mdsd.external.quickCheckApi.NoAction
 import org.xtext.mdsd.external.quickCheckApi.Postproposition
 import org.xtext.mdsd.external.quickCheckApi.Request
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
+import org.xtext.mdsd.external.util.QCJsonReuse
+import org.xtext.mdsd.external.util.QCNames
 
 class QCRequest {
 	

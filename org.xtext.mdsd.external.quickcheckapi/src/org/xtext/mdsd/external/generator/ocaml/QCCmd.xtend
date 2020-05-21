@@ -1,13 +1,13 @@
 package org.xtext.mdsd.external.generator.ocaml
 
-import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.Host
 import org.xtext.mdsd.external.quickCheckApi.Port
-import org.xtext.mdsd.external.quickCheckApi.URI
 import org.xtext.mdsd.external.quickCheckApi.Request
+import org.xtext.mdsd.external.quickCheckApi.Test
+import org.xtext.mdsd.external.quickCheckApi.URI
 import org.xtext.mdsd.external.quickCheckApi.URL
 import org.xtext.mdsd.external.quickCheckApi.URLDefRef
-import org.xtext.mdsd.external.generator.QCUtils
+import org.xtext.mdsd.external.util.QCUtils
 
 class QCCmd {
 	def CharSequence initCmd(Test test){
