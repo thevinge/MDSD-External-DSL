@@ -82,7 +82,7 @@ class QCJsonExcluder {
 	private def dispatch void compileExclusionJson(JsonPair json){
 		if(json.value instanceof CustomValue){
 			if ((json.value as CustomValue).value instanceof ExcludeValue){
-				exclusionKeys.add (json.key)
+				exclusionKeys.add (json.key.value)
 			} 
 		}
 		json.value.compileExclusionJson

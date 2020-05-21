@@ -166,20 +166,10 @@ class QCJsonUtils {
 	}
 	
 	def static dispatch void jsonCountType(JsonPair json){
-		currentkey = json.key
+		currentkey = json.key.value
 		json.value?.jsonCountType
 	}
-	
-	def static dispatch void jsonCountType(IntValue value){
-		
-		addJsonCount(value)
-	}
-	
-	def static dispatch void jsonCountType(StringValue value){
-		
-		addJsonCount(value)
-	}
-	
+
 	def static dispatch void jsonCountType(NestedJsonValue json){
 		json.value?.jsonCountType
 	}
@@ -189,43 +179,43 @@ class QCJsonUtils {
 	}
 	
 	def static dispatch void jsonCountType(ListJsonValue json){
-		
 		json.value?.jsonCountType
 	}
 	
 	
 	def static dispatch void jsonCountType(CustomValue json){
-		
 		json.value?.jsonCountType
 	}
 	
+	def static dispatch void jsonCountType(IntValue value){
+		addJsonCount(value)
+	}
+	
+	def static dispatch void jsonCountType(StringValue value){
+		addJsonCount(value)
+	}
+	
 	def static dispatch void jsonCountType(RandomStringGen value){
-		
 		addJsonCount(value)
 	}
 	
 	def static dispatch void jsonCountType(IntGen value){
-		
 		addJsonCount(value)
 	}
 	
 	def static dispatch void jsonCountType(NameStringGen value){
-	
 		addJsonCount(value)
 	}
 	
 	def static dispatch void jsonCountType(ExcludeValue value){
-		
 		addJsonCount(value)
 	}
 	
 	def static dispatch void jsonCountType(ReuseValue value){
-		
 		addJsonCount(value)
 	}
 	
 	def static dispatch void jsonCountType(IdentifierValue value){
-		
 		addJsonCount(value)
 	}
 	
@@ -241,5 +231,55 @@ class QCJsonUtils {
 	}
 	
 	
+	private static ArrayList<JsonPair> jsonPairs
+	
+	def static getAllJsonPairs(JsonRef json){
+		jsonPairs = new ArrayList
+		json?.getJsonPairs
+		jsonPairs
+	}
+	
+	private def static dispatch void getJsonPairs(JsonDefRef json){
+		json.ref?.json?.getJsonPairs
+	}
+	
+	private def static dispatch void getJsonPairs(Json json){
+		json.data?.getJsonPairs
+	}
+	
+	private def static dispatch void getJsonPairs(JsonObject json){
+		json.jsonPairs?.forEach[it?.getJsonPairs]
+	}
+	
+	private def static dispatch void getJsonPairs(JsonList json){
+		json.jsonValues?.forEach[it?.getJsonPairs]
+	}
+	
+	private def static dispatch void getJsonPairs(JsonPair json){
+		jsonPairs.add(json)
+		json.value?.getJsonPairs
+	}
+		
+	private def static dispatch void getJsonPairs(NestedJsonValue json){
+		json.value?.getJsonPairs
+	}
+	
+	private def static dispatch void getJsonPairs(NestedJsonDef json){
+		json.value?.json?.getJsonPairs
+	}
+	
+	private def static dispatch void getJsonPairs(ListJsonValue json){
+		json.value?.getJsonPairs
+	}
+	
+	private def static dispatch void getJsonPairs(CustomValue json){}	
+	private def static dispatch void getJsonPairs(RandomStringGen value){}	
+	private def static dispatch void getJsonPairs(IntGen value){}	
+	private def static dispatch void getJsonPairs(NameStringGen value){}	
+	private def static dispatch void getJsonPairs(ExcludeValue value){}	
+	private def static dispatch void getJsonPairs(ReuseValue value){}	
+	private def static dispatch void getJsonPairs(IdentifierValue value){}
+	private def static dispatch void getJsonPairs(IntValue value){}
+	private def static dispatch void getJsonPairs(StringValue value){}
 	
 }

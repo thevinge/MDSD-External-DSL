@@ -77,7 +77,7 @@ class QCJsonReuse {
 			if (pairValue instanceof CustomValue){
 				var custom = pairValue.value
 				if (custom instanceof ReuseValue){
-					reuseKeys.put(json.key, custom.name)
+					reuseKeys.put(json.key.value, custom.key.value)
 				}
 			}
 			

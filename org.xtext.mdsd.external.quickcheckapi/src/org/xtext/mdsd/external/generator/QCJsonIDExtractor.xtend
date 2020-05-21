@@ -58,7 +58,7 @@ class QCJsonIDExtractor {
 	
 	def static dispatch boolean extractJsonID(JsonPair json){
 		if (json.value.extractJsonID){
-			idKey.empty? idKey = json.key : idKey = idKey
+			idKey.empty? idKey = json.key.value : idKey = idKey
 			return true
 		} else {
 			false

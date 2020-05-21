@@ -123,7 +123,11 @@ JsonObject returns Json:
 ;
 
 JsonPair returns Json:
-	{JsonPair} key=ID ":" value=JsonValue
+	{JsonPair} key=JsonKey ":" value=JsonValue
+;
+
+JsonKey:
+	{JsonKey} value=ID
 ;
 
 JsonValue returns Json:
@@ -139,8 +143,7 @@ IdentifierValue:
 ;
 
 ReuseValue:
-	{ReuseValue} "^"name=ID
-;
+	{ReuseValue} "^"key=[JsonKey];
 
 GeneratedValue:
 	{RandomStringGen}"#STRING" | {IntGen} "#INT" |{NameStringGen}"#NAME"

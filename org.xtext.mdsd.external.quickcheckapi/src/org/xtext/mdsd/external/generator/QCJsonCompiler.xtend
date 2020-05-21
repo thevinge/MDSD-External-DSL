@@ -52,7 +52,7 @@ class QCJsonCompiler {
 				return ''''''
 			} 
 		}
-		'''("«json.key»",«json.value.compileJson»)'''
+		'''("«json.key.value»",«json.value.compileJson»)'''
 	}
 	
 	def static dispatch CharSequence compileJson(IntValue json){
@@ -96,8 +96,8 @@ class QCJsonCompiler {
 		''''''
 	}
 	
-	def static dispatch CharSequence compileCustomValue(ReuseValue gen){
-		'''`String (Hashtbl.find tbl "«gen.name»")'''
+	def static dispatch CharSequence compileCustomValue(ReuseValue value){
+		'''`String (Hashtbl.find tbl "«value.key.value»")'''
 	}
 	
 	def static dispatch CharSequence compileCustomValue(IdentifierValue gen){

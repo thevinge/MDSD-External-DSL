@@ -99,10 +99,10 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 		if (reuseJson.size > 0) {
 			val request = action.getContainerOfType(Request)
 			val allKeys = QCJsonUtils.jsonAllOfType(request?.body?.value)
-			reuseJson.filter[jsonKey, jsonObjs| jsonObjs.map[(it as ReuseValue).name].filter[!allKeys.containsKey(it)].size > 0]
+			reuseJson.filter[jsonKey, jsonObjs| jsonObjs.map[(it as ReuseValue).key.value].filter[!allKeys.containsKey(it)].size > 0]
 			.forEach[jsonKey, json|json.forEach[{
-				error('''Reuse is not allowed, when Body does not contain the key {«(it as ReuseValue).name»}''',
-					it, QuickCheckApiPackage.eINSTANCE.reuseValue_Name
+				error('''Reuse is not allowed, when Body does not contain the key {«(it as ReuseValue).key.value»}''',
+					it, QuickCheckApiPackage.eINSTANCE.reuseValue_Key
 				)
 			}]]
 		}		
@@ -114,13 +114,13 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 		if (reuseJson.size > 0) {
 			val test = action.getContainerOfType(Test)
 			val allCreateActions = test.getAllContentsOfType(CreateAction)
-			reuseJson.filter[jsonKey, jsonObjs| jsonObjs.map[(it as ReuseValue).name].filter[ reuseKey | allCreateActions.exists[{
+			reuseJson.filter[jsonKey, jsonObjs| jsonObjs.map[(it as ReuseValue).key.value].filter[ reuseKey | allCreateActions.exists[{
 				val CreateJsonKeys = QCJsonUtils.jsonAllOfType(it.value)
 				!CreateJsonKeys.containsKey(reuseKey)
 			}]].size > 0]
 			.forEach[jsonKey, json|json.forEach[{
-				error('''Reuse is not allowed, when no requests in test {«test.name»} creates a key {«(it as ReuseValue).name»}''',
-					it, QuickCheckApiPackage.eINSTANCE.reuseValue_Name
+				error('''Reuse is not allowed, when no requests in test {«test.name»} creates a key {«(it as ReuseValue).key.value»}''',
+					it, QuickCheckApiPackage.eINSTANCE.reuseValue_Key
 				)
 			}]]
 		}		
