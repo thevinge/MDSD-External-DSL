@@ -2,8 +2,8 @@ package org.xtext.mdsd.external.generator
 
 import org.xtext.mdsd.external.quickCheckApi.CustomValue
 import org.xtext.mdsd.external.quickCheckApi.ExcludeValue
+import org.xtext.mdsd.external.quickCheckApi.GenRef
 import org.xtext.mdsd.external.quickCheckApi.IdentifierValue
-import org.xtext.mdsd.external.quickCheckApi.IntGen
 import org.xtext.mdsd.external.quickCheckApi.IntValue
 import org.xtext.mdsd.external.quickCheckApi.Json
 import org.xtext.mdsd.external.quickCheckApi.JsonDefRef
@@ -14,7 +14,6 @@ import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
 import org.xtext.mdsd.external.quickCheckApi.NameStringGen
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonDef
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
-import org.xtext.mdsd.external.quickCheckApi.RandomStringGen
 import org.xtext.mdsd.external.quickCheckApi.ReuseValue
 import org.xtext.mdsd.external.quickCheckApi.StringValue
 
@@ -91,15 +90,12 @@ class QCJsonIDExtractor {
 		json.value.extractJsonID
 	}
 	
-	def static dispatch boolean extractJsonID(RandomStringGen value){
-		false
-	}
-	
-	def static dispatch boolean extractJsonID(IntGen value){
-		false
-	}
 	
 	def static dispatch boolean extractJsonID(NameStringGen gen){
+		false
+	}
+	
+	def static dispatch boolean extractJsonID(GenRef gen){
 		false
 	}
 	

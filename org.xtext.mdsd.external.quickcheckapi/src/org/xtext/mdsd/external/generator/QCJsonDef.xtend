@@ -16,6 +16,7 @@ class QCJsonDef {
 		this.name = name
 		this.type = type
 		reuseVars = new HashMap
+		generators = new HashMap
 		
 	}	
 	
@@ -23,6 +24,7 @@ class QCJsonDef {
 	public String name
 	public CharSequence processedJson
 	public HashMap<String,String> reuseVars
+	public HashMap<String,String> generators
 	public String IdentifierKey
 	public defType type
 	

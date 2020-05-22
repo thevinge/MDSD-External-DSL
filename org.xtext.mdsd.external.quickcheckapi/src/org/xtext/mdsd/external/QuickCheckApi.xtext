@@ -22,8 +22,10 @@ URLDefinition returns VarDefinition:
 ;
 
 GenDefinition returns VarDefinition:
-	{GenDefinition} name=ID "=" 
+	{GenDefinition} name=ID "=" gen=Generator
 ;
+
+
 
 Request:
     "request" name=ID method=Method url=URLRef ("Precondition:" preconditions=PreLogicExp)? 
@@ -140,13 +142,34 @@ CustomValue:
 
 IdentifierValue:
 	{IdentifierValue} "@id"
-;
+; 
 
 ReuseValue:
-	{ReuseValue} "^"key=[JsonKey];
+	{ReuseValue} '^'key=[JsonKey];
 
 GeneratedValue:
-	{RandomStringGen}"#STRING" | {IntGen} "#INT" |{NameStringGen}"#NAME"
+	{NameStringGen}"#NAME" | {GenRef} '#'ref=[GenDefinition]
+;
+
+
+Generator:
+	{Generator} "<" method=GenMethod  ">"
+;
+
+GenValue:
+	{StringGenValue} value=STRING | {IntGenValue} value=INT | {NestedGen} value=Generator
+;
+
+GenMethod:
+	OneOfGen | IntGen
+;
+
+OneOfGen returns GenMethod:
+	{OneOfGen} "oneOf" "[" Values+=GenValue ("," Values+=GenValue)* "]"
+;
+
+IntGen returns GenMethod:
+	{IntGen} "Int" ("<" from=INT ',' to=INT ">")?
 ;
 
 PreLogicExp returns Preproposition:

@@ -4,8 +4,8 @@ import java.util.ArrayList
 import java.util.HashMap
 import org.xtext.mdsd.external.quickCheckApi.CustomValue
 import org.xtext.mdsd.external.quickCheckApi.ExcludeValue
+import org.xtext.mdsd.external.quickCheckApi.GenRef
 import org.xtext.mdsd.external.quickCheckApi.IdentifierValue
-import org.xtext.mdsd.external.quickCheckApi.IntGen
 import org.xtext.mdsd.external.quickCheckApi.IntValue
 import org.xtext.mdsd.external.quickCheckApi.Json
 import org.xtext.mdsd.external.quickCheckApi.JsonDefRef
@@ -17,7 +17,6 @@ import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
 import org.xtext.mdsd.external.quickCheckApi.NameStringGen
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonDef
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
-import org.xtext.mdsd.external.quickCheckApi.RandomStringGen
 import org.xtext.mdsd.external.quickCheckApi.ReuseValue
 import org.xtext.mdsd.external.quickCheckApi.StringValue
 
@@ -83,20 +82,6 @@ class QCJsonUtils {
 		json.value?.jsonContainsType(type)
 	}
 	
-	def static dispatch boolean jsonContainsType(RandomStringGen value, Class<? extends Json> type){
-		if(type.isAssignableFrom(value?.class)){
-			return true
-		}
-		false
-	}
-	
-	def static dispatch boolean jsonContainsType(IntGen value, Class<? extends Json> type){
-		if(type.isAssignableFrom(value?.class)){
-			return true
-		}
-		false
-	}
-	
 	def static dispatch boolean jsonContainsType(NameStringGen value, Class<? extends Json> type){
 		if(type.isAssignableFrom(value?.class)){
 			return true
@@ -105,6 +90,13 @@ class QCJsonUtils {
 	}
 	
 	def static dispatch boolean jsonContainsType(ExcludeValue value, Class<? extends Json> type){
+		if(type.isAssignableFrom(value?.class)){
+			return true
+		}
+		false
+	}
+	
+	def static dispatch boolean jsonContainsType(GenRef value, Class<? extends Json> type){
 		if(type.isAssignableFrom(value?.class)){
 			return true
 		}
@@ -195,15 +187,11 @@ class QCJsonUtils {
 		addJsonCount(value)
 	}
 	
-	def static dispatch void jsonCountType(RandomStringGen value){
-		addJsonCount(value)
-	}
-	
-	def static dispatch void jsonCountType(IntGen value){
-		addJsonCount(value)
-	}
-	
 	def static dispatch void jsonCountType(NameStringGen value){
+		addJsonCount(value)
+	}
+	
+	def static dispatch void jsonCountType(GenRef value){
 		addJsonCount(value)
 	}
 	
@@ -273,9 +261,8 @@ class QCJsonUtils {
 	}
 	
 	private def static dispatch void getJsonPairs(CustomValue json){}	
-	private def static dispatch void getJsonPairs(RandomStringGen value){}	
-	private def static dispatch void getJsonPairs(IntGen value){}	
 	private def static dispatch void getJsonPairs(NameStringGen value){}	
+	private def static dispatch void getJsonPairs(GenRef value){}	
 	private def static dispatch void getJsonPairs(ExcludeValue value){}	
 	private def static dispatch void getJsonPairs(ReuseValue value){}	
 	private def static dispatch void getJsonPairs(IdentifierValue value){}

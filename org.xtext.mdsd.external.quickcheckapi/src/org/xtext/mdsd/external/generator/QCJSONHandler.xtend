@@ -8,29 +8,20 @@ import org.xtext.mdsd.external.util.QCJsonReuse
 class QCJSONHandler {
 		
 	def CharSequence InitJsonVariables(Test test){
-
+		for (request : test.requests) {
+			QCRequestProcess.processRequest(request)
+		}
 		'''
 		«initJsonHelper»
 		«initDefaultGen»
 		«test.customGen»
-		«test.compileJsonVaribles»
+		«compileJsonVaribles»
 		'''
 	}
 	
-	private def CharSequence compileJsonVaribles(Test test){
-		for (request : test.requests) {
-		
-			QCRequestProcess.processRequest(request)
-		}
-		'''
-		«FOR request : test.requests»
-			«QCRequestProcess.get(request.name).bodyJsonDef?.declaration»
-			«QCRequestProcess.get(request.name).stateJsonDef?.declaration»
-			«FOR jsonDef : QCRequestProcess.get(request.name).postCondJsonDefs»
-				«jsonDef.declaration»
-			«ENDFOR»
-		«ENDFOR»
-		'''
+	private def CharSequence compileJsonVaribles(){
+
+		QCRequestProcess.compileAllJsonDeclarations()
 	}
 	private def dispatch CharSequence compileReuseJson(Json json){
 		
@@ -57,6 +48,8 @@ class QCJSONHandler {
 		'''
 		let defaultNameGen () = Gen.generate1( Gen.oneof[Gen.return "Jens"; Gen.return "Mads"; Gen.return "Andreas"; Gen.return "John"; Gen.return "Nikolaj";])		
 		let defaultStringGen() = Gen.generate1 (Gen.string_size (Gen.int_range 3 4))
+		
+		«QCRequestProcess.compileAllGenDeclarations»
 		'''
 	}
 	

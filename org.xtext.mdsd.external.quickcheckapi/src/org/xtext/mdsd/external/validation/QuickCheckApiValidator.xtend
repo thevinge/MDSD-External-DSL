@@ -8,7 +8,9 @@ import org.xtext.mdsd.external.quickCheckApi.BodyCondition
 import org.xtext.mdsd.external.quickCheckApi.Builder
 import org.xtext.mdsd.external.quickCheckApi.CreateAction
 import org.xtext.mdsd.external.quickCheckApi.EmptyCondition
+import org.xtext.mdsd.external.quickCheckApi.GenDefinition
 import org.xtext.mdsd.external.quickCheckApi.IdentifierValue
+import org.xtext.mdsd.external.quickCheckApi.IntGen
 import org.xtext.mdsd.external.quickCheckApi.JsonList
 import org.xtext.mdsd.external.quickCheckApi.JsonObject
 import org.xtext.mdsd.external.quickCheckApi.QuickCheckApiPackage
@@ -18,10 +20,13 @@ import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.URLRef
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
 import org.xtext.mdsd.external.util.QCConditionUtils
+import org.xtext.mdsd.external.util.QCGenUtils
+import org.xtext.mdsd.external.util.QCGenUtils.GenType
 import org.xtext.mdsd.external.util.QCJsonUtils
 import org.xtext.mdsd.external.util.QCUtils
 
 import static extension org.eclipse.xtext.EcoreUtil2.*
+import org.xtext.mdsd.external.quickCheckApi.Generator
 
 /**
  * This class contains custom validation rules. 
@@ -91,6 +96,19 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 		error("Current Implementation of the DSL does not handle Json List due to limitation in OCaml", json, QuickCheckApiPackage.eINSTANCE.jsonList_JsonValues)
 	}
 	
+	
+	@Check
+	def intConversionWarning(IntGen gen){
+		val genDefinition = gen.getContainerOfType(GenDefinition)
+		if (genDefinition !== null) {
+
+			if(QCGenUtils.getGeneratorType(genDefinition.gen) === GenType.Mixed){
+				warning("The Integer will be converted to a string when in combination with a String Generator",
+					gen.getContainerOfType(Generator) ,QuickCheckApiPackage.Literals.GENERATOR__METHOD
+				)
+			}
+		}
+	}
 	
 	@Check
 	def checkIfReuseAllowed(CreateAction action){

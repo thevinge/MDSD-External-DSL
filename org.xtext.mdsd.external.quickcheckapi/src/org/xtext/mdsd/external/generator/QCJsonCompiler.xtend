@@ -7,8 +7,8 @@ import org.xtext.mdsd.external.quickCheckApi.CreateAction
 import org.xtext.mdsd.external.quickCheckApi.CustomValue
 import org.xtext.mdsd.external.quickCheckApi.DeleteAction
 import org.xtext.mdsd.external.quickCheckApi.ExcludeValue
+import org.xtext.mdsd.external.quickCheckApi.GenRef
 import org.xtext.mdsd.external.quickCheckApi.IdentifierValue
-import org.xtext.mdsd.external.quickCheckApi.IntGen
 import org.xtext.mdsd.external.quickCheckApi.IntValue
 import org.xtext.mdsd.external.quickCheckApi.Json
 import org.xtext.mdsd.external.quickCheckApi.JsonDefRef
@@ -23,14 +23,17 @@ import org.xtext.mdsd.external.quickCheckApi.NoAction
 import org.xtext.mdsd.external.quickCheckApi.PostConjunction
 import org.xtext.mdsd.external.quickCheckApi.PostDisjunction
 import org.xtext.mdsd.external.quickCheckApi.Postproposition
-import org.xtext.mdsd.external.quickCheckApi.RandomStringGen
 import org.xtext.mdsd.external.quickCheckApi.ReuseValue
 import org.xtext.mdsd.external.quickCheckApi.StringValue
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
 import org.xtext.mdsd.external.util.QCJsonReuse
 import org.xtext.mdsd.external.util.QCNames
+import org.xtext.mdsd.external.util.QCGenUtils
 
 class QCJsonCompiler {
+	
+	
+	
 	def static dispatch CharSequence compileJson(JsonDefRef json){
 		
 		json.ref.json.compileJson.trim
@@ -82,20 +85,28 @@ class QCJsonCompiler {
 		'''«json.value.compileCustomValue»'''
 	}
 	
-	def static dispatch CharSequence compileCustomValue(RandomStringGen gen){
-		'''`String (defaultStringGen())'''
-	}
-	
-	def static dispatch CharSequence compileCustomValue(IntGen gen){
-		''''''
-	}
-	
 	def static dispatch CharSequence compileCustomValue(NameStringGen gen){
 		'''`String (defaultNameGen ())'''
 	}
 	
 	def static dispatch CharSequence compileCustomValue(ExcludeValue gen){
 		''''''
+	}
+	
+	def static dispatch CharSequence compileCustomValue(GenRef gen){
+		switch (QCGenUtils.getGeneratorType(gen.ref.gen)) {
+			case Int: {
+				return '''`Int («gen.ref.name» ())'''
+			}
+			case Text: {
+				return '''`String («gen.ref.name» ())'''
+			}
+			case Mixed: {
+				return '''`String («gen.ref.name» ())'''
+			}
+			default: {
+			}
+		}
 	}
 	
 	def static dispatch CharSequence compileCustomValue(ReuseValue value){
@@ -114,6 +125,11 @@ class QCJsonCompiler {
 					.replace(";}","}")
 					
 	}
+
+
+
+
+
 
 	private static ArrayList<QCJsonDef> jsonBodies
 	private static int declarationCounter
@@ -144,36 +160,11 @@ class QCJsonCompiler {
 			declarationCounter++  
 			var QCJsonDef jsondef = new QCJsonDef(QCNames.LocalPostConditionJsonDef() + declarationCounter, defType.dtCondition)
 		 	jsondef.processedJson = QCJsonCompiler.compileJson(condition.requestValue.body)
-		 	
+		 	jsondef.generators = QCGenerator.getAllGenerators(condition.requestValue.body)
 		 	QCJsonReuse.isReuseJson(condition.requestValue.body)
 		 	jsondef.reuseVars = QCJsonReuse.reuseKeys
 		 	jsondef.IdentifierKey = QCJsonIDExtractor.compileJsonID(condition.requestValue.body).toString
 		 	jsonBodies.add(jsondef)
 		} 
-	}
-
-
-
-
-
-
-	def static dispatch CharSequence compileJsonAction(CreateAction action){
-		action.value.compileJson
-	}
-	
-	def static dispatch CharSequence compileJsonAction(UpdateAction action){
-		action.value.compileJson
-	}
-	
-	def static dispatch CharSequence compileJsonAction(DeleteAction action){
-		action.value.compileJson
-	}
-	def static dispatch CharSequence compileJsonAction(NoAction action){
-		''''''
-	}
-
-
-
-
-				 
+	}				 
 }

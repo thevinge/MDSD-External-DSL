@@ -45,6 +45,7 @@ class QCRequest {
 	private def dispatch process(Body body){
 		bodyJsonDef = new QCJsonDef(QCNames.LocalBodyJsonDef, defType.dtBody)		
 		bodyJsonDef.processedJson = QCJsonCompiler.compileJson(body.value)
+		bodyJsonDef.generators = QCGenerator.getAllGenerators(body.value)
 		bodyJsonDef.requestName = requestName
 		QCJsonReuse.resetKeys
 		QCJsonReuse.isReuseJson(body.value)
@@ -71,7 +72,8 @@ class QCRequest {
 	
 	private def processAction(Action action, JsonRef json){
 		stateJsonDef = new QCJsonDef(QCNames.LocalStateJsonDef, defType.dtState)		
-		stateJsonDef.processedJson = QCJsonCompiler.compileJsonAction(action)
+		stateJsonDef.processedJson = QCJsonCompiler.compileJson(json)
+		stateJsonDef.generators = QCGenerator.getAllGenerators(json)
 		stateJsonDef.requestName = requestName
 		QCJsonReuse.resetKeys
 		QCJsonReuse.isReuseJson(json)
