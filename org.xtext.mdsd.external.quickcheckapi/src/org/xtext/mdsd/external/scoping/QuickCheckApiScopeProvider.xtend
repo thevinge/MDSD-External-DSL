@@ -20,7 +20,7 @@ import org.xtext.mdsd.external.quickCheckApi.QuickCheckApiPackage
 import org.xtext.mdsd.external.quickCheckApi.Request
 import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
-import org.xtext.mdsd.external.util.QCJsonUtils
+import org.xtext.mdsd.external.util.json.QCJsonUtils
 
 import static extension org.eclipse.xtext.EcoreUtil2.*
 

@@ -9,6 +9,7 @@ import org.xtext.mdsd.external.quickCheckApi.Builder
 import org.xtext.mdsd.external.quickCheckApi.CreateAction
 import org.xtext.mdsd.external.quickCheckApi.EmptyCondition
 import org.xtext.mdsd.external.quickCheckApi.GenDefinition
+import org.xtext.mdsd.external.quickCheckApi.Generator
 import org.xtext.mdsd.external.quickCheckApi.IdentifierValue
 import org.xtext.mdsd.external.quickCheckApi.IntGen
 import org.xtext.mdsd.external.quickCheckApi.JsonList
@@ -22,11 +23,10 @@ import org.xtext.mdsd.external.quickCheckApi.UpdateAction
 import org.xtext.mdsd.external.util.QCConditionUtils
 import org.xtext.mdsd.external.util.QCGenUtils
 import org.xtext.mdsd.external.util.QCGenUtils.GenType
-import org.xtext.mdsd.external.util.QCJsonUtils
 import org.xtext.mdsd.external.util.QCUtils
+import org.xtext.mdsd.external.util.json.QCJsonUtils
 
 import static extension org.eclipse.xtext.EcoreUtil2.*
-import org.xtext.mdsd.external.quickCheckApi.Generator
 
 /**
  * This class contains custom validation rules. 
