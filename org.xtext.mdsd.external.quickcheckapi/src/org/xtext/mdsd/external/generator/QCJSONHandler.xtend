@@ -46,9 +46,7 @@ class QCJSONHandler {
 	
 	private def CharSequence initDefaultGen(){
 		'''
-		let defaultNameGen () = Gen.generate1( Gen.oneof[Gen.return "Jens"; Gen.return "Mads"; Gen.return "Andreas"; Gen.return "John"; Gen.return "Nikolaj";])		
-		let defaultStringGen() = Gen.generate1 (Gen.string_size (Gen.int_range 3 4))
-		
+		let defaultNameGen () = Gen.generate1( Gen.oneof[Gen.return "Jens"; Gen.return "Mads"; Gen.return "Andreas"; Gen.return "John"; Gen.return "Nikolaj";])				
 		«QCRequestProcess.compileAllGenDeclarations»
 		'''
 	}

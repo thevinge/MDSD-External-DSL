@@ -161,7 +161,11 @@ GenValue:
 ;
 
 GenMethod:
-	OneOfGen | IntGen
+	OneOfGen | IntGen | StringGen
+;
+
+StringGen:
+	{StringGen} "String" 
 ;
 
 OneOfGen returns GenMethod:

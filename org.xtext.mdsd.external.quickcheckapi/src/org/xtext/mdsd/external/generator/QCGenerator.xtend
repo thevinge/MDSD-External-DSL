@@ -22,6 +22,7 @@ import org.xtext.mdsd.external.quickCheckApi.NestedJsonDef
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
 import org.xtext.mdsd.external.quickCheckApi.OneOfGen
 import org.xtext.mdsd.external.quickCheckApi.ReuseValue
+import org.xtext.mdsd.external.quickCheckApi.StringGen
 import org.xtext.mdsd.external.quickCheckApi.StringGenValue
 import org.xtext.mdsd.external.quickCheckApi.StringValue
 import org.xtext.mdsd.external.util.QCGenUtils
@@ -64,8 +65,17 @@ class QCGenerator {
 		if (method.from === 0 && method.to === 0) {
 			'''Gen.int'''
 		} else {
-			'''(Gen.int_range «method.from» «method.to»)'''
+			if (method.from > method.to) {
+				'''(Gen.int_range «method.to» «method.from»)'''
+			} else {
+				'''(Gen.int_range «method.from» «method.to»)'''
+			}
+			
 		}
+	}
+	
+	private static def dispatch CharSequence compileMethod(StringGen method) {
+		'''(Gen.string_size (Gen.int_range 3 4))'''
 	}
 
 	private static def dispatch CharSequence compileValue(StringGenValue genValue) {

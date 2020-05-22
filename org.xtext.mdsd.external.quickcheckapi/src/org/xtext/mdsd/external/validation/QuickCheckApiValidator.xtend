@@ -101,7 +101,6 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 	def intConversionWarning(IntGen gen){
 		val genDefinition = gen.getContainerOfType(GenDefinition)
 		if (genDefinition !== null) {
-
 			if(QCGenUtils.getGeneratorType(genDefinition.gen) === GenType.Mixed){
 				warning("The Integer will be converted to a string when in combination with a String Generator",
 					gen.getContainerOfType(Generator) ,QuickCheckApiPackage.Literals.GENERATOR__METHOD

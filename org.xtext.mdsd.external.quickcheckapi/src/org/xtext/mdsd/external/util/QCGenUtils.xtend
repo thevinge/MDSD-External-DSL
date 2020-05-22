@@ -1,13 +1,13 @@
 package org.xtext.mdsd.external.util
 
-import java.util.HashMap
+import java.util.HashSet
 import org.xtext.mdsd.external.quickCheckApi.Generator
 import org.xtext.mdsd.external.quickCheckApi.IntGen
 import org.xtext.mdsd.external.quickCheckApi.IntGenValue
 import org.xtext.mdsd.external.quickCheckApi.NestedGen
 import org.xtext.mdsd.external.quickCheckApi.OneOfGen
+import org.xtext.mdsd.external.quickCheckApi.StringGen
 import org.xtext.mdsd.external.quickCheckApi.StringGenValue
-import java.util.HashSet
 
 class QCGenUtils {
 
@@ -42,6 +42,10 @@ class QCGenUtils {
 
 	private static def dispatch GenType compile(IntGen method) {
 		GenType.Int
+	}
+	
+	private static def dispatch GenType compile(StringGen method) {
+		GenType.Text
 	}
 
 	private static def dispatch GenType compileType(StringGenValue genValue) {
