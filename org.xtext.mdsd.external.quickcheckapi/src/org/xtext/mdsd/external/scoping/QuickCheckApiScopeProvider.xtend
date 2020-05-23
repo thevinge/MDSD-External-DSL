@@ -3,15 +3,14 @@
  */
 package org.xtext.mdsd.external.scoping
 
+import com.google.inject.Inject
 import java.util.ArrayList
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.xtext.naming.QualifiedName
 import org.eclipse.xtext.scoping.IScope
 import org.eclipse.xtext.scoping.Scopes
-import org.xtext.mdsd.external.generator.QCJsonOrigin
 import org.xtext.mdsd.external.quickCheckApi.Action
-import org.xtext.mdsd.external.quickCheckApi.BodyCondition
 import org.xtext.mdsd.external.quickCheckApi.CreateAction
 import org.xtext.mdsd.external.quickCheckApi.DeleteAction
 import org.xtext.mdsd.external.quickCheckApi.JsonKey
@@ -20,6 +19,7 @@ import org.xtext.mdsd.external.quickCheckApi.QuickCheckApiPackage
 import org.xtext.mdsd.external.quickCheckApi.Request
 import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
+import org.xtext.mdsd.external.util.QCOrigin
 import org.xtext.mdsd.external.util.json.QCJsonUtils
 
 import static extension org.eclipse.xtext.EcoreUtil2.*
@@ -31,6 +31,8 @@ import static extension org.eclipse.xtext.EcoreUtil2.*
  * on how and when to use it.
  */
 class QuickCheckApiScopeProvider extends AbstractQuickCheckApiScopeProvider {
+	
+	@Inject extension QCOrigin
 
 	override getScope(EObject context, EReference reference) {
 		switch reference {
@@ -50,17 +52,7 @@ class QuickCheckApiScopeProvider extends AbstractQuickCheckApiScopeProvider {
 			}
 			case ACTION: {
 				var currentAction = context.getContainerOfType(Action)
-				switch (currentAction) {
-					case currentAction instanceof CreateAction:
-						return (currentAction as CreateAction).actionScope
-					case currentAction instanceof UpdateAction:
-						return (currentAction as UpdateAction).actionScope
-					case currentAction instanceof DeleteAction:
-						return (currentAction as DeleteAction).actionScope
-					default:
-						return IScope.NULLSCOPE
-				}
-
+				currentAction.actionScope
 			}
 			case BODY_CONDITION: {
 				var test = context.getContainerOfType(Test)
@@ -98,7 +90,7 @@ class QuickCheckApiScopeProvider extends AbstractQuickCheckApiScopeProvider {
 		QCJsonUtils.getAllJsonPairs(json).map[it.key]
 	}
 
-	private def static String name(JsonKey key) {
+	private def String name(JsonKey key) {
 		key.value
 	}
 
@@ -118,15 +110,5 @@ class QuickCheckApiScopeProvider extends AbstractQuickCheckApiScopeProvider {
 		allKeys
 	}
 
-	private def QCJsonOrigin JsonOrigin(EObject context) {
-		if (context.getContainerOfType(Request) === null) {
-			return QCJsonOrigin.NON_REFERRED
-		} else {
-			if (context.getContainerOfType(Action) !== null) {
-				return QCJsonOrigin.ACTION
-			} else if (context.getContainerOfType(BodyCondition) !== null) {
-				return QCJsonOrigin.BODY_CONDITION
-			}
-		}
-	}
+	
 }
