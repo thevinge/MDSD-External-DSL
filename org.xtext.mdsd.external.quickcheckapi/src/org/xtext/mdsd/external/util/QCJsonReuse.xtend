@@ -12,7 +12,6 @@ import org.xtext.mdsd.external.quickCheckApi.JsonList
 import org.xtext.mdsd.external.quickCheckApi.JsonObject
 import org.xtext.mdsd.external.quickCheckApi.JsonPair
 import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
-import org.xtext.mdsd.external.quickCheckApi.NameStringGen
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonDef
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
 import org.xtext.mdsd.external.quickCheckApi.ReuseValue
@@ -109,10 +108,6 @@ class QCJsonReuse {
 	
 	def static dispatch boolean compileIsReuseJson(CustomValue json){
 		json.value.compileIsReuseJson
-	}
-	
-	def static dispatch boolean compileIsReuseJson(NameStringGen gen){
-		false
 	}
 	
 	def static dispatch boolean compileIsReuseJson(GenRef gen){

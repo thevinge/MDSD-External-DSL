@@ -14,7 +14,6 @@ import org.xtext.mdsd.external.quickCheckApi.JsonObject
 import org.xtext.mdsd.external.quickCheckApi.JsonPair
 import org.xtext.mdsd.external.quickCheckApi.JsonRef
 import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
-import org.xtext.mdsd.external.quickCheckApi.NameStringGen
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonDef
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
 import org.xtext.mdsd.external.quickCheckApi.ReuseValue
@@ -63,7 +62,7 @@ class QCJsonPairUtil {
 	}
 	
 	private def static dispatch void getJsonPairs(CustomValue json){}	
-	private def static dispatch void getJsonPairs(NameStringGen value){}	
+	
 	private def static dispatch void getJsonPairs(GenRef value){}	
 	private def static dispatch void getJsonPairs(ExcludeValue value){}	
 	private def static dispatch void getJsonPairs(ReuseValue value){}	

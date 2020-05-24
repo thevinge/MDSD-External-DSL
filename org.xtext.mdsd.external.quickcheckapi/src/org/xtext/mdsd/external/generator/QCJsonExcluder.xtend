@@ -11,7 +11,6 @@ import org.xtext.mdsd.external.quickCheckApi.JsonList
 import org.xtext.mdsd.external.quickCheckApi.JsonObject
 import org.xtext.mdsd.external.quickCheckApi.JsonPair
 import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
-import org.xtext.mdsd.external.quickCheckApi.NameStringGen
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonDef
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
 import org.xtext.mdsd.external.quickCheckApi.ReuseValue
@@ -107,7 +106,7 @@ class QCJsonExcluder {
 	}
 	
 
-	private def dispatch void compileExclusionJson(NameStringGen gen){}
+
 	private def dispatch void compileExclusionJson(ExcludeValue gen){}
 	private def dispatch void compileExclusionJson(ReuseValue gen){}
 	private def dispatch void compileExclusionJson(IdentifierValue gen){}

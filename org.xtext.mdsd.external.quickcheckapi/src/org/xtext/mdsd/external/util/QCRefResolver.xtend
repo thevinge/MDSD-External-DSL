@@ -22,9 +22,9 @@ import static extension org.eclipse.xtext.EcoreUtil2.*
 
 class QCRefResolver {
 
-	private ArrayList<EObject> references
+	private static ArrayList<EObject> references
 
-	def ArrayList<EObject> getReferencesToMe(EObject context, boolean resolve) {
+	def static ArrayList<EObject> getReferencesToMe(EObject context, boolean resolve) {
 
 		val jsonRef = context.resolveJsonRef
 		references = new ArrayList
@@ -47,7 +47,7 @@ class QCRefResolver {
 		references
 	}
 
-	private def JsonRef resolveJsonRef(EObject context) {
+	private static def JsonRef resolveJsonRef(EObject context) {
 		var jsonDef = context.getContainerOfType(JsonDefRef)
 		if (jsonDef !== null) {
 			return jsonDef
@@ -65,7 +65,7 @@ class QCRefResolver {
 		}
 	}
 
-	private def JsonRef bodyResolver(Body body) {
+	private static def JsonRef bodyResolver(Body body) {
 		if (body.value !== null) {
 			return body.value
 		} else {
@@ -73,7 +73,7 @@ class QCRefResolver {
 		}
 	}
 
-	private def dispatch JsonRef actionResolver(CreateAction action) {
+	private static def dispatch JsonRef actionResolver(CreateAction action) {
 		if (action?.value instanceof JsonDefRef) {
 			(action.value as JsonDefRef).ref.json
 		} else {
@@ -82,7 +82,7 @@ class QCRefResolver {
 
 	}
 
-	private def dispatch JsonRef actionResolver(DeleteAction action) {
+	private static def dispatch JsonRef actionResolver(DeleteAction action) {
 		if (action?.value instanceof JsonDefRef) {
 			(action.value as JsonDefRef).ref.json
 		} else {
@@ -90,7 +90,7 @@ class QCRefResolver {
 		}
 	}
 
-	private def dispatch JsonRef actionResolver(UpdateAction action) {
+	private static def dispatch JsonRef actionResolver(UpdateAction action) {
 		if (action?.value instanceof JsonDefRef) {
 			(action.value as JsonDefRef).ref.json
 		} else {
@@ -98,33 +98,33 @@ class QCRefResolver {
 		}
 	}
 
-	private def dispatch JsonRef actionResolver(NoAction action) {
+	private static def dispatch JsonRef actionResolver(NoAction action) {
 		null
 	}
 
-	private ArrayList<JsonRef> jsonBodies
+	private static ArrayList<JsonRef> jsonBodies
 
-	def ArrayList<JsonRef> bodyConditionResolver(Postproposition cond) {
+	def static ArrayList<JsonRef> bodyConditionResolver(Postproposition cond) {
 		jsonBodies = new ArrayList
 		cond.resolvePostCondition
 		jsonBodies
 	}
 
-	private def dispatch void resolvePostCondition(PostConjunction and) {
+	private static def dispatch void resolvePostCondition(PostConjunction and) {
 		and.left.resolvePostCondition
 		and.right.resolvePostCondition
 	}
 
-	private def dispatch void resolvePostCondition(PostDisjunction or) {
+	private static def dispatch void resolvePostCondition(PostDisjunction or) {
 		or.left.resolvePostCondition
 		or.right.resolvePostCondition
 	}
 
-	private def dispatch void resolvePostCondition(BodyCondition condition) {
+	private static def dispatch void resolvePostCondition(BodyCondition condition) {
 		if (condition.requestValue.body !== null) {
 			jsonBodies.add(condition.requestValue.body)
 		}
 	}
 
-	private def dispatch void resolvePostCondition(CodeCondition condition) {}
+	private static def dispatch void resolvePostCondition(CodeCondition condition) {}
 }

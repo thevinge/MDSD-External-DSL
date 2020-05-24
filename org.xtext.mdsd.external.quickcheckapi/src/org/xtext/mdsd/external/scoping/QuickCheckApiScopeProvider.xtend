@@ -44,7 +44,7 @@ class QuickCheckApiScopeProvider extends AbstractQuickCheckApiScopeProvider {
 	}
 
 	def private IScope getReuseScope(EObject context) {
-		val origin = context.JsonOrigin
+		val origin = QCOriginResolver.JsonOrigin(context)
 		switch (origin.origin) {
 			case NON_REFERRED: {
 				var test = context.getContainerOfType(Test)

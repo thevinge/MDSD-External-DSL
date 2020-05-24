@@ -11,7 +11,6 @@ import org.xtext.mdsd.external.quickCheckApi.JsonList
 import org.xtext.mdsd.external.quickCheckApi.JsonObject
 import org.xtext.mdsd.external.quickCheckApi.JsonPair
 import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
-import org.xtext.mdsd.external.quickCheckApi.NameStringGen
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonDef
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
 import org.xtext.mdsd.external.quickCheckApi.ReuseValue
@@ -90,10 +89,6 @@ class QCJsonIDExtractor {
 		json.value.extractJsonID
 	}
 	
-	
-	def static dispatch boolean extractJsonID(NameStringGen gen){
-		false
-	}
 	
 	def static dispatch boolean extractJsonID(GenRef gen){
 		false

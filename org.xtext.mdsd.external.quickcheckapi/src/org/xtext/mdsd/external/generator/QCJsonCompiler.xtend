@@ -1,6 +1,5 @@
 package org.xtext.mdsd.external.generator
 
-import com.google.inject.Inject
 import java.util.ArrayList
 import org.xtext.mdsd.external.quickCheckApi.BodyCondition
 import org.xtext.mdsd.external.quickCheckApi.CodeCondition
@@ -15,7 +14,6 @@ import org.xtext.mdsd.external.quickCheckApi.JsonList
 import org.xtext.mdsd.external.quickCheckApi.JsonObject
 import org.xtext.mdsd.external.quickCheckApi.JsonPair
 import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
-import org.xtext.mdsd.external.quickCheckApi.NameStringGen
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonDef
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
 import org.xtext.mdsd.external.quickCheckApi.PostConjunction
@@ -27,6 +25,7 @@ import org.xtext.mdsd.external.util.QCGenUtils
 import org.xtext.mdsd.external.util.QCJsonReuse
 import org.xtext.mdsd.external.util.QCNames
 import org.xtext.mdsd.external.util.QCTypeInfer
+import org.xtext.mdsd.external.util.QCTypeInfer.JsonValueType
 
 class QCJsonCompiler {
 	
@@ -83,10 +82,6 @@ class QCJsonCompiler {
 		'''«json.value.compileCustomValue»'''
 	}
 	
-	def static dispatch CharSequence compileCustomValue(NameStringGen gen){
-		'''`String (defaultNameGen ())'''
-	}
-	
 	def static dispatch CharSequence compileCustomValue(ExcludeValue gen){
 		''''''
 	}
@@ -107,9 +102,19 @@ class QCJsonCompiler {
 		}
 	}
 	
-	def static dispatch CharSequence compileCustomValue(ReuseValue value){
-		val res = inferType(value)
-		'''`String (Hashtbl.find tbl "«value.key.value»")'''
+	def static dispatch CharSequence compileCustomValue(ReuseValue value){ 
+		switch (QCTypeInfer.inferType(value)) {
+			case JsonValueType.STRING: {
+				'''`String (Hashtbl.find tbl "«value.key.value»")'''
+			}
+			case JsonValueType.INT: {
+				'''`Int (int_of_string (Hashtbl.find tbl "«value.key.value»"))'''
+			}
+			default: {
+				'''`String (Hashtbl.find tbl "«value.key.value»")'''
+			}
+		}
+		
 	}
 	
 	def static dispatch CharSequence compileCustomValue(IdentifierValue gen){

@@ -13,7 +13,6 @@ import org.xtext.mdsd.external.quickCheckApi.JsonObject
 import org.xtext.mdsd.external.quickCheckApi.JsonPair
 import org.xtext.mdsd.external.quickCheckApi.JsonRef
 import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
-import org.xtext.mdsd.external.quickCheckApi.NameStringGen
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
 import org.xtext.mdsd.external.quickCheckApi.ReuseValue
 import org.xtext.mdsd.external.quickCheckApi.StringValue
@@ -79,14 +78,7 @@ class QCJsonUtils {
 	def static dispatch boolean jsonContainsType(CustomValue json, Class<? extends Json> type){
 		json.value?.jsonContainsType(type)
 	}
-	
-	def static dispatch boolean jsonContainsType(NameStringGen value, Class<? extends Json> type){
-		if(type.isAssignableFrom(value?.class)){
-			return true
-		}
-		false
-	}
-	
+		
 	def static dispatch boolean jsonContainsType(ExcludeValue value, Class<? extends Json> type){
 		if(type.isAssignableFrom(value?.class)){
 			return true

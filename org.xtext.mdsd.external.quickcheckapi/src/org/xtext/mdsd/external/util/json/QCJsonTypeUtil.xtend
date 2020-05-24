@@ -14,7 +14,6 @@ import org.xtext.mdsd.external.quickCheckApi.JsonObject
 import org.xtext.mdsd.external.quickCheckApi.JsonPair
 import org.xtext.mdsd.external.quickCheckApi.JsonRef
 import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
-import org.xtext.mdsd.external.quickCheckApi.NameStringGen
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonDef
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
 import org.xtext.mdsd.external.quickCheckApi.ReuseValue
@@ -85,10 +84,6 @@ class QCJsonTypeUtil {
 	}
 	
 	def static dispatch void jsonCountType(StringValue value){
-		addJsonCount(value)
-	}
-	
-	def static dispatch void jsonCountType(NameStringGen value){
 		addJsonCount(value)
 	}
 	

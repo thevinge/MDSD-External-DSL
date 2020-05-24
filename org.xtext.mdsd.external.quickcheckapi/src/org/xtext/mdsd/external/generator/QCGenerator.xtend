@@ -16,7 +16,6 @@ import org.xtext.mdsd.external.quickCheckApi.JsonObject
 import org.xtext.mdsd.external.quickCheckApi.JsonPair
 import org.xtext.mdsd.external.quickCheckApi.JsonRef
 import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
-import org.xtext.mdsd.external.quickCheckApi.NameStringGen
 import org.xtext.mdsd.external.quickCheckApi.NestedGen
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonDef
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
@@ -153,7 +152,7 @@ class QCGenerator {
 		generators.put(name, gen)
 	}
 
-	private def static dispatch void iterateJson(NameStringGen value) {}
+	
 
 	private def static dispatch void iterateJson(ExcludeValue value) {}
 

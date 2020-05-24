@@ -148,7 +148,7 @@ ReuseValue:
 	{ReuseValue} '^'key=[JsonKey];
 
 GeneratedValue:
-	{NameStringGen}"#NAME" | {GenRef} '#'ref=[GenDefinition]
+	{GenRef} '#'ref=[GenDefinition]
 ;
 
 
