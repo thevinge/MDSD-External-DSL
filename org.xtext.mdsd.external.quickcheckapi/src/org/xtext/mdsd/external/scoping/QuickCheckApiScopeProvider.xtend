@@ -19,10 +19,10 @@ import org.xtext.mdsd.external.quickCheckApi.QuickCheckApiPackage
 import org.xtext.mdsd.external.quickCheckApi.Request
 import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
-import org.xtext.mdsd.external.util.QCOrigin
 import org.xtext.mdsd.external.util.json.QCJsonUtils
 
 import static extension org.eclipse.xtext.EcoreUtil2.*
+import org.xtext.mdsd.external.util.QCOriginResolver
 
 /**
  * This class contains custom scoping description.
@@ -31,8 +31,8 @@ import static extension org.eclipse.xtext.EcoreUtil2.*
  * on how and when to use it.
  */
 class QuickCheckApiScopeProvider extends AbstractQuickCheckApiScopeProvider {
-	
-	@Inject extension QCOrigin
+
+	@Inject extension QCOriginResolver
 
 	override getScope(EObject context, EReference reference) {
 		switch reference {
@@ -44,19 +44,33 @@ class QuickCheckApiScopeProvider extends AbstractQuickCheckApiScopeProvider {
 	}
 
 	def private IScope getReuseScope(EObject context) {
-
-		switch (context.JsonOrigin) {
+		val origin = context.JsonOrigin
+		switch (origin.origin) {
 			case NON_REFERRED: {
 				var test = context.getContainerOfType(Test)
 				Scopes.scopeFor(test.allJsonKeys, QualifiedName.wrapper[name], IScope.NULLSCOPE)
 			}
 			case ACTION: {
-				var currentAction = context.getContainerOfType(Action)
-				currentAction.actionScope
+				if (origin.references.empty) {
+					var currentAction = context.getContainerOfType(Action)
+					currentAction.actionScope
+				} else {
+					val action = origin.references.get(0) as Action
+					action.actionScope
+				}
 			}
 			case BODY_CONDITION: {
-				var test = context.getContainerOfType(Test)
-				Scopes.scopeFor(test.allJsonKeys, QualifiedName.wrapper[name], IScope.NULLSCOPE)
+				if (!origin.references.empty) {
+					var test = origin.references.get(0).getContainerOfType(Test)
+					Scopes.scopeFor(test.allJsonKeys, QualifiedName.wrapper[name], IScope.NULLSCOPE)
+				}
+
+			}
+			case BODY: {
+				if (!origin.references.empty) {
+					var test = origin.references.get(0).getContainerOfType(Test)
+					Scopes.scopeFor(test.allJsonKeys, QualifiedName.wrapper[name], IScope.NULLSCOPE)
+				}
 			}
 			default: {
 				return IScope.NULLSCOPE
@@ -75,7 +89,7 @@ class QuickCheckApiScopeProvider extends AbstractQuickCheckApiScopeProvider {
 		var test = request.getContainerOfType(Test)
 		Scopes.scopeFor(test.allJsonKeys, QualifiedName.wrapper[name], IScope.NULLSCOPE)
 	}
-	
+
 	def private dispatch IScope getActionScope(DeleteAction action) {
 		var request = action.getContainerOfType(Request)
 		var test = request.getContainerOfType(Test)
@@ -110,5 +124,4 @@ class QuickCheckApiScopeProvider extends AbstractQuickCheckApiScopeProvider {
 		allKeys
 	}
 
-	
 }
