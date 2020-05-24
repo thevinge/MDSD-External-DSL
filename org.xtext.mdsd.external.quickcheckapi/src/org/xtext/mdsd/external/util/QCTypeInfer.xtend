@@ -27,16 +27,30 @@ class QCTypeInfer {
 	private ReuseValue inferKey
 	def inferType(ReuseValue context) {
 		inferKey = context
-		var origin = inferKey.JsonOrigin
+		var origin = context.JsonOrigin
 		switch (origin.origin) {
 			case NON_REFERRED: {
+				var test = context.getContainerOfType(Test)
+				
 			}
 			case ACTION: {
-				var currentAction = inferKey.getContainerOfType(Action)
-				currentAction.infer
-
+				if (!origin.references.empty) {
+					val action = origin.references.get(0) as Action
+					action.infer
+				} 
 			}
 			case BODY_CONDITION: {
+				if (!origin.references.empty) {
+					var test = origin.references.get(0).getContainerOfType(Test)
+					
+				}
+
+			}
+			case BODY: {
+				if (!origin.references.empty) {
+					var test = origin.references.get(0).getContainerOfType(Test)
+					
+				}
 			}
 			default: {
 			}
@@ -44,12 +58,21 @@ class QCTypeInfer {
 	}
 	
 	def private dispatch infer(CreateAction action) {
-//		val pairs = action.inferPair
-//		if (pairs.size > 0) {
-//			pairs.groupBy[it.value.]
-//		} else {
-//			return JsonValueType.NON_INFERRED
-//		}
+		val pairs = action.inferPair
+		if (pairs.size > 0) {
+			val grouped = pairs.groupBy[it.value]
+			val stringFound = grouped.keySet.exists[it instanceof StringValue]
+			val intFound = grouped.keySet.exists[it instanceof IntValue]
+			if (stringFound && intFound) {
+				return JsonValueType.STRING
+			} else if (stringFound) {
+				return JsonValueType.STRING
+			} else if (intFound){
+				return JsonValueType.INT
+			}
+		} else {
+			return JsonValueType.NON_INFERRED
+		}
 	}
 
 	def private dispatch  infer(UpdateAction action) {

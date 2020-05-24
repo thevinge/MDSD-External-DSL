@@ -51,13 +51,10 @@ class QuickCheckApiScopeProvider extends AbstractQuickCheckApiScopeProvider {
 				Scopes.scopeFor(test.allJsonKeys, QualifiedName.wrapper[name], IScope.NULLSCOPE)
 			}
 			case ACTION: {
-				if (origin.references.empty) {
-					var currentAction = context.getContainerOfType(Action)
-					currentAction.actionScope
-				} else {
+				if (!origin.references.empty) {
 					val action = origin.references.get(0) as Action
 					action.actionScope
-				}
+				} 
 			}
 			case BODY_CONDITION: {
 				if (!origin.references.empty) {

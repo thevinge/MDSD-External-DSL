@@ -1,11 +1,10 @@
 package org.xtext.mdsd.external.generator
 
+import com.google.inject.Inject
 import java.util.ArrayList
 import org.xtext.mdsd.external.quickCheckApi.BodyCondition
 import org.xtext.mdsd.external.quickCheckApi.CodeCondition
-import org.xtext.mdsd.external.quickCheckApi.CreateAction
 import org.xtext.mdsd.external.quickCheckApi.CustomValue
-import org.xtext.mdsd.external.quickCheckApi.DeleteAction
 import org.xtext.mdsd.external.quickCheckApi.ExcludeValue
 import org.xtext.mdsd.external.quickCheckApi.GenRef
 import org.xtext.mdsd.external.quickCheckApi.IdentifierValue
@@ -19,16 +18,15 @@ import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
 import org.xtext.mdsd.external.quickCheckApi.NameStringGen
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonDef
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
-import org.xtext.mdsd.external.quickCheckApi.NoAction
 import org.xtext.mdsd.external.quickCheckApi.PostConjunction
 import org.xtext.mdsd.external.quickCheckApi.PostDisjunction
 import org.xtext.mdsd.external.quickCheckApi.Postproposition
 import org.xtext.mdsd.external.quickCheckApi.ReuseValue
 import org.xtext.mdsd.external.quickCheckApi.StringValue
-import org.xtext.mdsd.external.quickCheckApi.UpdateAction
+import org.xtext.mdsd.external.util.QCGenUtils
 import org.xtext.mdsd.external.util.QCJsonReuse
 import org.xtext.mdsd.external.util.QCNames
-import org.xtext.mdsd.external.util.QCGenUtils
+import org.xtext.mdsd.external.util.QCTypeInfer
 
 class QCJsonCompiler {
 	
@@ -110,6 +108,7 @@ class QCJsonCompiler {
 	}
 	
 	def static dispatch CharSequence compileCustomValue(ReuseValue value){
+		val res = inferType(value)
 		'''`String (Hashtbl.find tbl "«value.key.value»")'''
 	}
 	
