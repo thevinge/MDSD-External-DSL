@@ -116,6 +116,10 @@ class QuickCheckApiScopeProvider extends AbstractQuickCheckApiScopeProvider {
 				if (it.action instanceof UpdateAction) {
 					allKeys.addAll((it.action as UpdateAction).value.jsonKeys)
 				}
+				
+				if (it.action instanceof CreateAction) {
+					allKeys.addAll((it.action as CreateAction).value.jsonKeys)
+				}
 			}
 		]
 		allKeys
