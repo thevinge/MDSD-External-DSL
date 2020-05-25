@@ -40,7 +40,7 @@ class QCRefResolver {
 				references.add(request.body)
 			}
 			val bodyConditions = request.postconditions.bodyConditionResolver
-			if (bodyConditions.exists[it === jsonRef]) {
+			if (bodyConditions.exists[it.ConditionJsonRefResolver === jsonRef]) {
 				references.add(request.postconditions)
 			}
 		}
@@ -101,6 +101,15 @@ class QCRefResolver {
 	private static def dispatch JsonRef actionResolver(NoAction action) {
 		null
 	}
+	
+	private static def JsonRef ConditionJsonRefResolver(JsonRef json) {
+		if (json instanceof JsonDefRef) {
+			(json as JsonDefRef).ref.json
+		} else {
+			json
+		}
+	}
+	
 
 	private static ArrayList<JsonRef> jsonBodies
 
@@ -111,13 +120,13 @@ class QCRefResolver {
 	}
 
 	private static def dispatch void resolvePostCondition(PostConjunction and) {
-		and.left.resolvePostCondition
-		and.right.resolvePostCondition
+		and.left?.resolvePostCondition
+		and.right?.resolvePostCondition
 	}
 
 	private static def dispatch void resolvePostCondition(PostDisjunction or) {
-		or.left.resolvePostCondition
-		or.right.resolvePostCondition
+		or.left?.resolvePostCondition
+		or.right?.resolvePostCondition
 	}
 
 	private static def dispatch void resolvePostCondition(BodyCondition condition) {
