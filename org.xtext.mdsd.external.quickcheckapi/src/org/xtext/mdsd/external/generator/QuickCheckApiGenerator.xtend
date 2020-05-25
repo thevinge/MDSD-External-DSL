@@ -9,7 +9,9 @@ import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
 import org.xtext.mdsd.external.quickCheckApi.Builder
 import org.xtext.mdsd.external.quickCheckApi.Test
-
+import org.xtext.mdsd.external.quickCheckApi.Model
+import java.util.List
+import org.eclipse.emf.common.util.EList
 
 /**
  * Generates code from your model files on save.
@@ -28,6 +30,7 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 	QCPreconditions preconditions = new QCPreconditions;
 	QCMakeFile makeFile = new QCMakeFile;
 	QCSetup setup = new QCSetup;
+	QCModel model = new QCModel;
 	
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		val builder = resource.allContents.filter(Builder).next;
@@ -53,24 +56,46 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 	
 	
 	def createFile(IFileSystemAccess2 fsa, Builder builder) {
-		
 		for (test : builder.tests) {
-			fsa.generateFile(QCUtils.firstCharLowerCase(test.name) + ".ml", test.compile());
+			fsa.generateFile(QCUtils.firstCharLowerCase(test.name) + ".ml", test.compile(builder.models));
 		}	
 	}
 	
 	
-	def CharSequence compile(Test test ) {
+	def CharSequence compile(Test test, List<Model> models) {
 		'''
 		«initDependencies(test)»
 		
-			
 		module APIConf =
 		struct
 		
+		«models.compileModel»
+		«test.compileTest»
+		 end
+		 
+		 
+		 module APItest = QCSTM.Make(APIConf)
+		 ;; 
+		 
+		 QCheck_runner.run_tests ~verbose:true
+		   [APItest.agree_test ~count:10 ~name:"«test.name»"]
+		'''
+	}
+	
+	def CharSequence compileModel(List<Model> models) {
+		'''
+		  «FOR m:models»
+			«model.compileModel(m)»
+		  «ENDFOR»
+		'''
+	}
+	
+	def CharSequence compileTest(Test test) {
+		'''
 		  type sut = (string list) ref
 		  type state = string list
 		
+		  
 		  «cmd.initCmd(test)»
 		 
 		  «modelSystem.initModelSystem()»
@@ -85,14 +110,7 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 		 
 		  «preconditions.initPreconditions(test)»
 		 
-		 end
-		 
-		 
-		 module APItest = QCSTM.Make(APIConf)
-		 ;; 
-		 
-		 QCheck_runner.run_tests ~verbose:true
-		   [APItest.agree_test ~count:500 ~name:"«test.name»"]
+
 		 '''
 	
 	}

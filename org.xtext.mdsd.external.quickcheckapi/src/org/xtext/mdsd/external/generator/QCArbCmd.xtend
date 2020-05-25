@@ -4,7 +4,7 @@ import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.generator.QCUtils
 class QCArbCmd {
 	
-	def initArb_cmd(Test test ) {
+	def initArb_cmd(Test test) {
 		
 		'''
 		let arb_cmd state = 
@@ -30,6 +30,7 @@ class QCArbCmd {
 		                 ])
 		'''
 	}
+	
 	
 	
 	
