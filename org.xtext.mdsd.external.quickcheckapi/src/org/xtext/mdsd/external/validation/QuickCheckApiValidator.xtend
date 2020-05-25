@@ -52,6 +52,22 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 		 }
 	}
 	
+	@Check
+	def checkDuplicateCreateAction(Test test){
+		val duplicates = test.getAllContentsOfType(CreateAction)
+		if (duplicates.size > 1) {
+			duplicates.forEach[error("Only one Create statement per Test", it, QuickCheckApiPackage.eINSTANCE.createAction_Value)]		
+		}
+	}
+	
+	@Check
+	def checkDuplicateRequestName(Test test){
+		val duplicates = test.requests.groupBy[it.name].filter[k,v| v.size >= 2]
+		if (duplicates.size > 0){
+		 	duplicates.forEach[k, v|v.forEach[error("Request name duplicate",it, QuickCheckApiPackage.Literals.REQUEST__NAME)]]
+		 }
+	}
+	
 	
 	@Check
 	def checkPostCondition(BodyCondition condition){
@@ -109,8 +125,20 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 		}
 	}
 	
+	
 	@Check
-	def checkIfReuseAllowed(CreateAction action){
+	def checkReuseID(UpdateAction action){
+		val reuseJson = QCJsonUtils.jsonAllOfType(action.value, ReuseValue)
+		if (reuseJson.size > 0) {
+			val request = action.getContainerOfType(Request)
+			if (QCUtils.CheckNoRequestID(request.url)){
+				error("@ID must be annotated in the URL if reuse should be possible", request, QuickCheckApiPackage.eINSTANCE.request_Url )
+			}
+		}		
+	}
+	
+	@Check
+	def checkReuseKey(CreateAction action){
 		val reuseJson = QCJsonUtils.jsonAllOfType(action.value, ReuseValue)
 		if (reuseJson.size > 0) {
 			val request = action.getContainerOfType(Request)
@@ -125,7 +153,7 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 	}
 	
 	@Check
-	def checkIfReuseAllowed(UpdateAction action){
+	def checkReuseKey(UpdateAction action){
 		val reuseJson = QCJsonUtils.jsonAllOfType(action.value, ReuseValue)
 		if (reuseJson.size > 0) {
 			val test = action.getContainerOfType(Test)
