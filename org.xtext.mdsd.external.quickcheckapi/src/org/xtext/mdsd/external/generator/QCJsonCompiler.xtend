@@ -1,9 +1,9 @@
 package org.xtext.mdsd.external.generator
 
 import java.util.ArrayList
-import static extension org.eclipse.xtext.EcoreUtil2.*
 import org.xtext.mdsd.external.quickCheckApi.BodyCondition
 import org.xtext.mdsd.external.quickCheckApi.CodeCondition
+import org.xtext.mdsd.external.quickCheckApi.CreateAction
 import org.xtext.mdsd.external.quickCheckApi.CustomValue
 import org.xtext.mdsd.external.quickCheckApi.ExcludeValue
 import org.xtext.mdsd.external.quickCheckApi.GenRef
@@ -24,12 +24,15 @@ import org.xtext.mdsd.external.quickCheckApi.ReuseValue
 import org.xtext.mdsd.external.quickCheckApi.StringValue
 import org.xtext.mdsd.external.util.QCGenUtils
 import org.xtext.mdsd.external.util.QCNames
+import org.xtext.mdsd.external.util.QCOriginResolver
 import org.xtext.mdsd.external.util.QCTypeInfer
 import org.xtext.mdsd.external.util.QCTypeInfer.JsonValueType
 
+import static extension org.eclipse.xtext.EcoreUtil2.*
 import static extension org.xtext.mdsd.external.generator.QCGenerator.*
-import static extension org.xtext.mdsd.external.util.QCJsonReuse.*
 import static extension org.xtext.mdsd.external.generator.QCJsonIDExtractor.*
+import static extension org.xtext.mdsd.external.util.QCJsonReuse.*
+
 class QCJsonCompiler {
 	
 	
@@ -53,9 +56,19 @@ class QCJsonCompiler {
 	
 	def static dispatch CharSequence compileJson(JsonPair json){
 		if(json.value instanceof CustomValue){
-			if ((json.value as CustomValue).value instanceof ExcludeValue || (json.value as CustomValue).value instanceof IdentifierValue){
+			if ((json.value as CustomValue).value instanceof ExcludeValue){
 				return ''''''
-			} 
+			} else if ((json.value as CustomValue).value instanceof IdentifierValue){
+				val origin = QCOriginResolver.JsonOrigin(json)
+				switch (origin.origin) {
+					case ACTION: {
+						if (origin.references.exists[it instanceof CreateAction]) {
+							return ''''''
+						}
+					}
+					default: {}
+				}
+			}
 		}
 		'''("«json.key.value»",«json.value.compileJson»)'''
 	}
@@ -122,8 +135,9 @@ class QCJsonCompiler {
 		
 	}
 	
-	def static dispatch CharSequence compileCustomValue(IdentifierValue gen){
-		''''''
+	def static dispatch CharSequence compileCustomValue(IdentifierValue value){
+		val pair = value.getContainerOfType(JsonPair)
+		'''`String (Hashtbl.find tbl "«pair.key.value»")'''
 	}
 	
 	def static CharSequence trim(CharSequence json){

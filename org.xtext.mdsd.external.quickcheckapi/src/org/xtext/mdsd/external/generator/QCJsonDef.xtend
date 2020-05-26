@@ -58,13 +58,16 @@ class QCJsonDef {
 	
 	def CharSequence valueTableDeclaration(){
 		
-		if (usesReuseArguments) {
+		if (usesReuseArguments || !IdentifierKey.isEmpty) {
 			'''
 			let «valueTableName» json = 
 			        let tbl = Hashtbl.create 100 in 
 			        	«FOR reuseKey : reuseVars.keySet»
 			        	Hashtbl.add tbl "«reuseKey»" (jsonElementExtractor "«reuseVars.get(reuseKey)»" (fromStrToJson json));
 			        	«ENDFOR»
+			        	«IF !IdentifierKey.isEmpty»
+			        	Hashtbl.add tbl "«IdentifierKey»" (jsonElementExtractor "«IdentifierKey»" (fromStrToJson json));
+			        	«ENDIF»
 			            tbl
 			'''
 		} else {
@@ -96,7 +99,7 @@ class QCJsonDef {
 	}
 	
 	private def CharSequence declArguments(){
-		if (usesReuseArguments) {
+		if (usesReuseArguments || !IdentifierKey.isEmpty) {
 			'''tbl'''
 		} else {
 			'''()'''

@@ -113,7 +113,7 @@ class QCRefResolver {
 
 	private static ArrayList<JsonRef> jsonBodies
 
-	def static ArrayList<JsonRef> bodyConditionResolver(Postproposition cond) {
+	private def static ArrayList<JsonRef> bodyConditionResolver(Postproposition cond) {
 		jsonBodies = new ArrayList
 		cond.resolvePostCondition
 		jsonBodies

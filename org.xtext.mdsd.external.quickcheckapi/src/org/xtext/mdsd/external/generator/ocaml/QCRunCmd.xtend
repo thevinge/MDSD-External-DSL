@@ -157,8 +157,9 @@ class QCRunCmd {
 				«condition.requestOp.compileRequestOp» (String.compare («currentRequest.name.nextJsonDefUse()») («condition.requestValue.body.compileExcluder» content) == 0)
 			«ELSE»
 			let json = lookupItem ix state in
-				let combined = combine_state_id (fromStrToJson(«currentRequest.name.nextJsonDefUse()»)) "«qcRequest.postCondJsonDefs.get(declarationCounter).IdentifierKey»" id in	
-				«condition.requestOp.compileRequestOp» (String.compare (fromJsonToStr combined) («condition.requestValue.body.compileExcluder» content) == 0)
+				let json = fromJsonToStr (combine_state_id (fromStrToJson json) "«qcRequest.postCondJsonDefs.get(declarationCounter).IdentifierKey»" id) in
+				let combined = «currentRequest.name.nextJsonDefUse()» in
+				«condition.requestOp.compileRequestOp» (String.compare (combined) («condition.requestValue.body.compileExcluder» content) == 0)
 			«ENDIF»
 			'''
 		} else if (condition.requestValue.body === null){
