@@ -8,7 +8,6 @@ import org.xtext.mdsd.external.quickCheckApi.NoAction
 import org.xtext.mdsd.external.quickCheckApi.Request
 import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
-import org.xtext.mdsd.external.util.QCUtils
 import static extension org.xtext.mdsd.external.util.QCUtils.*
 class QCNextState {
 

@@ -1,39 +1,45 @@
 package org.xtext.mdsd.external.util
 
+import org.xtext.mdsd.external.quickCheckApi.Request
+
+import static extension org.xtext.mdsd.external.util.QCUtils.*
+
 class QCNames {
 	def static String LocalStateJsonDef(String name){
-		QCUtils.firstCharLowerCase(name) + LocalStateJsonDef()
+		name.firstCharLowerCase + LocalStateJsonDef()
 	}
 	
 	def static String LocalStateValueTable(String name){
-		QCUtils.firstCharLowerCase(name) + LocalStateValueTable()
+		name.firstCharLowerCase + LocalStateValueTable()
 	}
 	
 	def static String JsonDefName(String name){
-		QCUtils.firstCharLowerCase(name) + JsonDefName()
+		name.firstCharLowerCase + JsonDefName()
 	}
 	
 	def static String JsonDefValueTable(String name){
-		QCUtils.firstCharLowerCase(name) + JsonDefValueTable()
+		name.firstCharLowerCase + JsonDefValueTable()
 	}
 	
 	def static String LocalBodyJsonDef(String name){
-		QCUtils.firstCharLowerCase(name) + LocalBodyJsonDef()
+		name.firstCharLowerCase + LocalBodyJsonDef()
 	}
 	def static String LocalBodyValueTable(String name){
-		QCUtils.firstCharLowerCase(name) + LocalBodyValueTable()
+		name.firstCharLowerCase + LocalBodyValueTable()
 	}
 	
 	def static String LocalPostConditionJsonDef(String name){
-		QCUtils.firstCharLowerCase(name) + LocalPostConditionJsonDef()
+		name.firstCharLowerCase + LocalPostConditionJsonDef()
 	}
 	
 	def static String LocalPostConditionValueTable(String name){
-		QCUtils.firstCharLowerCase(name) + LocalPostConditionValueTable()
+		name.firstCharLowerCase + LocalPostConditionValueTable()
 	}
 	
 	
-	
+	def static urlName(String name){
+		name.firstCharLowerCase + "URL"
+	}
 	
 	def static String LocalStateJsonDef(){
 		"LocalStateJsonDef"

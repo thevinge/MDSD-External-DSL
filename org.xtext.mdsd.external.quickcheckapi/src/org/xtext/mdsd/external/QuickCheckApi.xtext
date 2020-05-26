@@ -6,7 +6,11 @@ Builder:
 	tests+=Test+;
 
 Test:
-	"Test" name=ID definitions+=(VarDefinition)*  requests+=(Request)+
+	"Test" name=ID definitions+=(VarDefinition)* (resetHook=ResetHook)?  requests+=(Request)+
+;
+
+ResetHook:
+	"ResetHook" url=URLRef
 ;
 
 VarDefinition:

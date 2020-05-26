@@ -86,7 +86,7 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 		  
 		  «jsonHandler.InitJsonVariables(test)»
 		 
-		  «modelSystem.initModelSystem()»
+		  «modelSystem.initModelSystem(test)»
 		  
 		  «boilerplate.initUtilities()»
 		  
@@ -123,7 +123,9 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 		open Curl
 		open Format
 		open Http
+		«IF test.resetHook === null»
 		open «QCUtils.firstCharToUpperCase(test.name)»externals
+		«ENDIF»
 		'''
 	}
 	

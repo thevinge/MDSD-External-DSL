@@ -30,7 +30,9 @@ class QCMakeFile {
 					-tag thread \
 					«test.name.firstCharLowerCase».native \
 					http.native \
+					«IF test.resetHook === null»
 					«test.name.firstCharLowerCase»externals.native
+					«ENDIF»
 			
 			«ENDFOR»
 			run:

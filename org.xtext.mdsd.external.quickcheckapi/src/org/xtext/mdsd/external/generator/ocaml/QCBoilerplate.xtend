@@ -5,21 +5,22 @@ import org.xtext.mdsd.external.quickCheckApi.Builder
 import org.xtext.mdsd.external.util.QCUtils
 
 class QCBoilerplate {
-	
-	
-	
-	def initBoilerPlateFiles(IFileSystemAccess2 fsa,  Builder builder){
+
+	def initBoilerPlateFiles(IFileSystemAccess2 fsa, Builder builder) {
 		fsa.generateFile("http.ml", initHttpModule);
 		fsa.generateFile("externals.mli", initExternalsInterface);
 		for (test : builder.tests) {
-			val filename = test.name + "externals.ml";
-			if (!fsa.isFile(filename)) {
-				fsa.generateFile(QCUtils.firstCharLowerCase(filename), InitExternalsImplementation);
+			if (test.resetHook === null) {
+				val filename = test.name + "externals.ml";
+				if (!fsa.isFile(filename)) {
+					fsa.generateFile(QCUtils.firstCharLowerCase(filename), InitExternalsImplementation);
+				}
 			}
+
 		}
-		
+
 	}
-	
+
 	private def CharSequence initHttpModule() {
 		'''
 			open Curl
@@ -139,8 +140,8 @@ class QCBoilerplate {
 			
 		'''
 	}
-	
-	def CharSequence initUtilities(){
+
+	def CharSequence initUtilities() {
 		'''
 			(* Functions *)
 			(* Recursively drops n heads of a list and returns the rest of the list *)
@@ -178,32 +179,30 @@ class QCBoilerplate {
 			
 		'''
 	}
-	
+
 	private def CharSequence initExternalsInterface() {
 		'''
 			open Yojson			
 			«cleanupInterface()»
 		'''
 	}
-	
-	
+
 	private def CharSequence cleanupInterface() {
 		'''
 			(* Implement this method to cleanup after each test *)
 			val afterTestcleanup : unit
 		'''
 	}
-	
-	
-	private def CharSequence InitExternalsImplementation(){
+
+	private def CharSequence InitExternalsImplementation() {
 		'''
 			(* Implement this method to cleanup after each test *)
 					let afterTestcleanup =
 						...
 		'''
 	}
-	
-	private def CharSequence initExtractor(){
+
+	private def CharSequence initExtractor() {
 		'''
 			let jsonElementExtractor id json = 
 			  let jsonlist = Util.to_assoc json in 
@@ -231,6 +230,5 @@ class QCBoilerplate {
 			
 		'''
 	}
-	
-	
+
 }

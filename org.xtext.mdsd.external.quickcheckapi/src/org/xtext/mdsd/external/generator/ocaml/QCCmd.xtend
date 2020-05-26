@@ -7,8 +7,10 @@ import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.URI
 import org.xtext.mdsd.external.quickCheckApi.URL
 import org.xtext.mdsd.external.quickCheckApi.URLDefRef
+import org.xtext.mdsd.external.quickCheckApi.URLRef
 import org.xtext.mdsd.external.util.QCUtils
 
+import static extension org.xtext.mdsd.external.util.QCNames.*
 import static extension org.xtext.mdsd.external.util.QCUtils.*
 
 class QCCmd {
@@ -21,20 +23,21 @@ class QCCmd {
 				 [@@deriving show { with_path = false }]
 			
 			«FOR request : test.requests »
-				let «request.name.firstCharLowerCase»URL="«request.compileURL»"
+				let «request.name.urlName»="«request.url.compileURL»"
 			«ENDFOR»
+			«IF test !== null»let resetHook="«test.resetHook.url.compileURL»" «ENDIF»
+			
 		'''
 	}
 	
 	
-	def CharSequence compileURL(Request request){
-		'''«request.url.chooseURL.protocol»://«request.url.chooseURL.domain.host.compile()»«request.url.chooseURL.domain.port.compile()»/«request.url.chooseURI.compile()»'''
+	def CharSequence compileURL(URLRef url){
+		'''«url.chooseURL.protocol»://«url.chooseURL.domain.host.compile()»«url.chooseURL.domain.port.compile()»/«url.chooseURI.compile()»'''
 	}
 	
 	def dispatch URL chooseURL(URL url){
 		return url
-	}
-	
+	}	
 	
 	def dispatch URL chooseURL(URLDefRef url){
 		
@@ -45,10 +48,7 @@ class QCCmd {
 		return url.uri
 	}
 	
-	
-	
-	def dispatch URI chooseURI(URLDefRef url){
-		
+	def dispatch URI chooseURI(URLDefRef url){	
 		return url.extraUri
 	}
 			

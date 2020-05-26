@@ -12,6 +12,7 @@ import org.xtext.mdsd.external.quickCheckApi.GenDefinition
 import org.xtext.mdsd.external.quickCheckApi.Generator
 import org.xtext.mdsd.external.quickCheckApi.IdentifierValue
 import org.xtext.mdsd.external.quickCheckApi.IntGen
+import org.xtext.mdsd.external.quickCheckApi.IntGenValue
 import org.xtext.mdsd.external.quickCheckApi.JsonList
 import org.xtext.mdsd.external.quickCheckApi.JsonObject
 import org.xtext.mdsd.external.quickCheckApi.QuickCheckApiPackage
@@ -120,6 +121,19 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 			if(QCGenUtils.getGeneratorType(genDefinition.gen) === GenType.Mixed){
 				warning("The integer will be converted to a string when in combination with a String Generator",
 					gen.getContainerOfType(Generator) ,QuickCheckApiPackage.Literals.GENERATOR__METHOD
+				)
+			}
+		}
+	}
+	
+	
+	@Check
+	def intConversionWarning(IntGenValue gen){
+		val genDefinition = gen.getContainerOfType(GenDefinition)
+		if (genDefinition !== null) {
+			if(QCGenUtils.getGeneratorType(genDefinition.gen) === GenType.Mixed){
+				warning("The integer will be converted to a string when in combination with a String Generator",
+					gen ,QuickCheckApiPackage.Literals.INT_GEN_VALUE__VALUE
 				)
 			}
 		}

@@ -25,6 +25,8 @@ import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
 import org.xtext.mdsd.external.util.QCUtils
 import static extension org.xtext.mdsd.external.util.QCUtils.*
+import static extension org.xtext.mdsd.external.util.QCNames.*
+
 class QCRunCmd {
 	private int declarationCounter = 0;
 	private Request currentRequest;
@@ -65,12 +67,12 @@ class QCRunCmd {
 	def CharSequence createHttpCall(Request request) {
 		if (QCUtils.CheckNoRequestID(request.url)) {			
 			'''
-				let code,content = Http.«request.method.compileMethod» «request.name.firstCharLowerCase»URL «IF request.body !== null»json«ELSE»""«ENDIF» in
+				let code,content = Http.«request.method.compileMethod» «request.name.urlName» «IF request.body !== null»json«ELSE»""«ENDIF» in
 			'''
 		} else {
 			'''
 			let id = lookupSutItem ix !sut in
-				let code,content = Http.«request.method.compileMethod» («request.name.firstCharLowerCase»URL^"/"^id) «IF request.body !== null»json«ELSE»""«ENDIF» in
+				let code,content = Http.«request.method.compileMethod» («request.name.urlName»^"/"^id) «IF request.body !== null»json«ELSE»""«ENDIF» in
 			'''
 		}
 		
