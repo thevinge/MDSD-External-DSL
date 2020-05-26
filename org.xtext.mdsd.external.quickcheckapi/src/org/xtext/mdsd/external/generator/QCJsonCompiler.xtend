@@ -1,6 +1,7 @@
 package org.xtext.mdsd.external.generator
 
 import java.util.ArrayList
+import static extension org.eclipse.xtext.EcoreUtil2.*
 import org.xtext.mdsd.external.quickCheckApi.BodyCondition
 import org.xtext.mdsd.external.quickCheckApi.CodeCondition
 import org.xtext.mdsd.external.quickCheckApi.CustomValue
@@ -105,15 +106,17 @@ class QCJsonCompiler {
 	}
 	
 	def static dispatch CharSequence compileCustomValue(ReuseValue value){ 
+		val pair = value.getContainerOfType(JsonPair)
+		
 		switch (QCTypeInfer.inferType(value)) {
 			case JsonValueType.STRING: {
-				'''`String (Hashtbl.find tbl "«value.key.value»")'''
+				'''`String (Hashtbl.find tbl "«pair.key.value»")'''
 			}
 			case JsonValueType.INT: {
-				'''`Int (int_of_string (Hashtbl.find tbl "«value.key.value»"))'''
+				'''`Int (int_of_string (Hashtbl.find tbl "«pair.key.value»"))'''
 			}
 			default: {
-				'''`String (Hashtbl.find tbl "«value.key.value»")'''
+				'''`String (Hashtbl.find tbl "«pair.key.value»")'''
 			}
 		}
 		

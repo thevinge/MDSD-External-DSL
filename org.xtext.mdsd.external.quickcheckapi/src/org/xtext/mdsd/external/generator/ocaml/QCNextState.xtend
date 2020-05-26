@@ -8,13 +8,15 @@ import org.xtext.mdsd.external.quickCheckApi.NoAction
 import org.xtext.mdsd.external.quickCheckApi.Request
 import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
+import org.xtext.mdsd.external.util.QCUtils
+
 import static extension org.xtext.mdsd.external.util.QCUtils.*
+
 class QCNextState {
 
 
 	def initNext_State(Test test ) {
 		'''
-			«compileJsonValueTables(test)»
 			
 			let next_state cmd state = match cmd with
 				«FOR request : test.requests»
@@ -30,39 +32,72 @@ class QCNextState {
 	def CharSequence compile(Action action, Request request){
 		if (action instanceof CreateAction) {
 
-			'''json -> state@[«QCRequestProcess.get(request.name).stateJsonDef.declarationUse»]'''	
+			'''«request.compileArguments» -> state@[«QCRequestProcess.get(request.name).stateJsonDef.declarationUse»]'''	
 		} else if (action instanceof DeleteAction){
 			'''
-				ix -> let pos = getPos ix state in
+				«request.compileArguments» -> let pos = getPos ix state in
 				      (* Returns a list of all items except that which is 'item' found above *)
 				      let l = remove_item pos state in
 				      l
 			      '''
 		} else if (action instanceof UpdateAction){
 			'''
-				ix -> let pos = getPos ix state in
+				«request.compileArguments» -> let pos = getPos ix state in
 				      	let json = lookupItem ix state in
 				      		let newelem = «QCRequestProcess.get(request.name).stateJsonDef.declarationUse» in
 				      			replaceElem pos state newelem
 			'''	
 		} else if (action instanceof NoAction){
-			'''ix -> state'''
+			'''«request.compileArguments» -> state'''
 		} else {
 			''''''
 		}
 	}
 	
-	def CharSequence compileJsonValueTables(Test test){
-		'''
-			«FOR request : test.requests»
-				«QCRequestProcess.get(request.name).bodyJsonDef?.valueTableDeclaration»
-				«QCRequestProcess.get(request.name).stateJsonDef?.valueTableDeclaration»
-				«FOR jsonDef : QCRequestProcess.get(request.name).postCondJsonDefs»
-					«jsonDef.valueTableDeclaration»
-				«ENDFOR»
-			«ENDFOR»
-		'''
+	def CharSequence compileArguments(Request request){
+		
+			if (QCUtils.requireIndex(request)) {
+			if (request.body !== null) {
+				''' (ix, cmdJson)'''
+			} else {
+				''' ix'''
+			}
+			
+		} else {
+			if (request.body !== null) {
+				''' json'''
+			} else {
+				''''''
+			}
+		}
+//		if (request.action instanceof CreateAction) {
+//			'''json'''	
+//		} else if (request.action instanceof DeleteAction){
+//			if (request.body !== null) {
+//				'''(ix, cmdJson)'''
+//			} else {
+//				'''ix'''
+//			}
+//			
+//		} else if (request.action instanceof UpdateAction){
+//			if (request.body !== null) {
+//				'''(ix, cmdJson)'''
+//			} else {
+//				'''ix'''
+//			}
+//		} else if (request.action instanceof NoAction){
+//			if (request.body !== null) {
+//				'''(ix, cmdJson)'''
+//			} else {
+//				'''ix'''
+//			}
+//		} else {
+//			''''''
+//		}
 	}
+	
+	
+
 
 
 }

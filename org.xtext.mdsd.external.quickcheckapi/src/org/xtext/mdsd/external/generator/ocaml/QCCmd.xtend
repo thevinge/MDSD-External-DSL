@@ -25,7 +25,7 @@ class QCCmd {
 			«FOR request : test.requests »
 				let «request.name.urlName»="«request.url.compileURL»"
 			«ENDFOR»
-			«IF test !== null»let resetHook="«test.resetHook.url.compileURL»" «ENDIF»
+			«IF test.resetHook !== null»let resetHook="«test.resetHook.url.compileURL»" «ENDIF»
 			
 		'''
 	}
@@ -78,9 +78,19 @@ class QCCmd {
 	
 	private def CharSequence argumentsSnippet(Request request){
 		if (QCUtils.requireIndex(request)) {
-			''' of int'''
+			if (request.body !== null) {
+				''' of int * string'''
+			} else {
+				''' of int'''
+			}
+			
 		} else {
-			''' of string'''
+			if (request.body !== null) {
+				''' of string'''
+			} else {
+				''''''
+			}
+			
 		}
 	}
 	

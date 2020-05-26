@@ -83,7 +83,7 @@ class QCJsonDef {
 		
 	}
 	
-	private def boolean usesReuseArguments(){
+	def boolean usesReuseArguments(){
 		(reuseVars.size > 0)
 	}
 	

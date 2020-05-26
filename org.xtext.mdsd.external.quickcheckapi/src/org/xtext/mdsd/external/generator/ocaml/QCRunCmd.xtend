@@ -24,8 +24,12 @@ import org.xtext.mdsd.external.quickCheckApi.RequestOp
 import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
 import org.xtext.mdsd.external.util.QCUtils
-import static extension org.xtext.mdsd.external.util.QCUtils.*
+import org.eclipse.emf.common.util.EList
+import static org.eclipse.emf.ecore.util.EcoreUtil.*
+
+import static extension org.eclipse.xtext.EcoreUtil2.*
 import static extension org.xtext.mdsd.external.util.QCNames.*
+import static extension org.xtext.mdsd.external.util.QCUtils.*
 
 class QCRunCmd {
 	private int declarationCounter = 0;
@@ -49,39 +53,60 @@ class QCRunCmd {
 			currentRequest = request
 			result +=
 			'''
-			| «request.name.firstCharToUpperCase» «request.action.determineIndex» «request.compileRunCmd»
+			| «request.name.firstCharToUpperCase» «request.action.determineArguments» «request.compileRunCmd»
 			'''
 		}
 		result
 	}
 	
-	def CharSequence determineIndex(Action action){
-	
-		if (action instanceof DeleteAction || action instanceof UpdateAction || action instanceof NoAction){
-			'''ix ->'''
+	def CharSequence determineArguments(Action action){
+		val request = action.getContainerOfType(Request)
+		if (QCUtils.requireIndex(request)) {
+			if (request.body !== null) {
+				''' (ix, cmdJson) ->'''
+			} else {
+				''' ix ->'''
+			}
+			
 		} else {
-			'''json ->'''
+			if (request.body !== null) {
+				''' json ->'''
+			} else {
+				''' ->'''
+			}
+		}
+	
+	}
+	
+	def CharSequence determineParameter(Request request){
+		if (QCUtils.requireIndex(request)) {
+			if (request.body !== null) {
+				'''cmdJson'''
+			} else {
+				'''""'''
+			}	
+		} else {
+			if (request.body !== null) {
+					'''json'''
+			} else {
+				'''""'''
+			}
 		}
 	}
 	
 	def CharSequence createHttpCall(Request request) {
 		if (QCUtils.CheckNoRequestID(request.url)) {			
 			'''
-				let code,content = Http.«request.method.compileMethod» «request.name.urlName» «IF request.body !== null»json«ELSE»""«ENDIF» in
+			let code,content = Http.«request.method.compileMethod» «request.name.urlName» «request.determineParameter» in
 			'''
 		} else {
 			'''
 			let id = lookupSutItem ix !sut in
-				let code,content = Http.«request.method.compileMethod» («request.name.urlName»^"/"^id) «IF request.body !== null»json«ELSE»""«ENDIF» in
+				let code,content = Http.«request.method.compileMethod» («request.name.urlName»^"/"^id) «request.determineParameter» in
 			'''
 		}
 		
 	}
-	
-	def boolean isGetMethod(Method method){
-		return (GET.isAssignableFrom(method.class))
-	}
-	
 	
 	def dispatch CharSequence compileMethod(GET get) {
 		'''get'''
@@ -129,10 +154,10 @@ class QCRunCmd {
 			'''
 			«IF qcRequest.postCondJsonDefs.get(declarationCounter).IdentifierKey.isEmpty»
 			let json = lookupItem ix state in
-				«condition.requestOp.compileRequestOp» (String.compare («currentRequest.name.nextJsonDefUse(false)») («condition.requestValue.body.compileExcluder» content) == 0)
+				«condition.requestOp.compileRequestOp» (String.compare («currentRequest.name.nextJsonDefUse()») («condition.requestValue.body.compileExcluder» content) == 0)
 			«ELSE»
 			let json = lookupItem ix state in
-				let combined = combine_state_id (fromStrToJson(«currentRequest.name.nextJsonDefUse(false)»)) "«qcRequest.postCondJsonDefs.get(declarationCounter).IdentifierKey»" id in	
+				let combined = combine_state_id (fromStrToJson(«currentRequest.name.nextJsonDefUse()»)) "«qcRequest.postCondJsonDefs.get(declarationCounter).IdentifierKey»" id in	
 				«condition.requestOp.compileRequestOp» (String.compare (fromJsonToStr combined) («condition.requestValue.body.compileExcluder» content) == 0)
 			«ENDIF»
 			'''
@@ -155,10 +180,10 @@ class QCRunCmd {
 		'''jsonExcluder «excluder.compileJsonExclusionList(json.ref.json)»'''
 	}
 	
-	def CharSequence nextJsonDefUse(String name, boolean next){
+	def CharSequence nextJsonDefUse(String name){
 		
 		val defName = QCRequestProcess.get(name).postCondJsonDefs.get(declarationCounter).declarationUse
-		next? declarationCounter++ : declarationCounter = declarationCounter
+		//next? declarationCounter++ : declarationCounter = declarationCounter
 		defName
 	}
 	

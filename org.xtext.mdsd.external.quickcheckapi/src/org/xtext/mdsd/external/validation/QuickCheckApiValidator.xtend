@@ -150,6 +150,19 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 			}
 		}		
 	}
+		
+	@Check
+	def checkPostConditionReuseID(BodyCondition condition){
+		if (condition.requestValue.body !== null){
+			val reuseJson = QCJsonUtils.jsonAllOfType(condition.requestValue.body, ReuseValue)
+			if (reuseJson.size > 0) {
+				val request = condition.getContainerOfType(Request)
+				if (QCUtils.CheckNoRequestID(request.url)){
+					error("@ID must be annotated in the URL if reuse is used", request, QuickCheckApiPackage.eINSTANCE.request_Url )
+				}
+			}
+		}
+	}	
 	
 	@Check
 	def checkReuseKey(CreateAction action){
