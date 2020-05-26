@@ -28,6 +28,7 @@ import org.xtext.mdsd.external.util.QCUtils
 import org.xtext.mdsd.external.util.json.QCJsonUtils
 
 import static extension org.eclipse.xtext.EcoreUtil2.*
+import org.xtext.mdsd.external.quickCheckApi.Body
 
 /**
  * This class contains custom validation rules. 
@@ -97,6 +98,15 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 		}
 		
 	}	
+	
+	@Check
+	def checkBodyIdentifiers(Body body){
+		
+		val filtered = QCJsonUtils.jsonAllOfType(body.value, IdentifierValue)
+		if(filtered.size > 0){
+			filtered.forEach[k,v| v.forEach[error("Identifier not allowed in Body due to limitation in Ocaml", it, QuickCheckApiPackage.Literals.CUSTOM_VALUE__VALUE)]]
+		}
+	}
 	
 	
 	@Check
