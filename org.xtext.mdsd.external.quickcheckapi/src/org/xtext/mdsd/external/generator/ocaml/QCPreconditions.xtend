@@ -6,13 +6,13 @@ import org.xtext.mdsd.external.quickCheckApi.PreConjunction
 import org.xtext.mdsd.external.quickCheckApi.PreDisjunction
 import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.util.QCUtils
-
+import static extension org.xtext.mdsd.external.util.QCUtils.*
 class QCPreconditions {
 	def initPreconditions(Test test ) {
 		'''
 			let precond cmd state = match cmd with
 			    «FOR request : test.requests»
-			    	| «QCUtils.firstCharToUpperCase(request.name)»«IF QCUtils.requireIndex(request)» ix -> (List.length state > 0) «ELSE» json -> true«ENDIF» 
+			    	| «request.name.firstCharToUpperCase»«IF QCUtils.requireIndex(request)» ix -> (List.length state > 0) «ELSE» json -> true«ENDIF» 
 			    		«IF request.preconditions !== null» && («request.preconditions.compilePrecondition»)«ENDIF»
 			    «ENDFOR»
 		'''

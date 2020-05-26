@@ -2,8 +2,9 @@ package org.xtext.mdsd.external.generator
 
 import java.util.HashMap
 import org.xtext.mdsd.external.util.QCNames
-import org.xtext.mdsd.external.util.QCUtils
 
+import static extension org.xtext.mdsd.external.util.QCUtils.*
+import static extension org.xtext.mdsd.external.util.QCNames.*
 enum defType {
 		dtState,
 		dtBody,
@@ -34,7 +35,7 @@ class QCJsonDef {
 	}
 	
 	def CharSequence declarationName(){
-		'''«QCUtils.firstCharLowerCase(requestName) + name»'''
+		'''«(requestName.firstCharLowerCase) + name»'''
 	}
 	
 	def CharSequence declarationUse(){
@@ -44,13 +45,13 @@ class QCJsonDef {
 	def CharSequence valueTableName(){
 		switch (type) {
 			case defType.dtBody: {
-				'''«QCNames.LocalBodyValueTable(requestName)»'''
+				'''«requestName.LocalBodyValueTable»'''
 			}
 			case defType.dtCondition: {
-				'''«QCNames.LocalPostConditionValueTable(requestName)»'''
+				'''«requestName.LocalPostConditionValueTable»'''
 			}
 			case defType.dtState: {
-				'''«QCNames.LocalStateValueTable(requestName)»'''
+				'''«requestName.LocalStateValueTable»'''
 			}
 		}
 	}

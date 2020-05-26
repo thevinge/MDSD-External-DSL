@@ -28,7 +28,7 @@ class QCOriginResolver {
 			// JSON Definition is declared as variable, and the problem is to find the reference to said JSON definition.	
 			refs = QCRefResolver.getReferencesToMe(context,true)
 		} else {
-			// JSON Definition is declared inline.
+			// JSON Definition is declared in line.
 			refs = QCRefResolver.getReferencesToMe(context,false)
 		}
 

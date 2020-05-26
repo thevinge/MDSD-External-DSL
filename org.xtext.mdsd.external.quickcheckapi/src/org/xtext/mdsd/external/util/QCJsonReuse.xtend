@@ -11,6 +11,7 @@ import org.xtext.mdsd.external.quickCheckApi.JsonDefRef
 import org.xtext.mdsd.external.quickCheckApi.JsonList
 import org.xtext.mdsd.external.quickCheckApi.JsonObject
 import org.xtext.mdsd.external.quickCheckApi.JsonPair
+import org.xtext.mdsd.external.quickCheckApi.JsonRef
 import org.xtext.mdsd.external.quickCheckApi.ListJsonValue
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonDef
 import org.xtext.mdsd.external.quickCheckApi.NestedJsonValue
@@ -19,11 +20,17 @@ import org.xtext.mdsd.external.quickCheckApi.StringValue
 
 class QCJsonReuse {
 	
-	public static HashMap<String,String> reuseKeys
+	private static HashMap<String,String> reuseKeys
 	
 	
-	def static void resetKeys(){
+	private def static void resetKeys(){
 		reuseKeys = new HashMap
+	}
+	
+	def static getReuseKeys(JsonRef json){
+		resetKeys
+		json.isReuseJson
+		reuseKeys
 	}
 	
 	

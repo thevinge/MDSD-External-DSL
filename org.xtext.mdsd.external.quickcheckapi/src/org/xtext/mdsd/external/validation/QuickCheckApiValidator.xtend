@@ -118,7 +118,7 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 		val genDefinition = gen.getContainerOfType(GenDefinition)
 		if (genDefinition !== null) {
 			if(QCGenUtils.getGeneratorType(genDefinition.gen) === GenType.Mixed){
-				warning("The Integer will be converted to a string when in combination with a String Generator",
+				warning("The integer will be converted to a string when in combination with a String Generator",
 					gen.getContainerOfType(Generator) ,QuickCheckApiPackage.Literals.GENERATOR__METHOD
 				)
 			}
@@ -132,7 +132,7 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 		if (reuseJson.size > 0) {
 			val request = action.getContainerOfType(Request)
 			if (QCUtils.CheckNoRequestID(request.url)){
-				error("@ID must be annotated in the URL if reuse should be possible", request, QuickCheckApiPackage.eINSTANCE.request_Url )
+				error("@ID must be annotated in the URL if reuse is used", request, QuickCheckApiPackage.eINSTANCE.request_Url )
 			}
 		}		
 	}

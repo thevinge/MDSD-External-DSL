@@ -9,25 +9,31 @@ import org.xtext.mdsd.external.quickCheckApi.URL
 import org.xtext.mdsd.external.quickCheckApi.URLDefRef
 import org.xtext.mdsd.external.util.QCUtils
 
+import static extension org.xtext.mdsd.external.util.QCUtils.*
+
 class QCCmd {
 	def CharSequence initCmd(Test test){
 		'''
 			type cmd =
 				 «FOR request : test.requests »
-				 	| «QCUtils.firstCharToUpperCase(request.name)»«request.argumentsSnippet»
+				 	| «request.name.firstCharToUpperCase»«request.argumentsSnippet»
 				 «ENDFOR»
 				 [@@deriving show { with_path = false }]
 			
 			«FOR request : test.requests »
-				let «QCUtils.firstCharLowerCase(request.name)»URL="«request.url.chooseURL.protocol»://«request.url.chooseURL.domain.host.compile()»«request.url.chooseURL.domain.port.compile()»/«request.url.chooseURI.compile()»"
+				let «request.name.firstCharLowerCase»URL="«request.compileURL»"
 			«ENDFOR»
 		'''
+	}
+	
+	
+	def CharSequence compileURL(Request request){
+		'''«request.url.chooseURL.protocol»://«request.url.chooseURL.domain.host.compile()»«request.url.chooseURL.domain.port.compile()»/«request.url.chooseURI.compile()»'''
 	}
 	
 	def dispatch URL chooseURL(URL url){
 		return url
 	}
-	
 	
 	
 	def dispatch URL chooseURL(URLDefRef url){

@@ -22,11 +22,13 @@ import org.xtext.mdsd.external.quickCheckApi.Postproposition
 import org.xtext.mdsd.external.quickCheckApi.ReuseValue
 import org.xtext.mdsd.external.quickCheckApi.StringValue
 import org.xtext.mdsd.external.util.QCGenUtils
-import org.xtext.mdsd.external.util.QCJsonReuse
 import org.xtext.mdsd.external.util.QCNames
 import org.xtext.mdsd.external.util.QCTypeInfer
 import org.xtext.mdsd.external.util.QCTypeInfer.JsonValueType
 
+import static extension org.xtext.mdsd.external.generator.QCGenerator.*
+import static extension org.xtext.mdsd.external.util.QCJsonReuse.*
+import static extension org.xtext.mdsd.external.generator.QCJsonIDExtractor.*
 class QCJsonCompiler {
 	
 	
@@ -163,11 +165,11 @@ class QCJsonCompiler {
 		if(condition.requestValue.body !== null){
 			declarationCounter++  
 			var QCJsonDef jsondef = new QCJsonDef(QCNames.LocalPostConditionJsonDef() + declarationCounter, defType.dtCondition)
-		 	jsondef.processedJson = QCJsonCompiler.compileJson(condition.requestValue.body)
-		 	jsondef.generators = QCGenerator.getAllGenerators(condition.requestValue.body)
-		 	QCJsonReuse.isReuseJson(condition.requestValue.body)
-		 	jsondef.reuseVars = QCJsonReuse.reuseKeys
-		 	jsondef.IdentifierKey = QCJsonIDExtractor.compileJsonID(condition.requestValue.body).toString
+		 	jsondef.processedJson = condition.requestValue.body.compileJson
+		 	jsondef.generators = condition.requestValue.body.getAllGenerators
+		 	
+		 	jsondef.reuseVars = condition.requestValue.body.reuseKeys
+		 	jsondef.IdentifierKey = condition.requestValue.body.compileJsonID.toString
 		 	jsonBodies.add(jsondef)
 		} 
 	}				 

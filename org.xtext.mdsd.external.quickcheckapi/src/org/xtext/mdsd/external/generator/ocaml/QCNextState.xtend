@@ -9,7 +9,7 @@ import org.xtext.mdsd.external.quickCheckApi.Request
 import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
 import org.xtext.mdsd.external.util.QCUtils
-
+import static extension org.xtext.mdsd.external.util.QCUtils.*
 class QCNextState {
 
 
@@ -19,7 +19,7 @@ class QCNextState {
 			
 			let next_state cmd state = match cmd with
 				«FOR request : test.requests»
-					| «QCUtils.firstCharToUpperCase(request.name)» «request.compileNextState»
+					| «request.name.firstCharToUpperCase» «request.compileNextState»
 				«ENDFOR»
 		'''
 	}

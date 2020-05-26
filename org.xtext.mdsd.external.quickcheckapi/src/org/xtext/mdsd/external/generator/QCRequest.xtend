@@ -10,8 +10,12 @@ import org.xtext.mdsd.external.quickCheckApi.NoAction
 import org.xtext.mdsd.external.quickCheckApi.Postproposition
 import org.xtext.mdsd.external.quickCheckApi.Request
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
-import org.xtext.mdsd.external.util.QCJsonReuse
 import org.xtext.mdsd.external.util.QCNames
+
+import static extension org.xtext.mdsd.external.generator.QCGenerator.*
+import static extension org.xtext.mdsd.external.generator.QCJsonCompiler.*
+import static extension org.xtext.mdsd.external.util.QCJsonReuse.*
+import static extension org.xtext.mdsd.external.generator.QCJsonIDExtractor.*
 
 class QCRequest {
 	
@@ -44,13 +48,11 @@ class QCRequest {
 	
 	private def dispatch process(Body body){
 		bodyJsonDef = new QCJsonDef(QCNames.LocalBodyJsonDef, defType.dtBody)		
-		bodyJsonDef.processedJson = QCJsonCompiler.compileJson(body.value)
-		bodyJsonDef.generators = QCGenerator.getAllGenerators(body.value)
+		bodyJsonDef.processedJson = body.value.compileJson
+		bodyJsonDef.generators = body.value.getAllGenerators
 		bodyJsonDef.requestName = requestName
-		QCJsonReuse.resetKeys
-		QCJsonReuse.isReuseJson(body.value)
-		bodyJsonDef.reuseVars = QCJsonReuse.reuseKeys
-		bodyJsonDef.IdentifierKey = QCJsonIDExtractor.compileJsonID(body.value).toString
+		bodyJsonDef.reuseVars = body.value.reuseKeys
+		bodyJsonDef.IdentifierKey = body.value.compileJsonID.toString
 		
 	}
 	
@@ -72,13 +74,11 @@ class QCRequest {
 	
 	private def processAction(Action action, JsonRef json){
 		stateJsonDef = new QCJsonDef(QCNames.LocalStateJsonDef, defType.dtState)		
-		stateJsonDef.processedJson = QCJsonCompiler.compileJson(json)
-		stateJsonDef.generators = QCGenerator.getAllGenerators(json)
+		stateJsonDef.processedJson = json.compileJson
+		stateJsonDef.generators = json.getAllGenerators
 		stateJsonDef.requestName = requestName
-		QCJsonReuse.resetKeys
-		QCJsonReuse.isReuseJson(json)
-		stateJsonDef.reuseVars = QCJsonReuse.reuseKeys
-		stateJsonDef.IdentifierKey = QCJsonIDExtractor.compileJsonID(json).toString
+		stateJsonDef.reuseVars = json.reuseKeys
+		stateJsonDef.IdentifierKey = json.compileJsonID.toString
 	}
 	
 	

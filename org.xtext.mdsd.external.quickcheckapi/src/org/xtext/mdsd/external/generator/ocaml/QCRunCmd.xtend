@@ -24,7 +24,7 @@ import org.xtext.mdsd.external.quickCheckApi.RequestOp
 import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.quickCheckApi.UpdateAction
 import org.xtext.mdsd.external.util.QCUtils
-
+import static extension org.xtext.mdsd.external.util.QCUtils.*
 class QCRunCmd {
 	private int declarationCounter = 0;
 	private Request currentRequest;
@@ -47,7 +47,7 @@ class QCRunCmd {
 			currentRequest = request
 			result +=
 			'''
-			| «QCUtils.firstCharToUpperCase(request.name)» «request.action.determineIndex» «request.compileRunCmd»
+			| «request.name.firstCharToUpperCase» «request.action.determineIndex» «request.compileRunCmd»
 			'''
 		}
 		result
@@ -65,12 +65,12 @@ class QCRunCmd {
 	def CharSequence createHttpCall(Request request) {
 		if (QCUtils.CheckNoRequestID(request.url)) {			
 			'''
-				let code,content = Http.«request.method.compileMethod» «QCUtils.firstCharLowerCase(request.name)»URL «IF request.body !== null»json«ELSE»""«ENDIF» in
+				let code,content = Http.«request.method.compileMethod» «request.name.firstCharLowerCase»URL «IF request.body !== null»json«ELSE»""«ENDIF» in
 			'''
 		} else {
 			'''
 			let id = lookupSutItem ix !sut in
-				let code,content = Http.«request.method.compileMethod» («QCUtils.firstCharLowerCase(request.name)»URL^"/"^id) «IF request.body !== null»json«ELSE»""«ENDIF» in
+				let code,content = Http.«request.method.compileMethod» («request.name.firstCharLowerCase»URL^"/"^id) «IF request.body !== null»json«ELSE»""«ENDIF» in
 			'''
 		}
 		

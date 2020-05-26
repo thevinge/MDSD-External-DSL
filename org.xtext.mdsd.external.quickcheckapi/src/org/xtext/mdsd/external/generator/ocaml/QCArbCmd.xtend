@@ -3,7 +3,8 @@ package org.xtext.mdsd.external.generator.ocaml
 import org.xtext.mdsd.external.generator.QCRequestProcess
 import org.xtext.mdsd.external.quickCheckApi.Test
 import org.xtext.mdsd.external.util.QCUtils
-
+import static extension org.xtext.mdsd.external.util.QCUtils.*
+import static extension org.xtext.mdsd.external.util.QCNames.*
 class QCArbCmd {
 
 	
@@ -15,8 +16,8 @@ class QCArbCmd {
 			  if state = [] then
 			    QCheck.make ~print:show_cmd
 			    (Gen.oneof [
-			    «FOR request: QCUtils.filterRequireNoIndex(test.requests) SEPARATOR ";"» 
-			    	(Gen.return («QCUtils.firstCharToUpperCase(request.name)» («QCRequestProcess.get(request.name).bodyJsonDef.declarationUse»)))
+			    «FOR request: filterRequireNoIndex(test.requests) SEPARATOR ";"» 
+			    	(Gen.return («request.name.firstCharToUpperCase» («QCRequestProcess.get(request.name).bodyJsonDef.declarationUse»)))
 			    «ENDFOR»
 			    ])
 			    
@@ -25,9 +26,9 @@ class QCArbCmd {
 			      (Gen.oneof [
 			       		  «FOR request: test.requests SEPARATOR ";"»
 			       		  	«IF QCUtils.requireIndex(request) » 
-			       		  		Gen.map (fun i -> «QCUtils.firstCharToUpperCase(request.name)» i) int_gen
+			       		  		Gen.map (fun i -> «(request.name.firstCharToUpperCase)» i) int_gen
 			       		  	«ELSE» 
-			       		  		(Gen.return («QCUtils.firstCharToUpperCase(request.name)» («QCRequestProcess.get(request.name).bodyJsonDef.declarationUse»)))
+			       		  		(Gen.return («request.name.firstCharToUpperCase» («QCRequestProcess.get(request.name).bodyJsonDef.declarationUse»)))
 			       		  	«ENDIF»
 			      «ENDFOR»
 			      ])

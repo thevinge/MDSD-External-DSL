@@ -3,7 +3,8 @@ package org.xtext.mdsd.external.generator.ocaml
 import org.eclipse.emf.common.util.EList
 import org.xtext.mdsd.external.quickCheckApi.Builder
 import org.xtext.mdsd.external.quickCheckApi.Test
-import org.xtext.mdsd.external.util.QCUtils
+
+import static extension org.xtext.mdsd.external.util.QCUtils.*
 
 class QCMakeFile {
 	
@@ -13,7 +14,7 @@ class QCMakeFile {
 			«builder.tests.phonyHeader»
 			
 			«FOR test : builder.tests» 
-				«QCUtils.firstCharLowerCase(test.name)»:
+				«test.name.firstCharLowerCase»:
 					ocamlbuild -r \
 					-use-ocamlfind \
 					-package \
@@ -27,14 +28,14 @@ class QCMakeFile {
 					qcstm,\
 					curl \
 					-tag thread \
-					«QCUtils.firstCharLowerCase(test.name)».native \
+					«test.name.firstCharLowerCase».native \
 					http.native \
-					«QCUtils.firstCharLowerCase(test.name)»externals.native
+					«test.name.firstCharLowerCase»externals.native
 			
 			«ENDFOR»
 			run:
 				«FOR test : builder.tests»   
-					./«QCUtils.firstCharLowerCase(test.name)».native
+					./«test.name.firstCharLowerCase».native
 				«ENDFOR»		
 			
 			clean:
@@ -46,7 +47,7 @@ class QCMakeFile {
 	
 	def CharSequence phonyHeader(EList<Test> tests){
 		'''
-			all: clean «FOR test : tests SEPARATOR ' '»«QCUtils.firstCharLowerCase(test.name)»«ENDFOR»
+			all: clean «FOR test : tests SEPARATOR ' '»«test.name.firstCharLowerCase»«ENDFOR»
 			.PHONY: all
 		'''
 	}
