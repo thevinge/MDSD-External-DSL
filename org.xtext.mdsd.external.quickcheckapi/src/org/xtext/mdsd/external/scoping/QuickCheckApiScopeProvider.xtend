@@ -84,13 +84,17 @@ class QuickCheckApiScopeProvider extends AbstractQuickCheckApiScopeProvider {
 	def private dispatch IScope getActionScope(UpdateAction action) {
 		var request = action.getContainerOfType(Request)
 		var test = request.getContainerOfType(Test)
-		Scopes.scopeFor(test.allJsonKeys, QualifiedName.wrapper[name], IScope.NULLSCOPE)
+		var allKeys = test.allJsonKeys
+		allKeys.addAll(request?.body?.value.getJsonKeys)
+		Scopes.scopeFor(allKeys, QualifiedName.wrapper[name], IScope.NULLSCOPE)
 	}
 
 	def private dispatch IScope getActionScope(DeleteAction action) {
 		var request = action.getContainerOfType(Request)
 		var test = request.getContainerOfType(Test)
-		Scopes.scopeFor(test.allJsonKeys, QualifiedName.wrapper[name], IScope.NULLSCOPE)
+		var allKeys = test.allJsonKeys
+		allKeys.addAll(request?.body?.value.getJsonKeys)
+		Scopes.scopeFor(allKeys, QualifiedName.wrapper[name], IScope.NULLSCOPE)
 	}
 
 	private def Iterable<JsonKey> getJsonKeys(JsonRef json) {
@@ -109,9 +113,6 @@ class QuickCheckApiScopeProvider extends AbstractQuickCheckApiScopeProvider {
 		val ArrayList<JsonKey> allKeys = new ArrayList
 		test.requests.forEach [
 			{
-				if (it.body?.value !== null) {
-					allKeys.addAll(it.body.value.jsonKeys)
-				}
 
 				if (it.action instanceof UpdateAction) {
 					allKeys.addAll((it.action as UpdateAction).value.jsonKeys)
