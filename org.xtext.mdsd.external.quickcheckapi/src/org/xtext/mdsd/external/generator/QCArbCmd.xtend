@@ -8,7 +8,7 @@ class QCArbCmd {
 		
 		'''
 		let arb_cmd state = 
-		  let int_gen = Gen.oneof [Gen.small_int] in
+		(*If nothing is in the state we cannot fetch or delete anything, therefore we ensure that we will only create in this case*)
 		  if state = [] then
 		    QCheck.make ~print:show_cmd
 		    (Gen.oneof [
@@ -22,7 +22,7 @@ class QCArbCmd {
 		      (Gen.oneof [
 			      		  «FOR request: test.requests SEPARATOR ";"»
 			      		  «IF QCUtils.requireIndex(request) » 
-			      		  Gen.map (fun i -> «QCUtils.toUpperCaseFunction(request.name)» i) int_gen
+			      		  Gen.map (fun i -> «QCUtils.toUpperCaseFunction(request.name)» i) Gen.small_int
 			      		  «ELSE» 
 			      		  (Gen.return «QCUtils.toUpperCaseFunction(request.name)»)
 			      		  «ENDIF»

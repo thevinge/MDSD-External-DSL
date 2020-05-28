@@ -16,7 +16,11 @@ DataType:
 ;
 
 Feature:
-    name=ID (listof?="list" "of")?  typeData=DataType ("limit" limit=INT)?
+    name=ID (listof?="list" "of")?  typeData=DataType ("limit" limit=Limit)?
+;
+
+Limit:
+	{Limit} value=INT
 ;
 
 Test:
