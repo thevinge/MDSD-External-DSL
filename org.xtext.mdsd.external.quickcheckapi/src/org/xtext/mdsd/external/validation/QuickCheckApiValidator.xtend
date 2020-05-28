@@ -29,6 +29,7 @@ import org.xtext.mdsd.external.util.json.QCJsonUtils
 
 import static extension org.eclipse.xtext.EcoreUtil2.*
 import org.xtext.mdsd.external.quickCheckApi.Body
+import org.xtext.mdsd.external.quickCheckApi.ExcludeValue
 
 /**
  * This class contains custom validation rules. 
@@ -152,9 +153,20 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 	
 	@Check
 	def checkReuseID(UpdateAction action){
-		val reuseJson = QCJsonUtils.jsonAllOfType(action.value, ReuseValue)
-		if (reuseJson.size > 0) {
+		val usingReuseJson = QCJsonUtils.jsonContainsType(action.value, ReuseValue)
+		if (usingReuseJson) {
 			val request = action.getContainerOfType(Request)
+			if (QCUtils.CheckNoRequestID(request.url)){
+				error("@ID must be annotated in the URL if reuse is used", request, QuickCheckApiPackage.eINSTANCE.request_Url )
+			}
+		}		
+	}
+	
+	@Check
+	def checkReuseID(Body body){
+		val usingReuseJson = QCJsonUtils.jsonContainsType(body.value, ReuseValue)
+		if (usingReuseJson) {
+			val request = body.getContainerOfType(Request)
 			if (QCUtils.CheckNoRequestID(request.url)){
 				error("@ID must be annotated in the URL if reuse is used", request, QuickCheckApiPackage.eINSTANCE.request_Url )
 			}
@@ -164,8 +176,8 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 	@Check
 	def checkPostConditionReuseID(BodyCondition condition){
 		if (condition.requestValue.body !== null){
-			val reuseJson = QCJsonUtils.jsonAllOfType(condition.requestValue.body, ReuseValue)
-			if (reuseJson.size > 0) {
+			val usingReuseJson = QCJsonUtils.jsonContainsType(condition.requestValue.body, ReuseValue)
+			if (usingReuseJson) {
 				val request = condition.getContainerOfType(Request)
 				if (QCUtils.CheckNoRequestID(request.url)){
 					error("@ID must be annotated in the URL if reuse is used", request, QuickCheckApiPackage.eINSTANCE.request_Url )
@@ -173,6 +185,34 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 			}
 		}
 	}	
+	
+	
+	
+	@Check
+	def checkExclusionUse(Body body){
+		val usingExcludeJson = QCJsonUtils.jsonContainsType(body.value, ExcludeValue)
+		if (usingExcludeJson) {
+			error("Exclusion can only be used in a condition statement", body, QuickCheckApiPackage.eINSTANCE.body_Value )
+		}		
+	}
+	
+	@Check
+	def checkExclusionUse(UpdateAction action){
+		val usingExcludeJson = QCJsonUtils.jsonContainsType(action.value, ExcludeValue)
+		if (usingExcludeJson) {
+			error("Exclusion can only be used in a condition statement", action, QuickCheckApiPackage.eINSTANCE.updateAction_Value )
+		}		
+	}
+	
+	@Check
+	def checkExclusionUse(CreateAction action){
+		val usingExcludeJson = QCJsonUtils.jsonContainsType(action.value, ExcludeValue)
+		if (usingExcludeJson) {
+			error("Exclusion can only be used in a condition statement", action, QuickCheckApiPackage.eINSTANCE.createAction_Value )
+		}		
+	}
+	
+		
 	
 	@Check
 	def checkReuseKey(CreateAction action){
