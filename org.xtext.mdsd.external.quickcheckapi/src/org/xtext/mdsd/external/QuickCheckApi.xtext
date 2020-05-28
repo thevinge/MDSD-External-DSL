@@ -24,7 +24,27 @@ Limit:
 ;
 
 Test:
-	"Test" name=ID requests+=(Request)+
+	"Test" name=ID requests+=(Request)+ "Reset" reset=ResetHook
+;
+
+ResetHook:
+	"driver" "=" driver=Driver "connection-string" "=" con=STRING statement=Statement
+;
+
+Driver:
+	{Pgsql} "PostgresQL" | {Mysql} "MySQL" | {Sqlight} "SQLight" | {Mssql} "MSSQL"
+;
+
+Statement:
+	delete=DeleteAction
+;
+
+DeleteAction:
+	"DELETE" "FROM" tables+=Table ("," tables+=Table)*
+;
+
+Table:
+	tableName=ID
 ;
 
 Request:
