@@ -37,7 +37,7 @@ class QCOriginResolver {
 			val bodyRef = refs.exists[it instanceof Body]
 			val bodyConditionRef = refs.exists[it instanceof Postproposition]
 			if (actionRef && bodyRef) {
-				return new QCOrigin(QCJsonOrigin.ACTION, refs)
+				return new QCOrigin(QCJsonOrigin.ACTION, Lists.newArrayList(refs.filter[it instanceof Action]))
 			} else if (actionRef) {
 				return new QCOrigin(QCJsonOrigin.ACTION, Lists.newArrayList(refs.filter[it instanceof Action]))
 			} else if (bodyRef) {
