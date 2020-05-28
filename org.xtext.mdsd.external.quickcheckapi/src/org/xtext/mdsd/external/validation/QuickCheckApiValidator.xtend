@@ -31,6 +31,8 @@ import org.xtext.mdsd.external.util.QCUtils
 import org.xtext.mdsd.external.util.json.QCJsonUtils
 
 import static extension org.eclipse.xtext.EcoreUtil2.*
+import org.xtext.mdsd.external.quickCheckApi.Body
+import org.xtext.mdsd.external.quickCheckApi.ExcludeValue
 
 /**
  * This class contains custom validation rules. 
@@ -231,7 +233,7 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 			val allKeys = QCJsonUtils.jsonAllOfType(request?.body?.value)
 			reuseJson.filter[jsonKey, jsonObjs| jsonObjs.map[(it as ReuseValue).key.value].filter[!allKeys.containsKey(it)].size > 0]
 			.forEach[jsonKey, json|json.forEach[{
-				error('''Reuse is not allowed, when Body does not contain the key {«(it as ReuseValue).key.value»}''',
+				error('''Reuse is not allowed, when Body does not contain the key {ï¿½(it as ReuseValue).key.valueï¿½}''',
 					it, QuickCheckApiPackage.eINSTANCE.reuseValue_Key
 				)
 			}]]
@@ -249,7 +251,7 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 				!CreateJsonKeys.containsKey(reuseKey)
 			}]].size > 0]
 			.forEach[jsonKey, json|json.forEach[{
-				error('''Reuse is not allowed, when no requests in test {«test.name»} creates a key {«(it as ReuseValue).key.value»}''',
+				error('''Reuse is not allowed, when no requests in test {ï¿½test.nameï¿½} creates a key {ï¿½(it as ReuseValue).key.valueï¿½}''',
 					it, QuickCheckApiPackage.eINSTANCE.reuseValue_Key
 				)
 			}]]
