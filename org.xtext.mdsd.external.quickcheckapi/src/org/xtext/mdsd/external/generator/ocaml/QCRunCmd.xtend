@@ -198,8 +198,9 @@ class QCRunCmd {
 	
 	
 	def dispatch CharSequence compileAction(CreateAction action) {
+//		 QCJsonIDExtractor.compileJsonID(action.value)
 		'''
-		let id = extractIdFromContent "«QCJsonIDExtractor.compileJsonID(action.value)»" content in
+		let id = extractIdFromContent "«QCRequestProcess.get(currentRequest.name).stateJsonDef.IdentifierKey»" content in
 			sut := !sut@[id];
 		'''
 	}
