@@ -32,6 +32,7 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 	QCSetup setup = new QCSetup;
 	QCModel model = new QCModel;
 	QCGenerator gen = new QCGenerator;
+	QCReset reset = new QCReset;
 	
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		val builder = resource.allContents.filter(Builder).next;
@@ -101,6 +102,8 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 		  «cmd.initCmd(test)»
 		 
 		  «modelSystem.initModelSystem()»
+		  
+		  «reset.compile(test.reset)»
 		  
 		  «boilerplate.initUtilities()»
 		 

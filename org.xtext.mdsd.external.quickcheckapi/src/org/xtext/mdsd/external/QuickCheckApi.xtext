@@ -28,12 +28,44 @@ Test:
 ;
 
 ResetHook:
-	"driver" "=" driver=Driver "connection-string" "=" con=STRING statement=Statement
+	"driver" "=" driver=Driver
 ;
 
 Driver:
+	Web | Pgsql | Mysql | Sqlight | Mssql
+;
+
+Mssql:
+	"MSSQl" sql = Sql
+;
+
+Sqlight:
+	"SQLight" sql = Sql
+;
+
+Mysql:
+	"MySQL" sql = Sql
+;
+
+Pgsql:
+	"PostgresQL" sql = Sql
+;
+
+Web:
+	"web" "url" url=URL "method" method=Method (body=Body)?
+;
+
+Sql:
+	"connection-string" "=" con=STRING statement=Statement
+;
+
+/*
+SqlDriver:
 	{Pgsql} "PostgresQL" | {Mysql} "MySQL" | {Sqlight} "SQLight" | {Mssql} "MSSQL"
 ;
+ */
+
+
 
 Statement:
 	delete=DeleteAction
