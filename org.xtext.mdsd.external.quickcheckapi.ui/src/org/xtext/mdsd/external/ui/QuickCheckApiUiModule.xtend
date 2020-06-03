@@ -4,10 +4,28 @@
 package org.xtext.mdsd.external.ui
 
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider
+import org.xtext.mdsd.external.ui.hovering.QuickCheckEObjectHoverProvider
+import org.eclipse.ui.plugin.AbstractUIPlugin
 
 /**
  * Use this class to register components to be used within the Eclipse IDE.
  */
-@FinalFieldsConstructor
+//@FinalFieldsConstructor
 class QuickCheckApiUiModule extends AbstractQuickCheckApiUiModule {
+	new(AbstractUIPlugin plugin) {
+		super(plugin)
+	}
+	
+
+	def Class<? extends IEObjectHoverProvider> bindIEObjectHoverProvider() {
+		QuickCheckEObjectHoverProvider
+	}
+	
+	/*
+	
+	public Class<? extends IEObjectHoverProvider> bindIEObjectHoverProvider() {
+		QuickCheckEObjectHoverProvider.class;
+	}
+	 */
 }
