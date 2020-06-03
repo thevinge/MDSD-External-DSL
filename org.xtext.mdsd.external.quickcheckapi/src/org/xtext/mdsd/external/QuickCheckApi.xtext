@@ -24,7 +24,7 @@ Limit:
 ;
 
 Test:
-	"Test" name=ID requests+=(Request)+ "Reset" reset=ResetHook
+	"Test" name=ID model=Mtest requests+=(Request)+ "Reset" reset=ResetHook
 ;
 
 ResetHook:
@@ -82,6 +82,10 @@ Table:
 Request:
     "request" name=ID method=Method url=URL ("precondition" preconditions=PreLogicExp)? 
     (params=Param)? body=Body? ("state" action=Action) ("postcondition"postconditions=PostLogicExp)?
+;
+
+Mtest:
+	"model" modelUnderTest=[Model]
 ;
 
 Action:
