@@ -12,12 +12,12 @@ class QCGenerator {
 		'''
 		let «QCUtils.firstCharLowerCase(model.name)»_generator = Gen.map (fun () -> {«FOR feature: model.features SEPARATOR ";"»
 														«IF !(feature.typeData instanceof UserData)»
-														  «feature.name» = Gen.generate1 Gen.«feature.typeData.compileDataType»
+														«feature.name» = Gen.generate1 Gen.«feature.typeData.compileDataType»
 														«ELSE»
 															«IF feature.limit !== null»
-															  «feature.name» = Gen.generate1 (Gen.list_size (Gen.return «feature.limit.value») «feature.typeData.compileDataType»_generator)
+															«feature.name» = Gen.generate1 (Gen.list_size (Gen.return «feature.limit.value») «feature.typeData.compileDataType»_generator)
 															«ELSE»
-															  «feature.name» = Gen.generate1 (Gen.list_size (Gen.return 5) «feature.typeData.compileDataType»_generator)
+															«feature.name» = Gen.generate1 (Gen.list_size (Gen.return 5) «feature.typeData.compileDataType»_generator)
 															«ENDIF»
 														«ENDIF»
 		«ENDFOR»

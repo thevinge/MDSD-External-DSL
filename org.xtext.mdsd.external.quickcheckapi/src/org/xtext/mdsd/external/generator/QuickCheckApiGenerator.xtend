@@ -95,9 +95,8 @@ class QuickCheckApiGenerator extends AbstractGenerator {
 	
 	def CharSequence compileTest(Test test) {
 		'''
-		  type sut = («test.model.modelUnderTest.name» list) ref
+		  type sut = (string list) ref
 		  type state = «test.model.modelUnderTest.name» list
-		
 		  
 		  «cmd.initCmd(test)»
 		 

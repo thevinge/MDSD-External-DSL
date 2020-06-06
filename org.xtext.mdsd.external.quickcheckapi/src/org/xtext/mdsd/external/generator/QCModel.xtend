@@ -14,7 +14,7 @@ class QCModel {
 			«FOR feature:model.features»
 			«feature.name»: «feature.typeData.compileDataType»«IF feature.listof» list«ENDIF»;
 			«ENDFOR»
-		}
+		} [@@deriving show, yojson];;
 		
 		'''
 	}

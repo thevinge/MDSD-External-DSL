@@ -47,6 +47,13 @@ class QCUtils {
 			true
 	}
 	
+	def static boolean requireType(Request request) {
+		if (request.body !== null) {
+			return true
+		} 
+		false;
+	}
+	
 	def static List<Request> filterRequireIndex(EList<Request> requests){
 		requests.filterIndex(true)
 	}

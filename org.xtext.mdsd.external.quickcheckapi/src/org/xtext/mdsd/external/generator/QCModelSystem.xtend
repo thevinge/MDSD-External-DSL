@@ -6,7 +6,6 @@ class QCModelSystem {
 		'''
 		let init_state = []
 		let init_sut() = ref []
-
 		'''
 		// TODO Require Cleanup HTTP-endpoint in DSL
 	}
