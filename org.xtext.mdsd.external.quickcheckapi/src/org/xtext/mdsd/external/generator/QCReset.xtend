@@ -21,7 +21,7 @@ class QCReset {
 	}
 	
 	def dispatch CharSequence compileDriver(Web web) {
-		'''let cleanup _  = ignore(Http.«web.method.compileMethod» («web.url.compileUrl») «IF web.body !== null» «web.body.compileBody» «ENDIF»)'''
+		'''let cleanup _  = ignore(Http.«web.method.compileMethod» ("«web.url.compileUrl»") «IF web.body !== null» «web.body.compileBody» «ENDIF»)'''
 	}
 	
 	def dispatch CharSequence compileDriver(Pgsql sql) {
