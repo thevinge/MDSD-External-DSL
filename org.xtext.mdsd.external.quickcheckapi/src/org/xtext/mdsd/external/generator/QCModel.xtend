@@ -15,6 +15,7 @@ class QCModel {
 			«feature.name»: «feature.typeData.compileDataType»«IF feature.listof» list«ENDIF»;
 			«ENDFOR»
 		}
+		
 		'''
 	}
 	
