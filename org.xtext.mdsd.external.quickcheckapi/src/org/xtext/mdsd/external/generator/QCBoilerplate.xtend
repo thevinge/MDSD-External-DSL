@@ -176,8 +176,6 @@ class QCBoilerplate {
 		«combineInterface()»
 		
 		«extractIdinterface()»
-		
-		«cleanupInterface()»
 		'''
 	}
 	
@@ -196,13 +194,6 @@ class QCBoilerplate {
 		'''
 	}
 	
-	private def CharSequence cleanupInterface() {
-		'''
-		(* Implement this method to cleanup after each test *)
-		val afterTestcleanup : unit
-		'''
-	}
-	
 	
 	private def CharSequence InitExternalsImplementation(){
 		'''
@@ -217,10 +208,6 @@ class QCBoilerplate {
 					let extracted = ... in
 
 					extracted
-
-		(* Implement this method to cleanup after each test *)
-				let afterTestcleanup =
-					...
 		'''
 	}
 	
