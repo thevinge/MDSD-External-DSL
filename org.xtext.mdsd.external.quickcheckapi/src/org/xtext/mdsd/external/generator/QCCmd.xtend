@@ -31,7 +31,7 @@ class QCCmd {
 		if (QCUtils.requireIndex(request)) {
 			''' of int'''
 		} else if(QCUtils.requireType(request)) {
-			'''of «model.modelUnderTest.name»'''
+			''' of «model.modelUnderTest.name»'''
 		}
 	}
 	

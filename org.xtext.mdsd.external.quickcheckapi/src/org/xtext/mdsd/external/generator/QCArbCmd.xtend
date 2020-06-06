@@ -12,8 +12,12 @@ class QCArbCmd {
 		  if state = [] then
 		    QCheck.make ~print:show_cmd
 		    (Gen.oneof [
-		    «FOR request: QCUtils.filterRequireNoIndex(test.requests) SEPARATOR ";"» 
-		    (Gen.return «QCUtils.toUpperCaseFunction(request.name)»)
+		    «FOR request: QCUtils.filterRequireNoIndex(test.requests) SEPARATOR ";"»
+		    «IF QCUtils.requireType(request)»
+		    Gen.map (fun c -> «QCUtils.toUpperCaseFunction(request.name)» c) «test.model.modelUnderTest.name»_generator
+		    «ELSE» 
+		    «QCUtils.toUpperCaseFunction(request.name)»
+		    «ENDIF»
 		    «ENDFOR»
 		    ])
 		    
