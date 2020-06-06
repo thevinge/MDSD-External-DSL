@@ -23,6 +23,8 @@ class QCArbCmd {
 			      		  «FOR request: test.requests SEPARATOR ";"»
 			      		  «IF QCUtils.requireIndex(request) » 
 			      		  Gen.map (fun i -> «QCUtils.toUpperCaseFunction(request.name)» i) Gen.small_int
+			      		  «ELSEIF QCUtils.requireType(request)»
+			      		  Gen.map (fun c -> Post c) «test.model.modelUnderTest.name»_generator
 			      		  «ELSE» 
 			      		  (Gen.return «QCUtils.toUpperCaseFunction(request.name)»)
 			      		  «ENDIF»
