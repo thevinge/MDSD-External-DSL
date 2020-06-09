@@ -11,8 +11,7 @@ class QCPreconditions {
 		'''
 		let precond cmd state = match cmd with
 		    «FOR request : test.requests»
-		    | «QCUtils.toUpperCaseFunction(request.name)»«IF QCUtils.requireIndex(request)» ix -> (List.length state > 0) «ELSE» -> true«ENDIF» 
-		    	«IF request.preconditions !== null» && («request.preconditions.compilePrecondition»)«ENDIF»
+		    | «QCUtils.toUpperCaseFunction(request.name)»«IF QCUtils.requireIndex(request)» ix -> (List.length state > 0)«ELSEIF QCUtils.requireType(request)» c -> true«ELSE» -> true«ENDIF»«IF request.preconditions !== null» && («request.preconditions.compilePrecondition»)«ENDIF»
 		    «ENDFOR»
 		'''
 	}

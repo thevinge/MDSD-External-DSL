@@ -31,22 +31,24 @@ class QCRunCmd {
 	
 	def CharSequence determineIndex(Action action){
 		var actionOp = action.actionOp
-		if (actionOp instanceof DeleteAction || actionOp instanceof UpdateAction || actionOp instanceof NoAction){
+		if (actionOp instanceof DeleteAction || actionOp instanceof NoAction){
 			'''ix ->'''
+		} else if (actionOp instanceof UpdateAction || actionOp instanceof CreateAction) {
+			'''c ->'''
 		} else {
-			''' ->'''
+			'''-> '''
 		}
 	}
 	
 	def CharSequence createHttpCall(Request request) {
 		if (request.url.domain.requestID === null) {			
 			'''
-				let code,content = Http.«request.method.compileMethod» «QCUtils.firstCharLowerCase(request.name)»URL "«IF request.body !== null»«request.body.compileBody»«ENDIF»" in
+				let code,content = Http.«request.method.compileMethod» «QCUtils.firstCharLowerCase(request.name)»URL «IF request.body !== null»"«request.body.compileBody»"«ENDIF» in
 			'''
 		} else {
 			'''
 			let id = lookupSutItem ix !sut in
-				let code,content = Http.«request.method.compileMethod» («QCUtils.firstCharLowerCase(request.name)»URL^"/"^id) "«IF request.body !== null»«request.body.compileBody»«ENDIF»" in
+			let code,content = Http.«request.method.compileMethod» («QCUtils.firstCharLowerCase(request.name)»URL^"/"^id) «IF request.body !== null»"«request.body.compileBody»"«ENDIF» in
 			'''
 		}
 		
@@ -101,11 +103,15 @@ class QCRunCmd {
 			'''«condition.requestOp.compileRequestOp» (String.compare (Yojson.Basic.to_string «QCUtils.compileJson(condition.requestValue.body)») (Yojson.Basic.to_string content) == 0)'''
 		} else if (condition.requestValue.body === null){
 		'''
+		(*
+		not needed in version 2 (individual)
 		let extractedState = lookupItem ix state in
 			let id = lookupSutItem ix !sut in
 				let stateJson = Yojson.Basic.from_string extractedState in
 					let combined = combine_state_id stateJson id in
-						«condition.requestOp.compileRequestOp» (String.compare (Yojson.Basic.to_string combined) (Yojson.Basic.to_string content) == 0)
+		*)
+		let control = lookupItem ix state in
+		«condition.requestOp.compileRequestOp»(String.compare (Yojson.Safe.to_string (comment_to_yojson control)) (Yojson.Basic.to_string content) == 1)
 		'''
 		}
 	}
@@ -122,13 +128,13 @@ class QCRunCmd {
 	def dispatch CharSequence compileAction(CreateAction action) {
 		'''
 		let id = extractIdFromContent content in
-			sut := !sut@[id];
+		sut := !sut@[c.id];
 		'''
 	}
 	def dispatch CharSequence compileAction(DeleteAction action) {
 		'''
 	    let pos = getPos ix !sut in
-	    	sut := remove_item pos !sut;
+	    sut := remove_item pos !sut;
 		'''
 	}
 	def dispatch CharSequence compileAction(UpdateAction action) {

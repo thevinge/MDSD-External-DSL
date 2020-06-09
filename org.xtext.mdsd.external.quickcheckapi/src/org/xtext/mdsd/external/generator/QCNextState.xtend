@@ -26,7 +26,7 @@ class QCNextState {
 	def CharSequence compile(Action action){
 		var actionOp = action.actionOp
 		if (actionOp instanceof CreateAction) {
-			''' -> state@["«QCUtils.compileJson(action.value)»"]'''	
+			'''c -> state@[c]'''	
 		} else if (actionOp instanceof DeleteAction){
 			'''
 			ix -> let pos = getPos ix state in
