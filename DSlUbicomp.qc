@@ -1,11 +1,14 @@
-    Test Ubicomp
-  		nameGen= <oneOf ["Jacob", "Andreas", "Nicolaj", "John", "Oluf"]>
+Test Ubicomp
+  		nameGen= <oneOf ["Jacob", "Andreas",<oneOf["Jens", "Anders",<String>, "Nicolaj", "John", "Oluf"]>]>
 
     	name = {name:#nameGen}
     	server = http://localhost:3000/
     	changeIN = {name: ^ name, status:"IN"}
     	modelName = {id:@id, name: ^ name }
     	resBody = {userid:@id, id:-,status: ^ status , dt:-, name:-} 
+    	
+    	ResetHook http://localhost:3000/api/reset
+    	
         request Getstatus
             GET
             server/api/status/@id
@@ -30,5 +33,3 @@
             body name
             STATE: create modelName
             Postcondition: returns code 200
-       
-       
