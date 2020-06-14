@@ -3,6 +3,10 @@
  */
 package org.xtext.mdsd.external.validation
 
+import org.eclipse.xtext.validation.Check
+import org.xtext.mdsd.external.quickCheckApi.Model
+import org.xtext.mdsd.external.quickCheckApi.QuickCheckApiPackage
+import org.xtext.mdsd.external.quickCheckApi.Feature
 
 /**
  * This class contains custom validation rules. 
@@ -11,7 +15,7 @@ package org.xtext.mdsd.external.validation
  */
 class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 	
-//	public static val INVALID_NAME = 'invalidName'
+	public static val INVALID_NAME = 'invalidName'
 //
 //	@Check
 //	def checkGreetingStartsWithCapital(Greeting greeting) {
@@ -21,5 +25,22 @@ class QuickCheckApiValidator extends AbstractQuickCheckApiValidator {
 //					INVALID_NAME)
 //		}
 //	}
+
+	@Check
+	def checkModelStartWithCapital(Model model) {
+		if (!Character.isLowerCase(model.name.charAt(0))) {
+			error('Name should start with a lowercase character', 
+					QuickCheckApiPackage.Literals.MODEL__NAME,
+					INVALID_NAME)
+		}
+	}
 	
+	@Check
+	def checkFeatureStartWithCapital(Feature feature){
+		if (!Character.isLowerCase(feature.name.charAt(0))) {
+			error('Name should start with a lowercase character', 
+					QuickCheckApiPackage.Literals.FEATURE__NAME,
+					INVALID_NAME)
+		}
+	}
 }
