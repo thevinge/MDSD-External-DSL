@@ -36,7 +36,7 @@ class QCNextState {
 	        '''
 		} else if (actionOp instanceof UpdateAction){
 			'''
-			ix -> let newelem = "«QCUtils.compileJson(action.value)»" in
+			ix c -> let newelem = c in
 			      let pos = getPos ix state in
 			      replaceElem pos state newelem
 			'''	

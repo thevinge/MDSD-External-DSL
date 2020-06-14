@@ -13,11 +13,12 @@ import org.xtext.mdsd.external.quickCheckApi.DELETE
 import org.xtext.mdsd.external.quickCheckApi.PATCH
 import org.xtext.mdsd.external.quickCheckApi.PUT
 import org.xtext.mdsd.external.quickCheckApi.POST
-import org.xtext.mdsd.external.quickCheckApi.Body
 import org.xtext.mdsd.external.quickCheckApi.CreateAction
 import org.xtext.mdsd.external.quickCheckApi.BodyCondition
 import org.xtext.mdsd.external.quickCheckApi.CodeCondition
 import org.xtext.mdsd.external.quickCheckApi.RequestOp
+import org.xtext.mdsd.external.quickCheckApi.JsonBody
+import org.xtext.mdsd.external.quickCheckApi.ModelBody
 
 class QCRunCmd {
 	def initRun_cmd(Test test ) {
@@ -43,18 +44,18 @@ class QCRunCmd {
 	def CharSequence createHttpCall(Request request) {
 		if (request.url.domain.requestID === null) {			
 			'''
-				let code,content = Http.«request.method.compileMethod» «QCUtils.firstCharLowerCase(request.name)»URL «IF request.body !== null»"«request.body.compileBody»"«ENDIF» in
+				let code,content = Http.«request.method.compileMethod» «QCUtils.firstCharLowerCase(request.name)»URL «IF request.body !== null»«request.body.compileBody»«ENDIF» in
 			'''
 		} else {
 			'''
 			let id = lookupSutItem ix !sut in
-			let code,content = Http.«request.method.compileMethod» («QCUtils.firstCharLowerCase(request.name)»URL^"/"^id) «IF request.body !== null»"«request.body.compileBody»"«ENDIF» in
+			let code,content = Http.«request.method.compileMethod» («QCUtils.firstCharLowerCase(request.name)»URL^"/"^id) «IF request.body !== null»«request.body.compileBody»«ENDIF» in
 			'''
 		}
 		
 	}
 	
-	def CharSequence compileBody(Body body) {
+	def CharSequence compileBody(JsonBody body) {
 		QCUtils.compileJson(body.value)
 	}	
 	
@@ -144,5 +145,9 @@ class QCRunCmd {
 	def dispatch CharSequence compileAction(NoAction action) {
 		// Doesn't update sut so should not do anything
 		''''''
-	}	
+	}
+	
+	def CharSequence compileBody(ModelBody body) {
+		'''(Yojson.Safe.to_string («body.value.name»_to_yojson c))'''
+	}
 }

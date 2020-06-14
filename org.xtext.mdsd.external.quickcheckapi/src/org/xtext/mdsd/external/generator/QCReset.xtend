@@ -13,7 +13,7 @@ import org.xtext.mdsd.external.quickCheckApi.GET
 import org.xtext.mdsd.external.quickCheckApi.DELETE
 import org.xtext.mdsd.external.quickCheckApi.PATCH
 import org.xtext.mdsd.external.quickCheckApi.URL
-import org.xtext.mdsd.external.quickCheckApi.Body
+import org.xtext.mdsd.external.quickCheckApi.JsonBody
 
 class QCReset {
 	def CharSequence compile(ResetHook rh) {
@@ -45,7 +45,7 @@ class QCReset {
 	}
 
 	
-	def CharSequence compileBody(Body body) {
+	def CharSequence compileBody(JsonBody body) {
 		QCUtils.compileJson(body.value)
 	}	
 	

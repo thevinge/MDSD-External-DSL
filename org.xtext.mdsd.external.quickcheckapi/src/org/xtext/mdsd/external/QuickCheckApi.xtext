@@ -52,7 +52,7 @@ Pgsql:
 ;
 
 Web:
-	"web" "url" url=URL "method" method=Method (body=Body)?
+	"web" "url" url=URL "method" method=Method (body=JsonBody)?
 ;
 
 Sql:
@@ -81,7 +81,7 @@ Table:
 
 Request:
     "request" name=ID method=Method url=URL ("precondition" preconditions=PreLogicExp)? 
-    (params=Param)? body=Body? ("state" action=Action) ("postcondition"postconditions=PostLogicExp)?
+    (params=Param)? body=ModelBody? ("state" action=Action) ("postcondition"postconditions=PostLogicExp)?
 ;
 
 Mtest:
@@ -89,7 +89,7 @@ Mtest:
 ;
 
 Action:
-	actionOp=ActionOperator value=Json | actionOp=ActionOperator
+	actionOp=ActionOperator value=[Model] | actionOp=ActionOperator
 ;
 
 ActionOperator:
@@ -150,8 +150,12 @@ Key:
 	name=ID	
 ;
 
-Body:
+JsonBody:
 	"body" value=Json
+;
+
+ModelBody:
+	"body" value=[Model]
 ;
 
 Json:
@@ -186,7 +190,7 @@ PreConjunction returns Preproposition:
 ;
 
 Precondition returns Preproposition:
-	{ContainsCondition} notOp=NotOp? "contains" value=Json | {EmptyCondition} notOp=NotOp? "empty"
+	{ContainsCondition} notOp=NotOp? "contains" value=[Model] | {EmptyCondition} notOp=NotOp? "empty"
 ;
 
 PostLogicExp returns Postproposition:
