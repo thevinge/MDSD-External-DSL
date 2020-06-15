@@ -184,7 +184,6 @@ class QCRunCmd {
 	def CharSequence nextJsonDefUse(String name){
 		
 		val defName = QCRequestProcess.get(name).postCondJsonDefs.get(declarationCounter).declarationUse
-		//next? declarationCounter++ : declarationCounter = declarationCounter
 		defName
 	}
 	
@@ -198,7 +197,6 @@ class QCRunCmd {
 	
 	
 	def dispatch CharSequence compileAction(CreateAction action) {
-//		 QCJsonIDExtractor.compileJsonID(action.value)
 		'''
 		let id = extractIdFromContent "«QCRequestProcess.get(currentRequest.name).stateJsonDef.IdentifierKey»" content in
 			sut := !sut@[id];

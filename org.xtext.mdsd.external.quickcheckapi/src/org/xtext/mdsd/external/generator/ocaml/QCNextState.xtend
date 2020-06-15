@@ -70,36 +70,9 @@ class QCNextState {
 				''''''
 			}
 		}
-//		if (request.action instanceof CreateAction) {
-//			'''json'''	
-//		} else if (request.action instanceof DeleteAction){
-//			if (request.body !== null) {
-//				'''(ix, cmdJson)'''
-//			} else {
-//				'''ix'''
-//			}
-//			
-//		} else if (request.action instanceof UpdateAction){
-//			if (request.body !== null) {
-//				'''(ix, cmdJson)'''
-//			} else {
-//				'''ix'''
-//			}
-//		} else if (request.action instanceof NoAction){
-//			if (request.body !== null) {
-//				'''(ix, cmdJson)'''
-//			} else {
-//				'''ix'''
-//			}
-//		} else {
-//			''''''
-//		}
+
 	}
 	
-	
-
-
-
 }
 	
 	
